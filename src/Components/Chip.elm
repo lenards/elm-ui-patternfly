@@ -3,6 +3,7 @@ module Components.Chip exposing
     , chip
     , toMarkup
     , withClickMsg
+    , withForeground
     )
 
 import Element exposing (Element)
@@ -70,6 +71,15 @@ chip text =
 withClickMsg : msg -> Chip msg -> Chip msg
 withClickMsg msg (Chip options) =
     Chip { options | onClick = Just msg }
+
+
+withForeground : ( Int, Int, Int ) -> Chip msg -> Chip msg
+withForeground ( r, g, b ) (Chip options) =
+    Chip
+        { options
+            | foreground =
+                Element.rgb255 r g b
+        }
 
 
 toMarkup : Chip msg -> Element msg

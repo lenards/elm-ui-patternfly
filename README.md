@@ -1,3 +1,14 @@
+# Pattern Fly Components 
+
+_Built with `elm-ui` and the Builder Pattern. 
+
+Links: 
+  - https://www.patternfly.org/v4/components/about-modal
+  - https://github.com/dwyl/learn-elm/issues/141
+    - https://youtu.be/PDyWP-0H4Zo
+  - https://www.elm.christmas/2020/18 (thanks to Bekk for this series)
+
+
 # Elm App
 
 This project is bootstrapped with [Create Elm App](https://github.com/halfzebra/create-elm-app).

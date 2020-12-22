@@ -1,12 +1,16 @@
-module Components.ChipGroup exposing (..)
+module Components.ChipGroup exposing
+    ( ChipGroup
+    , group
+    , toMarkup
+    , withCategory
+    , withClickMsg
+    )
 
 import Components.Chip as Chip exposing (Chip)
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
-import Element.Font as Font
 import Element.Input as Input
-import Element.Keyed as Keyed
 import Html
 import Html.Attributes exposing (style)
 import Svg
@@ -88,3 +92,59 @@ group chipList chipClickMsg =
         , numChips = Show defaultNumChips
         , onClick = Nothing
         }
+
+
+withCategory : String -> ChipGroup msg -> ChipGroup msg
+withCategory category (ChipGroup options) =
+    ChipGroup { options | category = Just category }
+
+
+withClickMsg : msg -> ChipGroup msg -> ChipGroup msg
+withClickMsg clickMsg (ChipGroup options) =
+    ChipGroup { options | onClick = Just clickMsg }
+
+
+toMarkup : ChipGroup msg -> Element msg
+toMarkup (ChipGroup options) =
+    let
+        parentEl =
+            case options.category of
+                Just categoryName ->
+                    \attrs children ->
+                        Element.el [] <|
+                            Element.row (attrs ++ categoryAttrs_) <|
+                                [ Element.el [] <|
+                                    Element.text categoryName
+                                , Element.row [] children
+                                , Input.button
+                                    [ Element.moveDown 2.0 ]
+                                    { onPress = options.onClick
+                                    , label = defaultClose
+                                    }
+                                ]
+
+                Nothing ->
+                    \attrs children ->
+                        Element.el [] <|
+                            Element.row attrs children
+
+        categoryAttrs_ =
+            [ Bg.color <| Element.rgb255 240 240 240
+            , Border.rounded 3
+            , Element.paddingEach
+                { top = 4
+                , right = 4
+                , bottom = 4
+                , left = 8
+                }
+            ]
+
+        attrs_ =
+            [ Element.spaceEvenly
+            , Element.spacing 8
+            ]
+    in
+    parentEl attrs_ <|
+        (options.chips
+            |> List.map Chip.toMarkup
+        )

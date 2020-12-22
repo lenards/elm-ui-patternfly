@@ -1,7 +1,9 @@
 module Main exposing (..)
 
 import Browser
+import Components.Badge as Badge
 import Components.Chip as Chip
+import Components.ChipGroup as ChipGroup
 import Components.Info as Info
 import Element
 import Html exposing (Html)
@@ -11,16 +13,28 @@ import Html exposing (Html)
 ---- MODEL ----
 
 
+type alias Category =
+    { name : String
+    , items : List String
+    }
+
+
 type alias Model =
     { exampleChip : Maybe String
     , listOfChips : List String
+    , category : Maybe Category
     }
 
 
 init : ( Model, Cmd Msg )
 init =
     ( { exampleChip = Just "New Language"
-      , listOfChips = []
+      , listOfChips = [ "English", "Spanish", "Hindi" ]
+      , category =
+            Just <|
+                { name = "Languages"
+                , items = [ "English", "Spanish", "Hindi" ]
+                }
       }
     , Cmd.none
     )
@@ -33,6 +47,8 @@ init =
 type Msg
     = NoOp
     | RemoveExampleChip
+    | RemoveChip String
+    | RemoveCategory
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -43,6 +59,20 @@ update msg model =
 
         RemoveExampleChip ->
             ( { model | exampleChip = Nothing }
+            , Cmd.none
+            )
+
+        RemoveChip name ->
+            ( { model
+                | listOfChips =
+                    model.listOfChips
+                        |> List.filter (\c -> name /= c)
+              }
+            , Cmd.none
+            )
+
+        RemoveCategory ->
+            ( { model | category = Nothing }
             , Cmd.none
             )
 
@@ -76,16 +106,35 @@ view model =
             , Info.info
                 "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
                 |> Info.toMarkup
-            , Chip.chip "English"
-                |> Chip.toMarkup
-            , model.exampleChip
-                |> Maybe.map
-                    (\c ->
-                        Chip.chip c
-                            |> Chip.withClickMsg RemoveExampleChip
-                            |> Chip.toMarkup
-                    )
-                |> Maybe.withDefault Element.none
+            , Element.column [ Element.paddingXY 0 10, Element.spacing 20 ] <|
+                [ Chip.chip "English"
+                    |> Chip.toMarkup
+                , model.exampleChip
+                    |> Maybe.map
+                        (\c ->
+                            Chip.chip c
+                                |> Chip.withClickMsg RemoveExampleChip
+                                |> Chip.toMarkup
+                        )
+                    |> Maybe.withDefault Element.none
+                , ChipGroup.group model.listOfChips RemoveChip
+                    |> ChipGroup.toMarkup
+                , model.category
+                    |> Maybe.map
+                        (\c ->
+                            ChipGroup.group c.items (\_ -> NoOp)
+                                |> ChipGroup.withCategory c.name
+                                |> ChipGroup.withClickMsg RemoveCategory
+                                |> ChipGroup.toMarkup
+                        )
+                    |> Maybe.withDefault Element.none
+                ]
+            , Element.row [ Element.paddingXY 0 10, Element.spacing 10 ] <|
+                [ Badge.badge 88 |> Badge.toMarkup
+                , Badge.unreadBadge 12 |> Badge.toMarkup
+                , Badge.badge 650 |> Badge.toMarkup
+                , Badge.badge 1000 |> Badge.toMarkup
+                ]
             ]
 
 
