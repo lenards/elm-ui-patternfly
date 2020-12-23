@@ -4,7 +4,10 @@ import Browser
 import Components.Badge as Badge
 import Components.Chip as Chip
 import Components.ChipGroup as ChipGroup
+import Components.Icons as Icons
 import Components.Info as Info
+import Components.Label as Label
+import Components.Tooltip as Tooltip
 import Element
 import Html exposing (Html)
 
@@ -113,7 +116,7 @@ view model =
                     |> Maybe.map
                         (\c ->
                             Chip.chip c
-                                |> Chip.withClickMsg RemoveExampleChip
+                                |> Chip.withCloseMsg RemoveExampleChip
                                 |> Chip.toMarkup
                         )
                     |> Maybe.withDefault Element.none
@@ -134,6 +137,34 @@ view model =
                 , Badge.unreadBadge 12 |> Badge.toMarkup
                 , Badge.badge 650 |> Badge.toMarkup
                 , Badge.badge 1000 |> Badge.toMarkup
+                ]
+            , Element.row
+                [ Element.paddingXY 0 10
+                , Element.spacing 10
+                , Tooltip.tooltip "Example of a tooltip on hover"
+                    |> Tooltip.withPositionLeft
+                    |> Tooltip.toMarkup
+                ]
+                [ Label.label "Grey" |> Label.toMarkup
+                , Label.label "Grey"
+                    |> Label.withCloseMsg NoOp
+                    |> Label.toMarkup
+                , Label.label "Grey"
+                    |> Label.withIcon (Icons.infoRgb255 21 21 21)
+                    |> Label.withCloseMsg NoOp
+                    |> Label.toMarkup
+                , Label.label "Grey"
+                    |> Label.withOutline
+                    |> Label.toMarkup
+                , Label.label "Grey"
+                    |> Label.withOutline
+                    |> Label.withCloseMsg NoOp
+                    |> Label.toMarkup
+                , Label.label "Grey"
+                    |> Label.withOutline
+                    |> Label.withIcon (Icons.infoRgb255 21 21 21)
+                    |> Label.withCloseMsg NoOp
+                    |> Label.toMarkup
                 ]
             ]
 
