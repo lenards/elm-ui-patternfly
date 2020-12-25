@@ -7,6 +7,8 @@ import Components.ChipGroup as ChipGroup
 import Components.Icons as Icons
 import Components.Info as Info
 import Components.Label as Label
+import Components.Page as Page
+import Components.Title as Title
 import Components.Tooltip as Tooltip
 import Element
 import Html exposing (Html)
@@ -91,85 +93,143 @@ view : Model -> Html Msg
 view model =
     Element.layout [] <|
         Element.column
-            [ Element.width
-                (Element.fill
-                    |> Element.maximum 960
-                )
-            , Element.centerX
+            [ Element.width Element.fill
+            , Element.height Element.fill
             ]
-            [ Info.info
-                "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
-                |> Info.withTitle "This is a Title"
-                |> Info.withDefaultIcon
-                |> Info.toMarkup
-            , Info.info
-                "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
-                |> Info.withTitle "This is a Title"
-                |> Info.toMarkup
-            , Info.info
-                "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
-                |> Info.toMarkup
-            , Element.column [ Element.paddingXY 0 10, Element.spacing 20 ] <|
-                [ Chip.chip "English"
-                    |> Chip.toMarkup
-                , model.exampleChip
-                    |> Maybe.map
-                        (\c ->
-                            Chip.chip c
-                                |> Chip.withCloseMsg RemoveExampleChip
-                                |> Chip.toMarkup
-                        )
-                    |> Maybe.withDefault Element.none
-                , ChipGroup.group model.listOfChips RemoveChip
-                    |> ChipGroup.toMarkup
-                , model.category
-                    |> Maybe.map
-                        (\c ->
-                            ChipGroup.group c.items (\_ -> NoOp)
-                                |> ChipGroup.withCategory c.name
-                                |> ChipGroup.withClickMsg RemoveCategory
-                                |> ChipGroup.toMarkup
-                        )
-                    |> Maybe.withDefault Element.none
-                ]
-            , Element.row [ Element.paddingXY 0 10, Element.spacing 10 ] <|
-                [ Badge.badge 88 |> Badge.toMarkup
-                , Badge.unreadBadge 12 |> Badge.toMarkup
-                , Badge.badge 650 |> Badge.toMarkup
-                , Badge.badge 1000 |> Badge.toMarkup
-                ]
-            , Element.row
-                [ Element.paddingXY 0 10
-                , Element.spacing 10
-                , Tooltip.tooltip "Example of a tooltip on hover"
-                    |> Tooltip.withPositionLeft
-                    |> Tooltip.toMarkup
-                ]
-                [ Label.label "Grey" |> Label.toMarkup
-                , Label.label "Grey"
-                    |> Label.withCloseMsg NoOp
-                    |> Label.toMarkup
-                , Label.label "Grey"
-                    |> Label.withIcon (Icons.infoRgb255 21 21 21)
-                    |> Label.withCloseMsg NoOp
-                    |> Label.toMarkup
-                , Label.label "Grey"
-                    |> Label.withOutline
-                    |> Label.toMarkup
-                , Label.label "Grey"
-                    |> Label.withOutline
-                    |> Label.withCloseMsg NoOp
-                    |> Label.toMarkup
-                , Label.label "Grey"
-                    |> Label.withOutline
-                    |> Label.withIcon (Icons.infoRgb255 21 21 21)
-                    |> Label.withCloseMsg NoOp
-                    |> Label.toMarkup
-                ]
+            [ Page.page
+                { title = "Components"
+                , body =
+                    [ Title.title "Kitchen Sink of Components"
+                        |> Title.withSize2xl
+                        |> Title.toMarkup
+                    , Info.info
+                        "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
+                        |> Info.withTitle "This is a Title"
+                        |> Info.withDefaultIcon
+                        |> Info.toMarkup
+                    , Info.info
+                        "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
+                        |> Info.withTitle "This is a Title"
+                        |> Info.toMarkup
+                    , Info.info
+                        "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
+                        |> Info.toMarkup
+                    , Element.column [ Element.paddingXY 0 10, Element.spacing 20 ] <|
+                        [ Chip.chip "English"
+                            |> Chip.toMarkup
+                        , model.exampleChip
+                            |> Maybe.map
+                                (\c ->
+                                    Chip.chip c
+                                        |> Chip.withCloseMsg RemoveExampleChip
+                                        |> Chip.toMarkup
+                                )
+                            |> Maybe.withDefault Element.none
+                        , ChipGroup.group model.listOfChips RemoveChip
+                            |> ChipGroup.toMarkup
+                        , model.category
+                            |> Maybe.map
+                                (\c ->
+                                    ChipGroup.group c.items (\_ -> NoOp)
+                                        |> ChipGroup.withCategory c.name
+                                        |> ChipGroup.withClickMsg RemoveCategory
+                                        |> ChipGroup.toMarkup
+                                )
+                            |> Maybe.withDefault Element.none
+                        ]
+                    , Element.row [ Element.paddingXY 0 10, Element.spacing 10 ] <|
+                        [ Badge.badge 88 |> Badge.toMarkup
+                        , Badge.unreadBadge 12 |> Badge.toMarkup
+                        , Badge.badge 650 |> Badge.toMarkup
+                        , Badge.badge 1000 |> Badge.toMarkup
+                        ]
+                    , Element.row
+                        [ Element.paddingXY 0 10
+                        , Element.spacing 10
+                        , Tooltip.tooltip "Example of a tooltip on hover"
+                            |> Tooltip.withPositionLeft
+                            |> Tooltip.toMarkup
+                        ]
+                        [ Label.label "Grey" |> Label.toMarkup
+                        , Label.label "Grey"
+                            |> Label.withCloseMsg NoOp
+                            |> Label.toMarkup
+                        , Label.label "Grey"
+                            |> Label.withIcon (Icons.infoRgb255 21 21 21)
+                            |> Label.withCloseMsg NoOp
+                            |> Label.toMarkup
+                        , Label.label "Grey"
+                            |> Label.withOutline
+                            |> Label.toMarkup
+                        , Label.label "Grey"
+                            |> Label.withOutline
+                            |> Label.withCloseMsg NoOp
+                            |> Label.toMarkup
+                        , Label.label "Grey"
+                            |> Label.withOutline
+                            |> Label.withIcon (Icons.infoRgb255 21 21 21)
+                            |> Label.withCloseMsg NoOp
+                            |> Label.toMarkup
+                        ]
+                    , Element.row
+                        [ Element.paddingXY 0 10
+                        , Element.spacing 10
+                        ]
+                        [ Element.el
+                            [ Tooltip.tooltip "Example of a tooltip on hover"
+                                |> Tooltip.withPositionLeft
+                                |> Tooltip.toMarkup
+                            ]
+                            (Label.label "Left"
+                                |> Label.toMarkup
+                            )
+                        , Element.el
+                            [ Tooltip.tooltip "Example of a tooltip on hover"
+                                |> Tooltip.withPositionTop
+                                |> Tooltip.toMarkup
+                            ]
+                            (Label.label "Top"
+                                |> Label.toMarkup
+                            )
+                        , Element.el
+                            [ Tooltip.tooltip "Example of a tooltip on hover"
+                                |> Tooltip.withPositionBottom
+                                |> Tooltip.toMarkup
+                            ]
+                            (Label.label "Bottom"
+                                |> Label.toMarkup
+                            )
+                        , Element.el
+                            [ Tooltip.tooltip "Example of a tooltip on hover"
+                                |> Tooltip.withPositionRight
+                                |> Tooltip.toMarkup
+                            ]
+                            (Label.label "Right"
+                                |> Label.toMarkup
+                            )
+                        ]
+                    ]
+                }
+                |> Page.toMarkup
             ]
 
 
 
+{-
+   Element.row []
+       [ Element.el
+           [ Bg.color <| Element.rgb255 21 21 21
+           , Element.width <| Element.px 20
+           , Element.height <| Element.px 20
+           , Element.htmlAttribute
+               (style
+                   "transform"
+                   "translateX(-50%) translateY(50%) rotate(45deg)"
+               )
+           ]
+           Element.none
+       ]
+-}
 ---- PROGRAM ----
 
 

@@ -3,9 +3,11 @@ module Components.Icons exposing
     , closeCircle
     , closeCircleRgb255
     , closeRgb255
+    , hamburger
     , info
     , infoRgb255
     , times
+    , timesRgb255
     )
 
 import Element exposing (Element)
@@ -129,3 +131,43 @@ closeCircleRgb255 r g b =
 times : Element msg
 times =
     close
+
+
+timesRgb255 : Int -> Int -> Int -> Element msg
+timesRgb255 r g b =
+    closeRgb255 r g b
+
+
+hamburger : Element msg
+hamburger =
+    hamburgerRgb255 255 255 255
+
+
+hamburgerRgb255 : Int -> Int -> Int -> Element msg
+hamburgerRgb255 r g b =
+    Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
+        [ Svg.svg
+            [ SvgAttrs.fill "currentColor"
+            , SvgAttrs.viewBox "0 0 448 512"
+            , SvgAttrs.height "1em"
+            , SvgAttrs.width "1em"
+            ]
+            [ Svg.path
+                [ SvgAttrs.d
+                    (String.concat
+                        [ "M16 132h416c8.837 0 16-7.163 "
+                        , "16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 "
+                        , "0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 "
+                        , "160h416c8.837 0 16-7.163 "
+                        , "16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 "
+                        , "0-16 7.163-16 16v40c0 8.837 7.163 16 16 "
+                        , "16zm0 160h416c8.837 0 16-7.163 "
+                        , "16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 "
+                        , "0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+                        ]
+                    )
+                ]
+                []
+            ]
+        ]
+        |> Element.html
