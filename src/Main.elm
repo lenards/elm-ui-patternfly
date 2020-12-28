@@ -98,6 +98,17 @@ view model =
             ]
             [ Page.page
                 { title = "Components"
+                , nav =
+                    [ ( "Badge", NoOp )
+                    , ( "Chip", NoOp )
+                    , ( "ChipGroup", NoOp )
+                    , ( "Icons", NoOp )
+                    , ( "Info", NoOp )
+                    , ( "Label", NoOp )
+                    , ( "Navigation", NoOp )
+                    , ( "Title", NoOp )
+                    , ( "Tooltip", NoOp )
+                    ]
                 , body =
                     [ Title.title "Kitchen Sink of Components"
                         |> Title.withSize2xl

@@ -1,10 +1,12 @@
 module Components.Page exposing (..)
 
 import Components.Icons as Icons
+import Components.Navigation as Navigation exposing (Navigation)
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Font as Font
 import Element.Input as Input
+import Element.Region as Region
 
 
 
@@ -39,7 +41,7 @@ type PageSidebar msg
 
 type alias SidebarOptions msg =
     { isOpen : Bool
-    , children : List (Element msg)
+    , nav : Navigation.Navigation msg
     }
 
 
@@ -70,12 +72,22 @@ defaultSection children =
     PageSection { children = children, variant = Default }
 
 
-page : { title : String, body : List (Element msg) } -> Page msg
-page { title, body } =
+page :
+    { title : String
+    , nav : List ( String, msg )
+    , body : List (Element msg)
+    }
+    -> Page msg
+page { title, nav, body } =
     Page
         { header =
             pageHeader title Nothing
-        , sidebar = Nothing
+        , sidebar =
+            Just <|
+                PageSidebar
+                    { isOpen = True
+                    , nav = Navigation.nav nav
+                    }
         , sections =
             sections body
         }
@@ -136,6 +148,20 @@ sectionsMarkup sections_ =
         |> List.map sectionMarkup
 
 
+sidebarMarkup : Maybe (PageSidebar msg) -> Element msg
+sidebarMarkup maybeSidebar =
+    maybeSidebar
+        |> Maybe.map
+            (\(PageSidebar options) ->
+                if options.isOpen then
+                    options.nav |> Navigation.toMarkup
+
+                else
+                    Element.none
+            )
+        |> Maybe.withDefault Element.none
+
+
 toMarkup : Page msg -> Element msg
 toMarkup (Page options) =
     let
@@ -147,6 +173,20 @@ toMarkup (Page options) =
     Element.column attrs_ <|
         [ options.header
             |> headerMarkup
-        , Element.column [ Element.padding 10 ] <|
-            (options.sections |> sectionsMarkup)
+        , Element.row
+            [ Element.width Element.fill
+            , Element.height Element.fill
+            ]
+            [ options.sidebar
+                |> sidebarMarkup
+            , Element.column
+                [ Element.padding 10
+                , Element.width Element.fill
+                , Element.alignTop
+                , Region.mainContent
+                ]
+                (options.sections
+                    |> sectionsMarkup
+                )
+            ]
         ]
