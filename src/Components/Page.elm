@@ -154,7 +154,9 @@ sidebarMarkup maybeSidebar =
         |> Maybe.map
             (\(PageSidebar options) ->
                 if options.isOpen then
-                    options.nav |> Navigation.toMarkup
+                    options.nav
+                        |> Navigation.withSelectedFirstItem
+                        |> Navigation.toMarkup
 
                 else
                     Element.none
