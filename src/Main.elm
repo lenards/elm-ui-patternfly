@@ -5,14 +5,17 @@ import Components.Badge as Badge
 import Components.Card as Card
 import Components.Chip as Chip
 import Components.ChipGroup as ChipGroup
+import Components.Created as Created
 import Components.Icons as Icons
 import Components.Info as Info
 import Components.Label as Label
+import Components.Navigation as Navigation exposing (Navigation)
 import Components.Page as Page
 import Components.Title as Title
 import Components.Tooltip as Tooltip
 import Element
 import Html exposing (Html)
+import Time
 
 
 
@@ -29,6 +32,8 @@ type alias Model =
     { exampleChip : Maybe String
     , listOfChips : List String
     , category : Maybe Category
+    , navItems : List String
+    , selectedNav : String
     }
 
 
@@ -41,6 +46,18 @@ init =
                 { name = "Languages"
                 , items = [ "English", "Spanish", "Hindi" ]
                 }
+      , navItems =
+            [ "Badge"
+            , "Chip"
+            , "ChipGroup"
+            , "Icons"
+            , "Info"
+            , "Label"
+            , "Navigation"
+            , "Title"
+            , "Tooltip"
+            ]
+      , selectedNav = "Badge"
       }
     , Cmd.none
     )
@@ -52,6 +69,7 @@ init =
 
 type Msg
     = NoOp
+    | NavSelected String
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory
@@ -82,6 +100,11 @@ update msg model =
             , Cmd.none
             )
 
+        NavSelected itemName ->
+            ( { model | selectedNav = itemName }
+            , Cmd.none
+            )
+
 
 
 ---- VIEW ----
@@ -97,16 +120,14 @@ view model =
             [ Page.page
                 { title = "Components"
                 , nav =
-                    [ ( "Badge", NoOp )
-                    , ( "Chip", NoOp )
-                    , ( "ChipGroup", NoOp )
-                    , ( "Icons", NoOp )
-                    , ( "Info", NoOp )
-                    , ( "Label", NoOp )
-                    , ( "Navigation", NoOp )
-                    , ( "Title", NoOp )
-                    , ( "Tooltip", NoOp )
-                    ]
+                    model.navItems
+                        |> List.map
+                            (\item ->
+                                ( item, NavSelected item )
+                            )
+                        |> Navigation.nav
+                        |> Navigation.withSelectedItem
+                            model.selectedNav
                 , body =
                     [ Title.title "Kitchen Sink of Components"
                         |> Title.withSize2xl
@@ -217,6 +238,11 @@ view model =
                                 (Label.label "Right"
                                     |> Label.toMarkup
                                 )
+                            , Created.created
+                                { createdOn = Time.millisToPosix 1609468521866
+                                , now = Time.millisToPosix 1609468694666
+                                }
+                                |> Created.toMarkup
                             ]
                             |> Card.withTitle "Tooltip Examples"
                             |> Card.toMarkup

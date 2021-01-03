@@ -74,7 +74,7 @@ defaultSection children =
 
 page :
     { title : String
-    , nav : List ( String, msg )
+    , nav : Navigation msg
     , body : List (Element msg)
     }
     -> Page msg
@@ -86,7 +86,7 @@ page { title, nav, body } =
             Just <|
                 PageSidebar
                     { isOpen = True
-                    , nav = Navigation.nav nav
+                    , nav = nav
                     }
         , sections =
             sections body
@@ -155,7 +155,6 @@ sidebarMarkup maybeSidebar =
             (\(PageSidebar options) ->
                 if options.isOpen then
                     options.nav
-                        |> Navigation.withSelectedFirstItem
                         |> Navigation.toMarkup
 
                 else

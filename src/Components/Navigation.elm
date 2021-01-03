@@ -1,8 +1,20 @@
-module Components.Navigation exposing (..)
+module Components.Navigation exposing
+    ( Navigation
+    , nav
+    , navItem
+    , selectItem
+    , toMarkup
+    , withHorizontalVariant
+    , withSelectedFirstItem
+    , withSelectedItem
+    , withTerinaryVariant
+    )
 
+import Dict exposing (Dict)
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
+import Element.Events as Events
 import Element.Font as Font
 import Element.Region as Region
 import Murmur3
@@ -20,7 +32,7 @@ type Navigation msg
 
 type alias Options msg =
     { variant : Variant
-    , children : List (NavItem msg)
+    , children : NavItems msg
     , background : Element.Color
     , foreground : Element.Color
     }
@@ -35,25 +47,44 @@ type alias ItemOptions msg =
     , name : String
     , to : Maybe String
     , onPress : Maybe msg
-    , selected : Bool
+    }
+
+
+type alias NavItems msg =
+    { items : Dict String ( Int, NavItem msg )
+    , selected : Maybe String
     }
 
 
 nav : List ( String, msg ) -> Navigation msg
 nav items =
+    let
+        navItems =
+            { selected = Nothing
+            , items =
+                items
+                    |> List.indexedMap Tuple.pair
+                    |> List.map
+                        (\( idx, ( name, msg ) ) ->
+                            ( idx
+                            , navItem
+                                { name = name
+                                , onPress = Just msg
+                                }
+                            )
+                        )
+                    |> List.foldr
+                        (\( k, NavItem opts ) ->
+                            Dict.insert opts.name ( k, NavItem opts )
+                        )
+                        Dict.empty
+            }
+    in
     Nav
         { variant = Default
         , background = Element.rgb255 21 21 21
         , foreground = Element.rgb255 255 255 255
-        , children =
-            items
-                |> List.map
-                    (\( name, msg ) ->
-                        navItem
-                            { name = name
-                            , onPress = Just msg
-                            }
-                    )
+        , children = navItems
         }
 
 
@@ -69,109 +100,76 @@ navItem { name, onPress } =
         , name = name
         , to = Nothing
         , onPress = onPress
-        , selected = False
         }
+
+
+asNavItemsIn : Options msg -> NavItems msg -> Options msg
+asNavItemsIn options newNavItems =
+    { options | children = newNavItems }
+
+
+setSelected : Maybe String -> NavItems msg -> NavItems msg
+setSelected mItemName navItems =
+    { navItems | selected = mItemName }
 
 
 withSelectedItem : String -> Navigation msg -> Navigation msg
 withSelectedItem itemName (Nav options) =
-    let
-        matches n_ =
-            n_.name == itemName
-
-        handleOne acc_ lst_ (NavItem options_) =
-            if matches options_ then
-                lst_
-                    |> traverse_
-                        (NavItem { options_ | selected = True } :: acc_)
-
-            else
-                lst_
-                    |> traverse_
-                        (NavItem options_ :: acc_)
-
-        traverse_ acc_ lst_ =
-            case lst_ of
-                h :: t ->
-                    h |> handleOne acc_ t
-
-                [] ->
-                    acc_
-
-        newChildren =
-            options.children
-                |> traverse_ []
-    in
     Nav
-        { options
-            | children = newChildren
-        }
+        (options.children
+            |> setSelected (Just itemName)
+            |> asNavItemsIn options
+        )
 
 
 withSelectedFirstItem : Navigation msg -> Navigation msg
 withSelectedFirstItem (Nav options) =
     let
-        newItems =
-            case options.children of
-                [] ->
-                    options.children
-
-                (NavItem opts_) :: t ->
-                    NavItem { opts_ | selected = True } :: t
+        firstName =
+            options.children.items
+                |> Dict.values
+                |> List.sortBy Tuple.first
+                |> List.head
+                |> Maybe.map
+                    (\( _, NavItem first ) ->
+                        Just first.name
+                    )
+                |> Maybe.withDefault
+                    Nothing
     in
-    Nav { options | children = newItems }
+    Nav
+        (options.children
+            |> setSelected firstName
+            |> asNavItemsIn options
+        )
 
 
-{-| Traverse a list of items, and update based on criteria
+selectItem : String -> Navigation msg -> Navigation msg
+selectItem itemName nav_ =
+    -- alias for the builder function
+    withSelectedItem itemName nav_
 
-This compiles, but generates a type mismatch on `items`
-when used ... it's :spooky:
 
--}
-traverse : { byName : Maybe String, byId : Maybe String } -> List (NavItem msg) -> List (NavItem msg)
-traverse { byName, byId } items =
+withHorizontalVariant : Navigation msg -> Navigation msg
+withHorizontalVariant (Nav options) =
+    Nav { options | variant = Horizontal }
+
+
+withTerinaryVariant : Navigation msg -> Navigation msg
+withTerinaryVariant (Nav options) =
+    Nav { options | variant = Terinary }
+
+
+itemMarkup : Maybe String -> NavItem msg -> Element msg
+itemMarkup mItemName (NavItem options) =
     let
-        matches n_ =
-            case ( byName, byId ) of
-                ( Just name_, Nothing ) ->
-                    n_.name == name_
+        selected_ name_ =
+            mItemName
+                |> Maybe.map (\n -> n == name_)
+                |> Maybe.withDefault False
 
-                ( Nothing, Just id_ ) ->
-                    n_.itemId == id_
-
-                ( Just name_, Just id_ ) ->
-                    n_.name == name_ && n_.itemId == id_
-
-                ( Nothing, Nothing ) ->
-                    False
-
-        handleOne acc_ lst_ (NavItem options_) =
-            if matches options_ then
-                lst_
-                    |> traverse_
-                        (NavItem { options_ | selected = True } :: acc_)
-
-            else
-                lst_
-                    |> traverse_
-                        (NavItem options_ :: acc_)
-
-        traverse_ acc_ lst_ =
-            case lst_ of
-                h :: t ->
-                    h |> handleOne acc_ t
-
-                [] ->
-                    acc_
-    in
-    traverse_ [] items
-
-
-itemMarkup : NavItem msg -> Element msg
-itemMarkup (NavItem options) =
-    let
         attrs_ =
-            if options.selected then
+            if selected_ options.name then
                 [ Bg.color <| Element.rgb255 79 82 85
                 , Border.solid
                 , Border.widthEach
@@ -192,9 +190,22 @@ itemMarkup (NavItem options) =
                 , Element.pointer
                 , Element.width Element.fill
                 ]
+
+        baseChildAttrs =
+            [ Element.padding 8 ]
+
+        childAttrs_ =
+            options.onPress
+                |> Maybe.map
+                    (\pressMsg ->
+                        Events.onClick pressMsg
+                            :: baseChildAttrs
+                    )
+                |> Maybe.withDefault
+                    baseChildAttrs
     in
     Element.row attrs_ <|
-        [ Element.el [ Element.padding 8 ] <|
+        [ Element.el childAttrs_ <|
             Element.text options.name
         ]
 
@@ -209,8 +220,15 @@ toMarkup (Nav options) =
             , Region.navigation
             , Element.height Element.fill
             ]
+
+        items =
+            options.children.items
+                |> Dict.values
+                |> List.sortBy Tuple.first
+                |> List.map Tuple.second
+
+        itemMarkup_ =
+            itemMarkup options.children.selected
     in
     Element.column attrs_ <|
-        (options.children
-            |> List.map itemMarkup
-        )
+        (items |> List.map itemMarkup_)
