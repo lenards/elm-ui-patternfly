@@ -1,12 +1,9 @@
 module Main exposing (..)
 
 import Browser
-import Components.Badge as Badge
+import Components.Button as Button
 import Components.Card as Card
-import Components.Chip as Chip
-import Components.ChipGroup as ChipGroup
 import Components.Created as Created
-import Components.Icons as Icons
 import Components.Info as Info
 import Components.Label as Label
 import Components.Navigation as Navigation exposing (Navigation)
@@ -16,25 +13,11 @@ import Components.Tooltip as Tooltip
 import Element
 import Html exposing (Html)
 import Time
+import Types exposing (Model, Msg(..))
 
 
 
 ---- MODEL ----
-
-
-type alias Category =
-    { name : String
-    , items : List String
-    }
-
-
-type alias Model =
-    { exampleChip : Maybe String
-    , listOfChips : List String
-    , category : Maybe Category
-    , navItems : List String
-    , selectedNav : String
-    }
 
 
 init : ( Model, Cmd Msg )
@@ -65,14 +48,6 @@ init =
 
 
 ---- UPDATE ----
-
-
-type Msg
-    = NoOp
-    | NavSelected String
-    | RemoveExampleChip
-    | RemoveChip String
-    | RemoveCategory
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -144,63 +119,6 @@ view model =
                     , Info.info
                         "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
                         |> Info.toMarkup
-                    , Element.column [ Element.paddingXY 0 10, Element.spacing 20 ] <|
-                        [ Chip.chip "English"
-                            |> Chip.toMarkup
-                        , model.exampleChip
-                            |> Maybe.map
-                                (\c ->
-                                    Chip.chip c
-                                        |> Chip.withCloseMsg RemoveExampleChip
-                                        |> Chip.toMarkup
-                                )
-                            |> Maybe.withDefault Element.none
-                        , ChipGroup.group model.listOfChips RemoveChip
-                            |> ChipGroup.toMarkup
-                        , model.category
-                            |> Maybe.map
-                                (\c ->
-                                    ChipGroup.group c.items (\_ -> NoOp)
-                                        |> ChipGroup.withCategory c.name
-                                        |> ChipGroup.withClickMsg RemoveCategory
-                                        |> ChipGroup.toMarkup
-                                )
-                            |> Maybe.withDefault Element.none
-                        ]
-                    , Element.row [ Element.paddingXY 0 10, Element.spacing 10 ] <|
-                        [ Badge.badge 88 |> Badge.toMarkup
-                        , Badge.unreadBadge 12 |> Badge.toMarkup
-                        , Badge.badge 650 |> Badge.toMarkup
-                        , Badge.badge 1000 |> Badge.toMarkup
-                        ]
-                    , Element.row
-                        [ Element.paddingXY 0 10
-                        , Element.spacing 10
-                        , Tooltip.tooltip "Example of a tooltip on hover"
-                            |> Tooltip.withPositionLeft
-                            |> Tooltip.toMarkup
-                        ]
-                        [ Label.label "Grey" |> Label.toMarkup
-                        , Label.label "Grey"
-                            |> Label.withCloseMsg NoOp
-                            |> Label.toMarkup
-                        , Label.label "Grey"
-                            |> Label.withIcon (Icons.infoRgb255 21 21 21)
-                            |> Label.withCloseMsg NoOp
-                            |> Label.toMarkup
-                        , Label.label "Grey"
-                            |> Label.withOutline
-                            |> Label.toMarkup
-                        , Label.label "Grey"
-                            |> Label.withOutline
-                            |> Label.withCloseMsg NoOp
-                            |> Label.toMarkup
-                        , Label.label "Grey"
-                            |> Label.withOutline
-                            |> Label.withIcon (Icons.infoRgb255 21 21 21)
-                            |> Label.withCloseMsg NoOp
-                            |> Label.toMarkup
-                        ]
                     , Element.row
                         [ Element.paddingXY 0 10
                         , Element.spacing 10
@@ -238,6 +156,16 @@ view model =
                                 (Label.label "Right"
                                     |> Label.toMarkup
                                 )
+                            , Button.secondary
+                                { label = "Example"
+                                , onPress = Nothing
+                                }
+                                |> Button.toMarkup
+                            , Button.control
+                                { label = "Example"
+                                , onPress = Nothing
+                                }
+                                |> Button.toMarkup
                             , Created.created
                                 { createdOn = Time.millisToPosix 1609468521866
                                 , now = Time.millisToPosix 1609468694666
