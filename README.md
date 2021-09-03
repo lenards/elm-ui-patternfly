@@ -23,7 +23,9 @@ Bonus:
 
 # Developing
 
-This repository started
+This repository started as [Create Elm App](https://github.com/halfzebra/create-elm-app).
+
+It's in the middle of becoming a library with an Elm Book sample application. You can find the default information provided by `Create Elm App` in the section below.
 
 <details><summary>From "Elm App" ...</summary>
 
