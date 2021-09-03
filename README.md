@@ -1,8 +1,12 @@
-# Pattern Fly Components 
+# About
+This is an exploration of the PatternFly design system.
 
-_Built with `elm-ui` and the Builder Pattern. 
+# PatternFly Components
 
-Links: 
+
+_Built with `elm-ui` and the Builder Pattern_.
+
+Links:
   - https://www.patternfly.org/v4/components/about-modal
   - https://github.com/dwyl/learn-elm/issues/141
     - https://youtu.be/PDyWP-0H4Zo
@@ -16,6 +20,12 @@ Book(s):
 Bonus:
   - https://dev.to/lucamug/elm-beginners-tutorial-how-to-make-animated-snackbars-with-zero-css-12g1
   - https://korban.net/posts/elm/2020-04-07-using-elm-animator-with-elm-ui/
+
+# Developing
+
+This repository started
+
+<details><summary>From "Elm App" ...</summary>
 
 # Elm App
 
@@ -807,7 +817,7 @@ Mutate the configuration directly or use [webpack-merge](https://www.npmjs.com/p
 `env` variable will help you distinguish `"development"` from `"production"` for environment-specific overrides.
 
 ## Configuring the Proxy Manually
- 
+
 If the `proxy` option is not flexible enough for you, you can get direct access to the Express app instance and hook up your own proxy middleware.
 
 You can use this feature in conjunction with the `proxy` property in `elmapp.config.js`, but it is recommended you consolidate all of your logic into `setupProxy` property`.
@@ -955,3 +965,5 @@ GitHub Pages doesn’t support routers that use the HTML5 `pushState` history AP
 ## IDE setup for Hot Module Replacement
 
 Remember to disable [safe write](https://webpack.js.org/guides/development/#adjusting-your-text-editor) if you are using VIM or IntelliJ IDE, such as WebStorm.
+
+</details>
