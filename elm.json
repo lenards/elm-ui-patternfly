@@ -5,6 +5,7 @@
     "license": "BSD-3-Clause",
     "version": "0.0.1",
     "exposed-modules": [
+        "PF4.Accordion",
         "PF4.Badge",
         "PF4.Button",
         "PF4.Card",

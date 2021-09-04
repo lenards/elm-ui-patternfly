@@ -1,5 +1,6 @@
 module Types exposing (Category, Model, Msg(..))
 
+import PF4.Accordion
 
 type alias Category =
     { name : String
@@ -13,12 +14,14 @@ type alias Model =
     , category : Maybe Category
     , navItems : List String
     , selectedNav : String
+    , accordionState : PF4.Accordion.State
     }
 
 
 type Msg
     = NoOp
     | NavSelected String
+    | AccordionSelected PF4.Accordion.Msg
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory

@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Browser
+import PF4.Accordion as Accordion
 import PF4.Button as Button
 import PF4.Card as Card
 import PF4.Created as Created
@@ -41,6 +42,7 @@ init =
             , "Tooltip"
             ]
       , selectedNav = "Badge"
+      , accordionState = Accordion.singleExpandState
       }
     , Cmd.none
     )
@@ -80,6 +82,15 @@ update msg model =
             , Cmd.none
             )
 
+        AccordionSelected accordionMsg ->
+            ( { model
+                | accordionState =
+                    Accordion.update
+                        accordionMsg
+                        model.accordionState
+            }
+            , Cmd.none
+            )
 
 
 ---- VIEW ----
@@ -120,7 +131,7 @@ view model =
                         "This Beta component is currently under review, so please join in and give us your feedback on the PatternFly forum."
                         |> Info.toMarkup
                     , Element.row
-                        [ Element.paddingXY 0 10
+                        [ Element.paddingXY 2 10
                         , Element.spacing 10
                         ]
                         [ Card.card
@@ -173,6 +184,25 @@ view model =
                                 |> Created.toMarkup
                             ]
                             |> Card.withTitle "Tooltip Examples"
+                            |> Card.toMarkup
+                        ]
+                    , Element.column
+                        [ Element.paddingXY 2 10
+                        , Element.spacing 10
+                        , Element.width (Element.px 960)
+                        ]
+                        [  Card.card
+                            [ Accordion.accordion
+                                (\accMsg -> AccordionSelected accMsg)
+                                [ ("Title 1", Element.el [] (Label.label "Content 1" |> Label.toMarkup) )
+                                , ("Title 2", Element.el [] (Label.label "Content 2" |> Label.toMarkup) )
+                                ]
+                                |> Accordion.toMarkupFor
+                                    model.accordionState
+
+                            , Label.label "The first stateful PF4 component" |> Label.toMarkup
+                            ]
+                            |> Card.withTitle "Accordion Example"
                             |> Card.toMarkup
                         ]
                     ]
