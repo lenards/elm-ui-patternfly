@@ -36,6 +36,7 @@ component =
                     |> Button.toMarkup
                 ]
                 |> Card.withTitle "Buttons Example"
+                |> Card.withBodyPadding 20
                 |> Card.toMarkup
             , Card.card
                 [ Created.created
@@ -45,6 +46,7 @@ component =
                     |> Created.toMarkup
                 ]
                 |> Card.withTitle "Created Example"
+                |> Card.withBodyPadding 20
                 |> Card.toMarkup
             ]
 

@@ -1,4 +1,4 @@
-module PF4.Created exposing (..)
+module PF4.Created exposing (created, toMarkup, withExtraAttributes)
 
 import Element exposing (Element)
 import Time
@@ -29,8 +29,8 @@ withExtraAttributes extra (Created options) =
     Created { options | extraAttributes = extra }
 
 
-calcUnitsAgo : Options msg -> { number : Int, label : String }
-calcUnitsAgo options =
+calcUnitsAgo_ : Options msg -> { number : Int, label : String }
+calcUnitsAgo_ options =
     let
         secondsDiff =
             Time.posixToMillis options.now
@@ -56,7 +56,7 @@ toMarkup : Created msg -> Element msg
 toMarkup (Created options) =
     let
         { number, label } =
-            calcUnitsAgo options
+            calcUnitsAgo_ options
 
         attrs_ =
             options.extraAttributes

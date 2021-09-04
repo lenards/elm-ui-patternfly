@@ -1,4 +1,16 @@
-module PF4.Badge exposing (..)
+module PF4.Badge exposing
+    ( Badge
+    , Status
+    , badge
+    , isRead
+    , isUnread
+    , readCombo
+    , toMarkup
+    , unreadBadge
+    , unreadCombo
+    , withReadStatus
+    , withUnreadStatus
+    )
 
 import Element exposing (Element)
 import Element.Background as Bg

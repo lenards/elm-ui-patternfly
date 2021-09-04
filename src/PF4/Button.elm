@@ -1,4 +1,31 @@
-module PF4.Button exposing (..)
+module PF4.Button exposing
+    ( Button
+    , Position
+    , Size
+    , Variant
+    , button
+    , control
+    , danger
+    , link
+    , primary
+    , secondary
+    , tertiary
+    , toMarkup
+    , warning
+    , withControl
+    , withDanger
+    , withDefaultSize
+    , withIcon
+    , withIconLeft
+    , withIconRight
+    , withLargeSize
+    , withLink
+    , withPrimary
+    , withSecondary
+    , withSmallSize
+    , withTertiary
+    , withWarning
+    )
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -6,7 +33,6 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes exposing (style)
-import PF4.Icons as Icons
 
 
 type Button msg

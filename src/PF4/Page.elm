@@ -1,4 +1,12 @@
-module PF4.Page exposing (..)
+module PF4.Page exposing
+    ( Page
+    , PageHeader
+    , PageSidebar
+    , page
+    , pageHeader
+    , sections
+    , toMarkup
+    )
 
 import Element exposing (Element)
 import Element.Background as Bg

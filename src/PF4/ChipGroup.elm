@@ -1,5 +1,7 @@
 module PF4.ChipGroup exposing
     ( ChipGroup
+    , ChipsShown
+    , expandedText
     , group
     , toMarkup
     , withCategory

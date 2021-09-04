@@ -1,5 +1,6 @@
 module PF4.Info exposing
-    ( info
+    ( Info
+    , info
     , toMarkup
     , withDefaultIcon
     , withTitle

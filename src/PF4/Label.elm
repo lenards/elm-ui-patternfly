@@ -1,4 +1,14 @@
-module PF4.Label exposing (..)
+module PF4.Label exposing
+    ( Label
+    , Variant
+    , label
+    , toMarkup
+    , withCloseMsg
+    , withFill
+    , withHyperlink
+    , withIcon
+    , withOutline
+    )
 
 import Element exposing (Element)
 import Element.Background as Bg
