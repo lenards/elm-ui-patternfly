@@ -1,5 +1,9 @@
 module PF4.Icons exposing
-    ( close
+    ( chevronDown
+    , chevronDownRgb255
+    , chevronRight
+    , chevronRightRgb255
+    , close
     , closeCircle
     , closeCircleRgb255
     , closeRgb255
@@ -164,6 +168,65 @@ hamburgerRgb255 r g b =
                         , "16zm0 160h416c8.837 0 16-7.163 "
                         , "16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 "
                         , "0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+                        ]
+                    )
+                ]
+                []
+            ]
+        ]
+        |> Element.html
+
+
+chevronDown : Element msg
+chevronDown =
+    chevronDownRgb255 106 110 115
+
+
+chevronDownRgb255 : Int -> Int -> Int -> Element msg
+chevronDownRgb255 r g b =
+    Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
+        [ Svg.svg
+            [ SvgAttrs.fill "currentColor"
+            , SvgAttrs.height "1em"
+            , SvgAttrs.width "1em"
+            , SvgAttrs.viewBox "0 0 256 512"
+            , SvgAttrs.style "vertical-align: -0.125em;"
+            ]
+            [ Svg.path
+                [ SvgAttrs.d
+                    (String.concat
+                        [ "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 "
+                        , "0l-22.6-22.6c-9.4-9.4-9.4-24.6 "
+                        , "0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 "
+                        , "0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 "
+                        , "136c9.5 9.4 9.5 24.6.1 34z"
+                        ]
+                    )
+                ]
+                []
+            ]
+        ]
+        |> Element.html
+
+
+chevronRight : Element msg
+chevronRight =
+    chevronRightRgb255 106 110 115
+
+
+chevronRightRgb255 : Int -> Int -> Int -> Element msg
+chevronRightRgb255 r g b =
+    Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
+        [ Svg.svg
+            [ SvgAttrs.fill "currentColor", SvgAttrs.height "1em", SvgAttrs.width "1em", SvgAttrs.viewBox "0 0 256 512", SvgAttrs.style "vertical-align: -0.125em;" ]
+            [ Svg.path
+                [ SvgAttrs.d
+                    (String.concat
+                        [ "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 "
+                        , "0l-22.6-22.6c-9.4-9.4-9.4-24.6 "
+                        , "0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 "
+                        , "0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 "
+                        , "136c9.5 9.4 9.5 24.6.1 34z"
                         ]
                     )
                 ]
