@@ -74,8 +74,8 @@ nav items =
                             )
                         )
                     |> List.foldr
-                        (\( k, NavItem opts ) ->
-                            Dict.insert opts.name ( k, NavItem opts )
+                        (\( i, NavItem opts ) ->
+                            Dict.insert opts.name ( i, NavItem opts )
                         )
                         Dict.empty
             }
@@ -91,12 +91,12 @@ nav items =
 navItem : { name : String, onPress : Maybe msg } -> NavItem msg
 navItem { name, onPress } =
     let
-        genId =
+        generatedId =
             Murmur3.hashString 650 name
                 |> String.fromInt
     in
     NavItem
-        { itemId = genId
+        { itemId = generatedId
         , name = name
         , to = Nothing
         , onPress = onPress
