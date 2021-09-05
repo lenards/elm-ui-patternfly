@@ -1,18 +1,25 @@
 module PF4.Icons exposing
-    ( chevronDown
-    , chevronDownRgb255
-    , chevronRight
-    , chevronRightRgb255
-    , close
-    , closeCircle
-    , closeCircleRgb255
-    , closeRgb255
-    , hamburger
-    , info
-    , infoRgb255
-    , times
-    , timesRgb255
+    ( hamburger
+    , chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255
     )
+
+{-| This library handles functions that will render `Svg` versions of
+the icons used by the `PF4` library. This relieves folks from the
+need to include a sprite sheet or other assets when using `PF4`.
+
+Most icons has functions for a default color and `Rgb255` form.
+
+
+# System Icons, no color variation
+
+@docs hamburger
+
+
+# Icons with default color and variation
+
+@docs chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255
+
+-}
 
 import Element exposing (Element)
 import Html
@@ -33,11 +40,13 @@ toCssRgb ( r, g, b ) =
         ++ ")"
 
 
+{-| -}
 info : Element msg
 info =
     infoRgb255 43 154 243
 
 
+{-| -}
 infoRgb255 : Int -> Int -> Int -> Element msg
 infoRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
@@ -65,11 +74,13 @@ infoRgb255 r g b =
         |> Element.html
 
 
+{-| -}
 close : Element msg
 close =
     closeRgb255 106 110 115
 
 
+{-| -}
 closeRgb255 : Int -> Int -> Int -> Element msg
 closeRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
@@ -97,11 +108,13 @@ closeRgb255 r g b =
         |> Element.html
 
 
+{-| -}
 closeCircle : Element msg
 closeCircle =
     closeCircleRgb255 106 110 115
 
 
+{-| -}
 closeCircleRgb255 : Int -> Int -> Int -> Element msg
 closeCircleRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
@@ -132,21 +145,25 @@ closeCircleRgb255 r g b =
         |> Element.html
 
 
+{-| -}
 times : Element msg
 times =
     close
 
 
+{-| -}
 timesRgb255 : Int -> Int -> Int -> Element msg
 timesRgb255 r g b =
     closeRgb255 r g b
 
 
+{-| -}
 hamburger : Element msg
 hamburger =
     hamburgerRgb255 255 255 255
 
 
+{-| -}
 hamburgerRgb255 : Int -> Int -> Int -> Element msg
 hamburgerRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
@@ -177,11 +194,13 @@ hamburgerRgb255 r g b =
         |> Element.html
 
 
+{-| -}
 chevronDown : Element msg
 chevronDown =
     chevronDownRgb255 106 110 115
 
 
+{-| -}
 chevronDownRgb255 : Int -> Int -> Int -> Element msg
 chevronDownRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
@@ -209,11 +228,13 @@ chevronDownRgb255 r g b =
         |> Element.html
 
 
+{-| -}
 chevronRight : Element msg
 chevronRight =
     chevronRightRgb255 106 110 115
 
 
+{-| -}
 chevronRightRgb255 : Int -> Int -> Int -> Element msg
 chevronRightRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]

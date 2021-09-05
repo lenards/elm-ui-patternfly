@@ -1,10 +1,32 @@
 module PF4.Info exposing
     ( Info
     , info
+    , withTitle, withDefaultIcon
     , toMarkup
-    , withDefaultIcon
-    , withTitle
     )
+
+{-| An informational text element
+
+#Defintion
+
+@docs Info
+
+
+# Constructor function
+
+@docs info
+
+
+# Configuration functions
+
+@docs withTitle, withDefaultIcon
+
+
+# Rendering element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -14,6 +36,8 @@ import Element.Region as Region
 import PF4.Icons as Icons
 
 
+{-| Opaque `Info` element that includes information text content
+-}
 type Info msg
     = Info (Options msg)
 
@@ -30,6 +54,8 @@ defaultIcon =
     Icons.info
 
 
+{-| Constructs an `Info` element
+-}
 info : String -> Info msg
 info text =
     Info
@@ -39,11 +65,21 @@ info text =
         }
 
 
+{-| Configures the `Info` element appear with title text above the content.
+
+By default, `Info` has no title text.
+
+-}
 withTitle : String -> Info msg -> Info msg
 withTitle title_ (Info options) =
     Info { options | title = Just title_ }
 
 
+{-| Configures the `Info` element to appear with the default icon.
+
+By default, `Info` will not render an icon.
+
+-}
 withDefaultIcon : Info msg -> Info msg
 withDefaultIcon (Info options) =
     Info
@@ -52,6 +88,8 @@ withDefaultIcon (Info options) =
         }
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Info msg -> Element msg
 toMarkup (Info options) =
     let

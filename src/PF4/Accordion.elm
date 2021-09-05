@@ -1,6 +1,31 @@
-module PF4.Accordion exposing (..)
+module PF4.Accordion exposing
+    ( Accordion, AccordionItem
+    , accordion, accordionItem, defaultState, singleExpandState, multipleExpandState
+    , State, Msg, update
+    , toMarkupFor
+    )
 
 {-| An expandable component that fills the role of an accordian
+
+
+# Definition
+
+@docs Accordion, AccordionItem
+
+
+# Constructor functions
+
+@docs accordion, accordionItem, defaultState, singleExpandState, multipleExpandState
+
+
+# Handling lifecycle of element
+
+@docs State, Msg, update
+
+
+# Rendering stateful element
+
+@docs toMarkupFor
 
 <https://www.patternfly.org/v4/components/accordion>
 
@@ -13,19 +38,32 @@ import Murmur3
 import PF4.Icons as Icons
 
 
+{-| Opaque `Accordion` element that can produce `msg` messages
+-}
 type Accordion msg
     = Accordion (Options msg)
 
 
+{-| Internal Accordion.Msg type for handling statefulness
+-}
 type Msg
     = Pressed String
 
 
+{-| Opaque `State` representation of the `Accordion`.
+
+To create a `State`, use one of the provided
+
+-}
 type alias State =
     Behavior
 
 
-{-| Size = Default | Large
+{-| Size
+
+Current, Size is only defined as `Default`. Eventually there
+will be `Default` and `Large` variants for `Size`.
+
 -}
 type Size
     = Default
@@ -64,6 +102,8 @@ type alias AccordionItems msg =
     }
 
 
+{-| Opaque `AccordionItem` element that can produce `msg` messages
+-}
 type AccordionItem msg
     = AccordionItem (ItemOptions msg)
 
@@ -85,21 +125,46 @@ type alias ItemOptions msg =
     }
 
 
+{-| Constructs a default state with the default behavior
+
+The default behavior is "Single Expand".
+
+Only a single accordion can be open at a given time.
+
+-}
 defaultState : State
 defaultState =
     singleExpandState
 
 
+{-| Constructs a state with behavior of "Single Expand"
+
+Only a single accordion can be open at a given time.
+
+-}
 singleExpandState : State
 singleExpandState =
     SingleExpand None
 
 
+{-| Constructs a state with behavior of "Multiple Expand"
+
+Each accordion item clicked on will be opened. An open
+accordion item clicked on will close.
+
+-}
 multipleExpandState : State
 multipleExpandState =
     MultipleExpand None
 
 
+{-| Constructs an accordian give a list of `(title, content)` and a message
+mapper function.
+
+The `msgMapper` needs to take a `PF4.Accordian.Msg` and transform it into
+to the `msg` of your Elm application.
+
+-}
 accordion : (Msg -> msg) -> List ( String, Element msg ) -> Accordion msg
 accordion msgMapper items =
     let
@@ -132,6 +197,8 @@ accordion msgMapper items =
         }
 
 
+{-| Constructs an accordion item given a `title` and an `Element msg` as `content`
+-}
 accordionItem : { title : String, content : Element msg } -> AccordionItem msg
 accordionItem { title, content } =
     let
@@ -300,6 +367,8 @@ updateSelectedIds itemId allowMultiple mSelectedIds =
             (Expanded (insert itemId Dict.empty))
 
 
+{-| Handles updating the `state` given the `Msg`
+-}
 update : Msg -> State -> State
 update msg state =
     let

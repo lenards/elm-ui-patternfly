@@ -1,23 +1,49 @@
 module PF4.Card exposing
     ( Card
-    , asTitleIn
     , card
+    , withTitle, withFooter
+    , withBodyPadding, withBodyPaddingXY, withBodyPaddingEach
+    , withBodySpacing, withBodySpacingXY, withBodySpaceEvenly
     , toMarkup
-    , withBodyPadding
-    , withBodyPaddingEach
-    , withBodyPaddingXY
-    , withBodySpaceEvenly
-    , withBodySpacing
-    , withBodySpacingXY
-    , withFooter
-    , withTitle
     )
+
+{-| A component to save as a media card or general container
+
+
+# Definition
+
+@docs Card
+
+
+# Constructor function(s)
+
+@docs card
+
+
+# Configuration functions
+
+@docs withTitle, withFooter
+
+
+# Padding & Spacing functions
+
+@docs withBodyPadding, withBodyPaddingXY, withBodyPaddingEach
+@docs withBodySpacing, withBodySpacingXY, withBodySpaceEvenly
+
+
+# Rendering stateless element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Attribute, Element)
 import Element.Font as Font
 import PF4.Title as Title
 
 
+{-| Opaque `Card` element that can produce `msg` messages
+-}
 type Card msg
     = Card (Options msg)
 
@@ -82,6 +108,8 @@ defaultTitle text =
         |> Title.withSizeLg
 
 
+{-| Constructs a card element with list `Element msg` as the "body" content
+-}
 card : List (Element msg) -> Card msg
 card body =
     Card
@@ -91,6 +119,8 @@ card body =
         }
 
 
+{-| Configures the `Card` to have title text above the "body" content
+-}
 withTitle : String -> Card msg -> Card msg
 withTitle heading (Card options) =
     Card
@@ -104,6 +134,8 @@ withTitle heading (Card options) =
         }
 
 
+{-| Configures the `Card` to have a footer element with the context passed
+-}
 withFooter : Element msg -> Card msg -> Card msg
 withFooter element (Card options) =
     Card { options | footer = Just element }
@@ -114,16 +146,22 @@ asTitleIn options newTitle =
     { options | title = Just newTitle }
 
 
+{-| Appeals spacing to the "body" content
+-}
 withBodySpacing : Int -> Card msg -> Card msg
 withBodySpacing spacingValue card_ =
     card_ |> updateBodySpacing_ (Element.spacing spacingValue)
 
 
+{-| Appeals spacing to the "body" content
+-}
 withBodySpacingXY : Int -> Int -> Card msg -> Card msg
 withBodySpacingXY spacingX spacingY card_ =
     card_ |> updateBodySpacing_ (Element.spacingXY spacingX spacingY)
 
 
+{-| Appeals spacing to the "body" content
+-}
 withBodySpaceEvenly : Card msg -> Card msg
 withBodySpaceEvenly card_ =
     card_ |> updateBodySpacing_ Element.spaceEvenly
@@ -141,16 +179,22 @@ updateBodySpacing_ spacingAttr (Card option) =
         }
 
 
+{-| Appeals padding to the "body" content
+-}
 withBodyPadding : Int -> Card msg -> Card msg
 withBodyPadding paddingValue card_ =
     card_ |> updateBodyPadding_ (Element.padding paddingValue)
 
 
+{-| Appeals padding to the "body" content
+-}
 withBodyPaddingXY : Int -> Int -> Card msg -> Card msg
 withBodyPaddingXY paddingX paddingY card_ =
     card_ |> updateBodyPadding_ (Element.paddingXY paddingX paddingY)
 
 
+{-| Appeals padding to the "body" content
+-}
 withBodyPaddingEach :
     { top : Int
     , right : Int
@@ -195,6 +239,8 @@ headerMarkup mCardHeader =
             Element.none
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Card msg -> Element msg
 toMarkup (Card options) =
     let

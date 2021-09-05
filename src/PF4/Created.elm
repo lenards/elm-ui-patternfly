@@ -1,9 +1,30 @@
-module PF4.Created exposing (created, toMarkup, withExtraAttributes)
+module PF4.Created exposing
+    ( created
+    , toMarkup
+    )
+
+{-| A component for showing "time since created", in days
+
+Not listed in the official PatternFly 4 component list.
+
+
+# Constructor function
+
+@docs created
+
+
+# Rendering element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Element)
 import Time
 
 
+{-| Opaque `Created` element that can produce `msg` messages
+-}
 type Created msg
     = Created (Options msg)
 
@@ -15,6 +36,18 @@ type alias Options msg =
     }
 
 
+{-| Constructs a `Created msg` element using a record
+with a `createdOn` and `now` value.
+
+Uses `Time` in `elm/time`.
+
+    Created.created
+        { createdOn = Time.millisToPosix 1609468521866
+        , now = Time.millisToPosix 1609468694666
+        }
+        |> Created.toMarkup
+
+-}
 created : { createdOn : Time.Posix, now : Time.Posix } -> Created msg
 created { createdOn, now } =
     Created
@@ -52,6 +85,8 @@ calcUnitsAgo_ options =
         }
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Created msg -> Element msg
 toMarkup (Created options) =
     let

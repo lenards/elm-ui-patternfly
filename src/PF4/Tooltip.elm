@@ -239,6 +239,8 @@ createTooltip convertF tooltipEl =
             Element.none
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Tooltip -> Element.Attribute msg
 toMarkup ((Tooltip options) as tt) =
     let

@@ -1,10 +1,38 @@
 module PF4.Chip exposing
     ( Chip
     , chip
+    , withCloseMsg, withForeground
     , toMarkup
-    , withCloseMsg
-    , withForeground
     )
+
+{-| A component for displaying items that are involved in selection or filtering
+out of an overall group.
+
+See also, `PF4.ChipGroup`
+
+
+# Definition
+
+@docs Chip
+
+
+# Constructor function
+
+@docs chip
+
+
+# Configuration functions
+
+@docs withCloseMsg, withForeground
+
+
+# Rendering element
+
+@docs toMarkup
+
+<https://www.patternfly.org/v4/components/chip>
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -16,6 +44,8 @@ import Murmur3
 import PF4.Icons as Icons
 
 
+{-| Opaque `Chip` element that can produce `msg` messages
+-}
 type Chip msg
     = Chip (Options msg)
 
@@ -33,6 +63,8 @@ defaultClose =
     Icons.close
 
 
+{-| Constructs a `Chip` from the text
+-}
 chip : String -> Chip msg
 chip text =
     Chip
@@ -43,11 +75,15 @@ chip text =
         }
 
 
+{-| Configures what `msg` is produced `onClick` by `Chip`
+-}
 withCloseMsg : msg -> Chip msg -> Chip msg
 withCloseMsg msg (Chip options) =
     Chip { options | onClose = Just msg }
 
 
+{-| Configures the foreground color, in RGB
+-}
 withForeground : ( Int, Int, Int ) -> Chip msg -> Chip msg
 withForeground ( r, g, b ) (Chip options) =
     Chip
@@ -57,6 +93,8 @@ withForeground ( r, g, b ) (Chip options) =
         }
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Chip msg -> Element msg
 toMarkup (Chip options) =
     let

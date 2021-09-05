@@ -1,12 +1,35 @@
 module PF4.ChipGroup exposing
-    ( ChipGroup
-    , ChipsShown
-    , expandedText
+    ( ChipGroup, ChipsShown
     , group
+    , withCategory, withClickMsg
     , toMarkup
-    , withCategory
-    , withClickMsg
     )
+
+{-| A container component for `PF4.Chip` element(s)
+
+
+# Definition
+
+@docs ChipGroup, ChipsShown
+
+
+# Constructor function
+
+@docs group
+
+
+# Configuration functions
+
+@docs withCategory, withClickMsg
+
+
+# Rendering element
+
+@docs toMarkup
+
+<https://www.patternfly.org/v4/components/chip-group>
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -16,10 +39,14 @@ import PF4.Chip as Chip exposing (Chip)
 import PF4.Icons as Icons
 
 
+{-| Opaque `ChipGroup` element that can produce `msg` messages
+-}
 type ChipGroup msg
     = ChipGroup (Options msg)
 
 
+{-| Defines how many `Chip`s to show when rendering.
+-}
 type ChipsShown
     = All
     | Show Int
@@ -49,6 +76,8 @@ defaultClose =
     Icons.closeCircle
 
 
+{-| Constructs a group of `Chip`s creates from the `List String`
+-}
 group : List String -> (String -> msg) -> ChipGroup msg
 group chipList chipClickMsg =
     let
@@ -68,16 +97,22 @@ group chipList chipClickMsg =
         }
 
 
+{-| Configures group to have category
+-}
 withCategory : String -> ChipGroup msg -> ChipGroup msg
 withCategory category (ChipGroup options) =
     ChipGroup { options | category = Just category }
 
 
+{-| Configures what `msg` is produced by group `onClick`
+-}
 withClickMsg : msg -> ChipGroup msg -> ChipGroup msg
 withClickMsg clickMsg (ChipGroup options) =
     ChipGroup { options | onClick = Just clickMsg }
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : ChipGroup msg -> Element msg
 toMarkup (ChipGroup options) =
     let

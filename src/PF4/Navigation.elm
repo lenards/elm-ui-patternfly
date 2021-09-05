@@ -1,14 +1,51 @@
 module PF4.Navigation exposing
     ( Navigation
-    , nav
-    , navItem
+    , nav, navItem
     , selectItem
+    , withSelectedItem, withSelectedFirstItem
+    , withHorizontalVariant, withTerinaryVariant
     , toMarkup
-    , withHorizontalVariant
-    , withSelectedFirstItem
-    , withSelectedItem
-    , withTerinaryVariant
     )
+
+{-| A stateless component for application navigation
+
+Intended to have its state "driven" by the Elm application using it.
+
+Uses the `Element.Region.navigation` to indicate semantic intent.
+
+<https://www.patternfly.org/v4/components/navigation>
+
+
+# Definition
+
+@docs Navigation
+
+
+# Constructor functions
+
+@docs nav, navItem
+
+
+# Perform State Change
+
+@docs selectItem
+
+
+# Selection functions
+
+@docs withSelectedItem, withSelectedFirstItem
+
+
+# Configuration functions
+
+@docs withHorizontalVariant, withTerinaryVariant
+
+
+# Rendering stateless element
+
+@docs toMarkup
+
+-}
 
 import Dict exposing (Dict)
 import Element exposing (Element)
@@ -20,12 +57,8 @@ import Element.Region as Region
 import Murmur3
 
 
-type Variant
-    = Default
-    | Horizontal
-    | Terinary
-
-
+{-| Opaque `Navigation` element that can produce `msg` messages
+-}
 type Navigation msg
     = Nav (Options msg)
 
@@ -36,6 +69,12 @@ type alias Options msg =
     , background : Element.Color
     , foreground : Element.Color
     }
+
+
+type Variant
+    = Default
+    | Horizontal
+    | Terinary
 
 
 type NavItem msg
@@ -56,6 +95,44 @@ type alias NavItems msg =
     }
 
 
+{-| Constructs a `Navigation msg` given a list of items
+
+You could render a `Navigation msg` with the following
+
+    [ "Badge"
+    , "Chip"
+    , "ChipGroup"
+    , "Icons"
+    , "Info"
+    , "Label"
+    , "Navigation"
+    , "Title"
+    , "Tooltip"
+    ]
+        |> List.map
+            (\item ->
+                ( item, NavSelected item )
+            )
+        |> Navigation.nav
+
+However, you will need want to have the `navItems` available for
+application code. It would make more sense to likely render using
+values that are stored your `Model`:
+
+    model.navItems
+        |> List.map
+            (\item ->
+                ( item, NavSelected item )
+            )
+        |> Navigation.nav
+        |> Navigation.withSelectedItem
+            model.selectedNav
+
+Currently, `Navigation msg` is implemented in a stateless manner,
+assuming the Elm application will want to _drive_ the transitions
+from data that is in the model.
+
+-}
 nav : List ( String, msg ) -> Navigation msg
 nav items =
     let
@@ -88,6 +165,14 @@ nav items =
         }
 
 
+{-| Constructs a `NavItem msg` given a `name` and `msg` to produce `onPress`
+
+For a `NavItem msg` that is disabled or not clickable, you can provide
+`Nothing` for `onPress`.
+
+Note: `name` is assumed to be unique among all items
+
+-}
 navItem : { name : String, onPress : Maybe msg } -> NavItem msg
 navItem { name, onPress } =
     let
@@ -113,6 +198,8 @@ setSelected mItemName navItems =
     { navItems | selected = mItemName }
 
 
+{-| Configures the selected item to be `itemName`
+-}
 withSelectedItem : String -> Navigation msg -> Navigation msg
 withSelectedItem itemName (Nav options) =
     Nav
@@ -122,6 +209,8 @@ withSelectedItem itemName (Nav options) =
         )
 
 
+{-| Configures that navigation to have the first `NavItem msg` as selected
+-}
 withSelectedFirstItem : Navigation msg -> Navigation msg
 withSelectedFirstItem (Nav options) =
     let
@@ -144,17 +233,27 @@ withSelectedFirstItem (Nav options) =
         )
 
 
+{-| Selects an item by `itemName`
+
+For duplicates, the handling of selection would be predictable given
+the underlying representation.
+
+-}
 selectItem : String -> Navigation msg -> Navigation msg
 selectItem itemName nav_ =
     -- alias for the builder function
     withSelectedItem itemName nav_
 
 
+{-| Configures the orientation for rendering to be horizontal
+-}
 withHorizontalVariant : Navigation msg -> Navigation msg
 withHorizontalVariant (Nav options) =
     Nav { options | variant = Horizontal }
 
 
+{-| Configures the orientation for rendering
+-}
 withTerinaryVariant : Navigation msg -> Navigation msg
 withTerinaryVariant (Nav options) =
     Nav { options | variant = Terinary }
@@ -210,6 +309,8 @@ itemMarkup mItemName (NavItem options) =
         ]
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Navigation msg -> Element msg
 toMarkup (Nav options) =
     let

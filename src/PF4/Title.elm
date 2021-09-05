@@ -1,28 +1,61 @@
 module PF4.Title exposing
     ( Title
-    , asH1
-    , asH2
-    , asH3
-    , asH4
-    , asH5
-    , asH6
     , title
-    , toMarkup
-    , withExtraAttributes
     , withRgb
-    , withSize2xl
-    , withSize3xl
-    , withSize4xl
-    , withSizeLg
-    , withSizeMd
-    , withSizeXl
+    , asH1, asH2, asH3, asH4, asH5, asH6
+    , TextSize, withSizeMd, withSizeLg, withSizeXl, withSize2xl, withSize3xl, withSize4xl
+    , withExtraAttributes
+    , toMarkup
     )
+
+{-| A title component serving as a semantic header element
+
+<https://www.patternfly.org/v4/components/title>
+
+
+# Definition
+
+@docs Title
+
+
+# Constructor function
+
+@docs title
+
+
+# Configuration function(s)
+
+@docs withRgb
+
+
+# Modifier functions, HTML semantics
+
+@docs asH1, asH2, asH3, asH4, asH5, asH6
+
+
+# Modifier functions, text sizing
+
+@docs TextSize, withSizeMd, withSizeLg, withSizeXl, withSize2xl, withSize3xl, withSize4xl
+
+
+# "Escape Hatch" for adding `Element.Attribute msg`
+
+@docs withExtraAttributes
+
+
+# Rendering element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Element)
 import Element.Font as Font
 import Element.Region as Region
 
 
+{-| Opaque `Title` element that can produce `msg` messages
+-}
 type Title msg
     = Title (Options msg)
 
@@ -111,6 +144,8 @@ fromTextSize textSize =
             1
 
 
+{-| Configure text size to Md, or medium
+-}
 withSizeMd : Title msg -> Title msg
 withSizeMd (Title options) =
     Title
@@ -122,6 +157,8 @@ withSizeMd (Title options) =
         }
 
 
+{-| Configure text size to Lg, or large
+-}
 withSizeLg : Title msg -> Title msg
 withSizeLg (Title options) =
     Title
@@ -133,6 +170,8 @@ withSizeLg (Title options) =
         }
 
 
+{-| Configure text size to XL
+-}
 withSizeXl : Title msg -> Title msg
 withSizeXl (Title options) =
     Title
@@ -144,6 +183,8 @@ withSizeXl (Title options) =
         }
 
 
+{-| Configure text size to 2XL
+-}
 withSize2xl : Title msg -> Title msg
 withSize2xl (Title options) =
     Title
@@ -155,6 +196,8 @@ withSize2xl (Title options) =
         }
 
 
+{-| Configure text size to 3XL
+-}
 withSize3xl : Title msg -> Title msg
 withSize3xl (Title options) =
     Title
@@ -166,6 +209,8 @@ withSize3xl (Title options) =
         }
 
 
+{-| Configure text size to 4XL
+-}
 withSize4xl : Title msg -> Title msg
 withSize4xl (Title options) =
     Title
@@ -177,6 +222,8 @@ withSize4xl (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 1`
+-}
 asH1 : Title msg -> Title msg
 asH1 (Title options) =
     Title
@@ -185,6 +232,8 @@ asH1 (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 2`
+-}
 asH2 : Title msg -> Title msg
 asH2 (Title options) =
     Title
@@ -193,6 +242,8 @@ asH2 (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 3`
+-}
 asH3 : Title msg -> Title msg
 asH3 (Title options) =
     Title
@@ -201,6 +252,8 @@ asH3 (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 4`
+-}
 asH4 : Title msg -> Title msg
 asH4 (Title options) =
     Title
@@ -209,6 +262,8 @@ asH4 (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 5`
+-}
 asH5 : Title msg -> Title msg
 asH5 (Title options) =
     Title
@@ -217,6 +272,8 @@ asH5 (Title options) =
         }
 
 
+{-| Alters semantics to appear as a `Element.Region.heading 6`
+-}
 asH6 : Title msg -> Title msg
 asH6 (Title options) =
     Title
@@ -225,6 +282,8 @@ asH6 (Title options) =
         }
 
 
+{-| Changes the color of the text
+-}
 withRgb : Int -> Int -> Int -> Title msg -> Title msg
 withRgb r g b (Title options) =
     Title
@@ -233,11 +292,19 @@ withRgb r g b (Title options) =
         }
 
 
+{-| Adds a list of `Element.Attributes` to the element
+-}
 withExtraAttributes : List (Element.Attribute msg) -> Title msg -> Title msg
 withExtraAttributes extras (Title options) =
     Title { options | attributes = extras }
 
 
+{-| Constructs a `Title` element without any attributes
+
+The default `Size` is `Medium 16`, use the various sizing
+configuration `with` functions to alter it.
+
+-}
 title : String -> Title msg
 title text =
     Title
@@ -261,6 +328,8 @@ getHeader maybeHeader =
         |> Maybe.withDefault nothingAttr
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Title msg -> Element msg
 toMarkup (Title options) =
     let

@@ -1,14 +1,35 @@
 module PF4.Label exposing
-    ( Label
-    , Variant
+    ( Label, Variant
     , label
+    , withFill, withOutline, withIcon, withHyperlink, withCloseMsg
     , toMarkup
-    , withCloseMsg
-    , withFill
-    , withHyperlink
-    , withIcon
-    , withOutline
     )
+
+{-| A label component for closable (or dismissable) text
+
+
+# Definition
+
+@docs Label, Variant
+
+
+# Constructor function
+
+@docs label
+
+
+# Configuration functions
+
+@docs withFill, withOutline, withIcon, withHyperlink, withCloseMsg
+
+
+# Rendering element
+
+@docs toMarkup
+
+<https://www.patternfly.org/v4/components/label>
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -18,10 +39,17 @@ import Element.Input as Input
 import PF4.Icons as Icons
 
 
+{-| Opaque `Label` element that can produce `msg` messages
+-}
 type Label msg
     = Label (Options msg)
 
 
+{-| An opaque `Variant` custom type with 2 variants
+
+`Outline`, `Fill`
+
+-}
 type Variant
     = Outline
     | Fill
@@ -53,6 +81,8 @@ defaultClose =
     Icons.close
 
 
+{-| Constructs a label from the `text`
+-}
 label : String -> Label msg
 label text =
     Label
@@ -66,26 +96,40 @@ label text =
         }
 
 
+{-| Configures appearance to have an `Outline`
+-}
 withOutline : Label msg -> Label msg
 withOutline (Label options) =
     Label { options | variant = Outline }
 
 
+{-| Configures appearance to have a `Fill`
+-}
 withFill : Label msg -> Label msg
 withFill (Label options) =
     Label { options | variant = Fill }
 
 
+{-| Configures what `msg` is produced "on close"
+
+The event "on close" is produce when the "close" **x**
+is clicked.
+
+-}
 withCloseMsg : msg -> Label msg -> Label msg
 withCloseMsg msg (Label options) =
     Label { options | onClose = Just msg }
 
 
+{-| Configures appearance to have a `Hyperlink`
+-}
 withHyperlink : String -> Label msg -> Label msg
 withHyperlink link (Label options) =
     Label { options | href = Just link }
 
 
+{-| Configures the label to include an icon defined by the `Element msg` passed
+-}
 withIcon : Element msg -> Label msg -> Label msg
 withIcon icon (Label options) =
     Label { options | icon = Just icon }
@@ -153,6 +197,8 @@ filterAttr ( include, attr ) =
         Nothing
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Label msg -> Element msg
 toMarkup (Label options) =
     let

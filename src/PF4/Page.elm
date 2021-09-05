@@ -1,12 +1,35 @@
 module PF4.Page exposing
-    ( Page
-    , PageHeader
-    , PageSidebar
-    , page
-    , pageHeader
+    ( Page, PageHeader, PageSidebar
+    , page, pageHeader
     , sections
     , toMarkup
     )
+
+{-| An appearance-oriented Page component
+
+<https://www.patternfly.org/v4/components/page>
+
+
+# Definition
+
+@docs Page, PageHeader, PageSidebar
+
+
+# Constructor functions
+
+@docs page, pageHeader
+
+
+# Content function(s)
+
+@docs sections
+
+
+# Rendering stateless element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -22,6 +45,8 @@ import PF4.Navigation as Navigation exposing (Navigation)
 --import Element.Region exposing (navigation)
 
 
+{-| Opaque `Page` element
+-}
 type Page msg
     = Page (Options msg)
 
@@ -33,6 +58,8 @@ type alias Options msg =
     }
 
 
+{-| Opaque `PageHeader` element
+-}
 type PageHeader msg
     = PageHeader (HeaderOptions msg)
 
@@ -43,6 +70,8 @@ type alias HeaderOptions msg =
     }
 
 
+{-| Opaque `PageSidebar` element
+-}
 type PageSidebar msg
     = PageSidebar (SidebarOptions msg)
 
@@ -80,6 +109,8 @@ defaultSection children =
     PageSection { children = children, variant = Default }
 
 
+{-| Constructs a `Page` with a `title`, `nav` and `body` (of sections)
+-}
 page :
     { title : String
     , nav : Navigation msg
@@ -101,6 +132,8 @@ page { title, nav, body } =
         }
 
 
+{-| Constructs a `PageHeader` element
+-}
 pageHeader : String -> Maybe msg -> PageHeader msg
 pageHeader title toggleMsg =
     PageHeader
@@ -109,6 +142,8 @@ pageHeader title toggleMsg =
         }
 
 
+{-| Adds a list of `Element msg` as sections to the page
+-}
 sections : List (Element msg) -> List (PageSection msg)
 sections elements =
     elements
@@ -171,6 +206,8 @@ sidebarMarkup maybeSidebar =
         |> Maybe.withDefault Element.none
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Page msg -> Element msg
 toMarkup (Page options) =
     let

@@ -1,16 +1,45 @@
 module PF4.Badge exposing
     ( Badge
-    , Status
-    , badge
-    , isRead
-    , isUnread
-    , readCombo
+    , badge, unreadBadge
+    , Status, withReadStatus, withUnreadStatus
+    , isRead, isUnread
     , toMarkup
-    , unreadBadge
-    , unreadCombo
-    , withReadStatus
-    , withUnreadStatus
     )
+
+{-| An element for showing off numbers in various scenarios
+
+The `PF4.Badge` comes in handy when rendering notifications or alerts
+that have been "read" or "unread" in the form of a "pill" element
+since in other design systems.
+
+
+# Definition
+
+@docs Badge
+
+
+# Constructor functions
+
+@docs badge, unreadBadge
+
+
+# Configuration functions
+
+@docs Status, withReadStatus, withUnreadStatus
+
+
+# Checking value
+
+@docs isRead, isUnread
+
+
+# Rendering stateless element
+
+@docs toMarkup
+
+<https://www.patternfly.org/v4/components/badge>
+
+-}
 
 import Element exposing (Element)
 import Element.Background as Bg
@@ -18,10 +47,14 @@ import Element.Border as Border
 import Element.Font as Font
 
 
+{-| Opaque `Badge` element
+-}
 type Badge
     = Badge Options
 
 
+{-| Defines `Status` to be one of two values: `Read` or `Unread`
+-}
 type Status
     = Read
     | Unread
@@ -61,6 +94,11 @@ defaultOverflowAt =
     999
 
 
+{-| Constructs a `Badge`
+
+Default `status` of the `Badge` will be `Read`.
+
+-}
 badge : Int -> Badge
 badge value =
     Badge
@@ -72,12 +110,16 @@ badge value =
         }
 
 
+{-| Configures the `Badge` to have an `Unread` status
+-}
 unreadBadge : Int -> Badge
 unreadBadge value =
     badge value
         |> withUnreadStatus
 
 
+{-| Configures `Badge` to have a `Unread` status
+-}
 withUnreadStatus : Badge -> Badge
 withUnreadStatus (Badge options) =
     Badge
@@ -88,6 +130,8 @@ withUnreadStatus (Badge options) =
         }
 
 
+{-| Configures `Badge` to have a `Read` status
+-}
 withReadStatus : Badge -> Badge
 withReadStatus (Badge options) =
     Badge
@@ -98,16 +142,22 @@ withReadStatus (Badge options) =
         }
 
 
+{-| Indicates if the status of the `Badge` is `Read`
+-}
 isRead : Badge -> Bool
 isRead (Badge options) =
     options.status == Read
 
 
+{-| Indicates if the status of the `Badge` is `Unread`
+-}
 isUnread : Badge -> Bool
 isUnread (Badge options) =
     options.status == Unread
 
 
+{-| Given the custom type representation, renders as an `Element msg`.
+-}
 toMarkup : Badge -> Element msg
 toMarkup (Badge options) =
     let
