@@ -1,4 +1,39 @@
-module PF4.ExpandableSection exposing (..)
+module PF4.ExpandableSection exposing
+    ( ExpandableSection
+    , expandableSection
+    , withDynamicText, withPressMsg
+    , expandSection, collapseSection
+    , toMarkup
+    )
+
+{-| An expandable component that fills the role of a "click to open" section
+
+
+# Definition
+
+@docs ExpandableSection
+
+
+# Constructor function
+
+@docs expandableSection
+
+
+# Configuration functions
+
+@docs withDynamicText, withPressMsg
+
+
+# State-change functions
+
+@docs expandSection, collapseSection
+
+
+# Rendering element
+
+@docs toMarkup
+
+-}
 
 import Element exposing (Element)
 import Element.Events as Events
@@ -50,6 +85,15 @@ type alias ClosedText =
     String
 
 
+{-| Constructs an expandable section given a `String` for the text, and
+content to "show" `onPress`.
+
+The `onPress` message in this form will allow the handling of the state
+change using `expandSection` and `collapseSection`. This will be the
+manner of acting until the decision on whether to make this a
+"stateful" component has been made.
+
+-}
 expandableSection :
     { text : String
     , content : Element msg
@@ -66,12 +110,21 @@ expandableSection { text, content, onPress } =
         }
 
 
+{-| Configure the section to have a dynamic text; text that will change
+when the section is "open", and "closed"
+
+By default, an ExpandableSection will be constructed with a `Closed`
+state.
+
+-}
 withDynamicText : { open : String, closed : String } -> ExpandableSection msg -> ExpandableSection msg
 withDynamicText { open, closed } (ExpandableSection options) =
     ExpandableSection
         { options | text = Dynamic open closed }
 
 
+{-| Configure the `onPress` msg produced
+-}
 withPressMsg : msg -> ExpandableSection msg -> ExpandableSection msg
 withPressMsg onPress (ExpandableSection options) =
     ExpandableSection
