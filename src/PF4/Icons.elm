@@ -22,7 +22,7 @@ Most icons has functions for a default color and `Rgb255` form.
 -}
 
 import Element exposing (Element)
-import Html
+import Html exposing (Html)
 import Html.Attributes exposing (style)
 import String
 import Svg
@@ -194,6 +194,30 @@ hamburgerRgb255 r g b =
         |> Element.html
 
 
+chevron_ : Html msg
+chevron_ =
+    Svg.svg
+        [ SvgAttrs.fill "currentColor"
+        , SvgAttrs.height "1em"
+        , SvgAttrs.width "1em"
+        , SvgAttrs.viewBox "0 0 256 512"
+        , SvgAttrs.style "vertical-align: -0.125em;"
+        ]
+        [ Svg.path
+            [ SvgAttrs.d
+                (String.concat
+                    [ "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 "
+                    , "0l-22.6-22.6c-9.4-9.4-9.4-24.6 "
+                    , "0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 "
+                    , "0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 "
+                    , "136c9.5 9.4 9.5 24.6.1 34z"
+                    ]
+                )
+            ]
+            []
+        ]
+
+
 {-| -}
 chevronDown : Element msg
 chevronDown =
@@ -203,28 +227,12 @@ chevronDown =
 {-| -}
 chevronDownRgb255 : Int -> Int -> Int -> Element msg
 chevronDownRgb255 r g b =
-    Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
-        [ Svg.svg
-            [ SvgAttrs.fill "currentColor"
-            , SvgAttrs.height "1em"
-            , SvgAttrs.width "1em"
-            , SvgAttrs.viewBox "0 0 256 512"
-            , SvgAttrs.style "vertical-align: -0.125em;"
-            ]
-            [ Svg.path
-                [ SvgAttrs.d
-                    (String.concat
-                        [ "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 "
-                        , "0l-22.6-22.6c-9.4-9.4-9.4-24.6 "
-                        , "0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 "
-                        , "0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 "
-                        , "136c9.5 9.4 9.5 24.6.1 34z"
-                        ]
-                    )
-                ]
-                []
-            ]
+    Html.div
+        [ style "color" (( r, g, b ) |> toCssRgb)
+        , style "transform" "rotate(90deg)"
+        , style "transition" ".2s ease-in 0s"
         ]
+        [ chevron_ ]
         |> Element.html
 
 
@@ -238,20 +246,5 @@ chevronRight =
 chevronRightRgb255 : Int -> Int -> Int -> Element msg
 chevronRightRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
-        [ Svg.svg
-            [ SvgAttrs.fill "currentColor", SvgAttrs.height "1em", SvgAttrs.width "1em", SvgAttrs.viewBox "0 0 256 512", SvgAttrs.style "vertical-align: -0.125em;" ]
-            [ Svg.path
-                [ SvgAttrs.d
-                    (String.concat
-                        [ "M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 "
-                        , "0l-22.6-22.6c-9.4-9.4-9.4-24.6 "
-                        , "0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 "
-                        , "0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 "
-                        , "136c9.5 9.4 9.5 24.6.1 34z"
-                        ]
-                    )
-                ]
-                []
-            ]
-        ]
+        [ chevron_ ]
         |> Element.html
