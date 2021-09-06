@@ -15,6 +15,7 @@ type alias Model =
     , navItems : List String
     , selectedNav : String
     , accordionState : PF4.Accordion.State
+    , sectionExpanded : Bool
     }
 
 
@@ -25,3 +26,4 @@ type Msg
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory
+    | ToggleExpandableSection
