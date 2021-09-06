@@ -5,12 +5,15 @@ import PF4.Accordion as Accordion
 import PF4.Button as Button
 import PF4.Card as Card
 import PF4.Created as Created
+import PF4.ExpandableSection as ExpandableSection
 import PF4.Info as Info
+import PF4.Icons as Icons
 import PF4.Label as Label
 import PF4.Navigation as Navigation exposing (Navigation)
 import PF4.Page as Page
 import PF4.Title as Title
 import PF4.Tooltip as Tooltip
+import PF4.ExpandableSection as ExpandableSection
 import Element
 import Html exposing (Html)
 import Time
@@ -43,6 +46,7 @@ init =
             ]
       , selectedNav = "Badge"
       , accordionState = Accordion.singleExpandState
+      , sectionExpanded = False
       }
     , Cmd.none
     )
@@ -89,6 +93,11 @@ update msg model =
                         accordionMsg
                         model.accordionState
             }
+            , Cmd.none
+            )
+
+        ToggleExpandableSection ->
+            ( { model | sectionExpanded = not model.sectionExpanded }
             , Cmd.none
             )
 
@@ -203,6 +212,31 @@ view model =
                             , Label.label "The first stateful PF4 component" |> Label.toMarkup
                             ]
                             |> Card.withTitle "Accordion Example"
+                            |> Card.toMarkup
+                        ]
+                    , Element.column
+                        [ Element.paddingXY 2 10
+                        , Element.spacing 10
+                        , Element.width (Element.px 960)
+                        ]
+                        [  Card.card
+                            [ ExpandableSection.expandableSection
+                                { text = "Click me ..."
+                                , content = Element.el [] (Label.label "Expanded Content" |> Label.toMarkup)
+                                , onPress = Just ToggleExpandableSection
+                                }
+                                |> (\es ->
+                                    if model.sectionExpanded then
+                                        ExpandableSection.expandSection es
+                                    else
+                                        ExpandableSection.collapseSection es
+
+                                )
+                                |> ExpandableSection.toMarkup
+                            , Icons.chevronDown
+                            , Icons.chevronRight
+                            ]
+                            |> Card.withTitle "ExpandableSection Example"
                             |> Card.toMarkup
                         ]
                     ]
