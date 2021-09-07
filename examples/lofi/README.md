@@ -1,6 +1,15 @@
-# About
 
-This is a low fidelity example of the `PF4`, or PatternFly design system components.
+# Running
+
+```
+elm reactor
+```
+
+Or, install `create-elm-app` through `npm` and you can use `elm-app build && elm-app start`
+
+## About
+
+This is a _"low fidelity"_ (or **lofi**) example of the `PF4`, or PatternFly design system components. The hope is that it will morph into "A PF4 Guide in PF4" (or, a PF4 implementation design guide on the PF4 components).
 
 What appears here was the original "Kitchen Sink" app that was used to build the initial components. It will likely be replaced by Elm Book or UI Explorer for showing off the components.
 
