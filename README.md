@@ -17,7 +17,7 @@ elm install lenards/elm-ui-patternfly
 
 ### Status
 
-This is a singular effort without official support. Though the version of this package is >1.0.0, this is a _very "alpha"_ offering at this time. Your patience & interest are appreciated. If you have ideas, feedback, or overall comments, please consider filing [_an issue_](./issues)
+This is a singular effort without official support. Though the version of this package is >1.0.0, this is a _very "alpha"_ offering at this time. Your patience & interest are appreciated. If you have ideas, feedback, or overall comments, please consider filing [_an issue_](https://github.com/lenards/elm-ui-patternfly/issues)
 
 Documentation is in a _nascent_ and incomplete form - my advance & abject apologies.
 
@@ -60,5 +60,5 @@ There is a "lofi" example that will morph into "A PF4 Guide in PF4" (or, a PF4 i
 Each example started as [Create Elm App](https://github.com/halfzebra/create-elm-app). Though they are (currently) `elm reactor` compatible, I am developing them using `elm-app` commands. As PF4 components are more _"flesh out"_, there will be [Ellie](https://ellie-app.com/) examples since I think that's is likely a better manner for getting feedback about them.
 
 
-You can find the default information provided by `Create Elm App` in the [**Examples**](./examples/README.md) below.
+You can find the default information provided by `Create Elm App` in the [**Examples**](https://github.com/lenards/elm-ui-patternfly/tree/main/examples) below.
 
