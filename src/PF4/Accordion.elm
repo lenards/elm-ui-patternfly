@@ -158,7 +158,7 @@ multipleExpandState =
     MultipleExpand None
 
 
-{-| Constructs an accordian give a list of `(title, content)` and a message
+{-| Constructs an accordian given a list of `(title, content)` and a message
 mapper function.
 
 The `msgMapper` needs to take a `PF4.Accordian.Msg` and transform it into
