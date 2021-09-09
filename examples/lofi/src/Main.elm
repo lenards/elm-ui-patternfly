@@ -1,21 +1,21 @@
 module Main exposing (..)
 
 import Browser
+import Element
+import Html exposing (Html)
 import PF4.Accordion as Accordion
 import PF4.Button as Button
 import PF4.Card as Card
 import PF4.Created as Created
 import PF4.ExpandableSection as ExpandableSection
-import PF4.Info as Info
 import PF4.Icons as Icons
+import PF4.Info as Info
 import PF4.Label as Label
 import PF4.Navigation as Navigation exposing (Navigation)
 import PF4.Page as Page
+import PF4.Switch as Switch
 import PF4.Title as Title
 import PF4.Tooltip as Tooltip
-import PF4.ExpandableSection as ExpandableSection
-import Element
-import Html exposing (Html)
 import Time
 import Types exposing (Model, Msg(..))
 
@@ -47,6 +47,7 @@ init =
       , selectedNav = "Badge"
       , accordionState = Accordion.singleExpandState
       , sectionExpanded = False
+      , checked = True
       }
     , Cmd.none
     )
@@ -92,7 +93,7 @@ update msg model =
                     Accordion.update
                         accordionMsg
                         model.accordionState
-            }
+              }
             , Cmd.none
             )
 
@@ -100,6 +101,12 @@ update msg model =
             ( { model | sectionExpanded = not model.sectionExpanded }
             , Cmd.none
             )
+
+        SwitchChanged checked ->
+            ( { model | checked = checked }
+            , Cmd.none
+            )
+
 
 
 ---- VIEW ----
@@ -176,6 +183,11 @@ view model =
                                 (Label.label "Right"
                                     |> Label.toMarkup
                                 )
+                            , Button.primary
+                                { label = "Example"
+                                , onPress = Nothing
+                                }
+                                |> Button.toMarkup
                             , Button.secondary
                                 { label = "Example"
                                 , onPress = Nothing
@@ -200,15 +212,14 @@ view model =
                         , Element.spacing 10
                         , Element.width (Element.px 960)
                         ]
-                        [  Card.card
+                        [ Card.card
                             [ Accordion.accordion
                                 (\accMsg -> AccordionSelected accMsg)
-                                [ ("Title 1", Element.el [] (Label.label "Content 1" |> Label.toMarkup) )
-                                , ("Title 2", Element.el [] (Label.label "Content 2" |> Label.toMarkup) )
+                                [ ( "Title 1", Element.el [] (Label.label "Content 1" |> Label.toMarkup) )
+                                , ( "Title 2", Element.el [] (Label.label "Content 2" |> Label.toMarkup) )
                                 ]
                                 |> Accordion.toMarkupFor
                                     model.accordionState
-
                             , Label.label "The first stateful PF4 component" |> Label.toMarkup
                             ]
                             |> Card.withTitle "Accordion Example"
@@ -219,24 +230,45 @@ view model =
                         , Element.spacing 10
                         , Element.width (Element.px 960)
                         ]
-                        [  Card.card
+                        [ Card.card
                             [ ExpandableSection.expandableSection
                                 { text = "Click me ..."
                                 , content = Element.el [] (Label.label "Expanded Content" |> Label.toMarkup)
                                 , onPress = Just ToggleExpandableSection
                                 }
                                 |> (\es ->
-                                    if model.sectionExpanded then
-                                        ExpandableSection.expandSection es
-                                    else
-                                        ExpandableSection.collapseSection es
+                                        if model.sectionExpanded then
+                                            ExpandableSection.expandSection es
 
-                                )
+                                        else
+                                            ExpandableSection.collapseSection es
+                                   )
                                 |> ExpandableSection.toMarkup
-                            , Icons.chevronDown
-                            , Icons.chevronRight
                             ]
                             |> Card.withTitle "ExpandableSection Example"
+                            |> Card.toMarkup
+                        ]
+                    , Element.column
+                        [ Element.paddingXY 2 10
+                        , Element.spacing 10
+                        , Element.width (Element.px 960)
+                        ]
+                        [ Card.card
+                            [ Switch.switch
+                                { checked = model.checked
+                                , onText = "Text that you say when 'on'"
+                                , offText = "Text that you say when 'off'"
+                                , onChange = SwitchChanged
+                                }
+                                |> Switch.toMarkup
+                            ]
+                            |> Card.withTitle "Switch Example"
+                            |> Card.withBodyPaddingEach
+                                { top = 0
+                                , right = 0
+                                , bottom = 25
+                                , left = 0
+                                }
                             |> Card.toMarkup
                         ]
                     ]

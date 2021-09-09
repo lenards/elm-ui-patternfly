@@ -1,13 +1,13 @@
 module Views.ChipView exposing (view)
 
+import Element
+import Html exposing (Html)
 import PF4.Card as Card
 import PF4.Chip as Chip
 import PF4.Info as Info
 import PF4.Navigation as Navigation
 import PF4.Page as Page
 import PF4.Title as Title
-import Element
-import Html exposing (Html)
 import Types exposing (Model, Msg(..))
 
 

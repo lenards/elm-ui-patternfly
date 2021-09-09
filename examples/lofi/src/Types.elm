@@ -2,6 +2,7 @@ module Types exposing (Category, Model, Msg(..))
 
 import PF4.Accordion
 
+
 type alias Category =
     { name : String
     , items : List String
@@ -16,6 +17,7 @@ type alias Model =
     , selectedNav : String
     , accordionState : PF4.Accordion.State
     , sectionExpanded : Bool
+    , checked : Bool
     }
 
 
@@ -27,3 +29,4 @@ type Msg
     | RemoveChip String
     | RemoveCategory
     | ToggleExpandableSection
+    | SwitchChanged Bool
