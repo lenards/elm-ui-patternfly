@@ -18,6 +18,7 @@
         "PF4.Label",
         "PF4.Navigation",
         "PF4.Page",
+        "PF4.Switch",
         "PF4.Title"
     ],
     "elm-version": "0.19.1 <= v < 0.20.0",
