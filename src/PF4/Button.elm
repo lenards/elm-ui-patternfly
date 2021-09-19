@@ -316,7 +316,7 @@ getAttributesBy : Variant -> List (Element.Attribute msg) -> List (Element.Attri
 getAttributesBy var baseAttrs_ =
     case var of
         Primary ->
-            [ Bg.color <| Element.rgb255 0 102 104
+            [ Bg.color <| Element.rgb255 0 102 204
             , Font.color <| Element.rgb255 255 255 255
             , Border.rounded 5
             ]
@@ -324,8 +324,8 @@ getAttributesBy var baseAttrs_ =
 
         Secondary ->
             [ Bg.color <| Element.rgb255 255 255 255
-            , Font.color <| Element.rgb255 0 102 104
-            , Border.color <| Element.rgb255 0 102 104
+            , Font.color <| Element.rgb255 0 102 204
+            , Border.color <| Element.rgb255 0 102 204
             , Border.rounded 5
             , Border.solid
             , Border.width 1

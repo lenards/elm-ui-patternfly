@@ -78,8 +78,8 @@ type Position
 
 {-| Constructs a `Switch` from the arguments
 
-- `onText` is the text that will be displayed when the switch is "on", or `checked` is true
-- `offText` is the text that will be displayed when the switch is "off", or `checked` is false
+  - `onText` is the text that will be displayed when the switch is "on", or `checked` is true
+  - `offText` is the text that will be displayed when the switch is "off", or `checked` is false
 
 -}
 switch :
@@ -194,7 +194,7 @@ switchMarkup isChecked_ =
     let
         currentColor =
             if isChecked_ then
-                Element.rgb255 0 102 104
+                Element.rgb255 0 102 204
 
             else
                 Element.rgb255 106 110 115
