@@ -46,6 +46,7 @@ init =
             ]
       , selectedNav = "Badge"
       , accordionState = Accordion.singleExpandState
+      , accordionMultiState = Accordion.multipleExpandState
       , sectionExpanded = False
       , checked = True
       }
@@ -93,6 +94,16 @@ update msg model =
                     Accordion.update
                         accordionMsg
                         model.accordionState
+              }
+            , Cmd.none
+            )
+
+        AccordionMultiSelected accordionMsg ->
+            ( { model
+                | accordionMultiState =
+                    Accordion.update
+                        accordionMsg
+                        model.accordionMultiState
               }
             , Cmd.none
             )
@@ -223,6 +234,24 @@ view model =
                             , Label.label "The first stateful PF4 component" |> Label.toMarkup
                             ]
                             |> Card.withTitle "Accordion Example"
+                            |> Card.toMarkup
+                        ]
+                    , Element.column
+                        [ Element.paddingXY 2 10
+                        , Element.spacing 10
+                        , Element.width (Element.px 960)
+                        ]
+                        [ Card.card
+                            [ Accordion.accordion
+                                (\accMsg -> AccordionMultiSelected accMsg)
+                                [ ( "Title 1", Element.el [] (Label.label "Content 1" |> Label.toMarkup) )
+                                , ( "Title 2", Element.el [] (Label.label "Content 2" |> Label.toMarkup) )
+                                ]
+                                |> Accordion.toMarkupFor
+                                    model.accordionMultiState
+                            , Label.label "The first stateful PF4 component" |> Label.toMarkup
+                            ]
+                            |> Card.withTitle "Accordion Multiple Expanded Example"
                             |> Card.toMarkup
                         ]
                     , Element.column

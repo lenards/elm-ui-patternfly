@@ -16,6 +16,7 @@ type alias Model =
     , navItems : List String
     , selectedNav : String
     , accordionState : PF4.Accordion.State
+    , accordionMultiState : PF4.Accordion.State
     , sectionExpanded : Bool
     , checked : Bool
     }
@@ -25,6 +26,7 @@ type Msg
     = NoOp
     | NavSelected String
     | AccordionSelected PF4.Accordion.Msg
+    | AccordionMultiSelected PF4.Accordion.Msg
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory
