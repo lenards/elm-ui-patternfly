@@ -1,6 +1,6 @@
 module PF4.Icons exposing
     ( hamburger
-    , chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255
+    , chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255, nineBox, nineBoxRgb255
     )
 
 {-| This library handles functions that will render `Svg` versions of
@@ -17,7 +17,7 @@ Most icons has functions for a default color and `Rgb255` form.
 
 # Icons with default color and variation
 
-@docs chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255
+@docs chevronDown, chevronDownRgb255, chevronRight, chevronRightRgb255, closeCircle, closeCircleRgb255, close, closeRgb255, info, infoRgb255, times, timesRgb255, nineBox, nineBoxRgb255
 
 -}
 
@@ -247,4 +247,55 @@ chevronRightRgb255 : Int -> Int -> Int -> Element msg
 chevronRightRgb255 r g b =
     Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
         [ chevron_ ]
+        |> Element.html
+
+
+{-| -}
+nineBox : Element msg
+nineBox =
+    nineBoxRgb255 106 110 115
+
+
+{-| -}
+nineBoxRgb255 : Int -> Int -> Int -> Element msg
+nineBoxRgb255 r g b =
+    Html.div [ style "color" (( r, g, b ) |> toCssRgb) ]
+        [ Svg.svg
+            [ SvgAttrs.fill "currentColor"
+            , SvgAttrs.height "1em"
+            , SvgAttrs.width "1em"
+            , SvgAttrs.viewBox "0 0 512 512"
+            , style "vertical-align" "-0.125em"
+            ]
+            [ Svg.path
+                [ SvgAttrs.d
+                    (String.concat
+                        [ "M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 "
+                        , "0-24-10.745-24-24V56c0-13.255 10.745-24 "
+                        , "24-24h101.333c13.255 0 24 10.745 24 24zm181.334 "
+                        , "240v-80c0-13.255-10.745-24-24-24H205.333c-13.255 "
+                        , "0-24 10.745-24 24v80c0 13.255 10.745 24 24 "
+                        , "24h101.333c13.256 0 24.001-10.745 "
+                        , "24.001-24zm32-240v80c0 13.255 10.745 24 24 "
+                        , "24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H386.667c-13.255 "
+                        , "0-24 10.745-24 24zm-32 80V56c0-13.255-10.745-24-24-24H205.333c-13.255 "
+                        , "0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 "
+                        , "0 24.001-10.745 24.001-24zm-205.334 56H24c-13.255 0-24 "
+                        , "10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.255 0 "
+                        , "24-10.745 24-24v-80c0-13.255-10.745-24-24-24zM0 376v80c0 "
+                        , "13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 "
+                        , "24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 "
+                        , "24zm386.667-56H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 "
+                        , "0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm0 160H488c13.255 "
+                        , "0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 "
+                        , "0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zM181.333 376v80c0 "
+                        , "13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 "
+                        , "24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 "
+                        , "10.745-24 24z"
+                        ]
+                    )
+                ]
+                []
+            ]
+        ]
         |> Element.html

@@ -3,8 +3,9 @@
     "name": "lenards/elm-ui-patternfly",
     "summary": "An elm-ui implementation of components from the PatternFly design system",
     "license": "BSD-3-Clause",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "exposed-modules": [
+        "PF4.ApplicationLauncher",
         "PF4.Accordion",
         "PF4.Badge",
         "PF4.Button",

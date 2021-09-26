@@ -19,16 +19,18 @@ type alias Model =
     , accordionMultiState : PF4.Accordion.State
     , sectionExpanded : Bool
     , checked : Bool
+    , activeMenuId : String
     }
 
 
 type Msg
     = NoOp
-    | NavSelected String
     | AccordionSelected PF4.Accordion.Msg
     | AccordionMultiSelected PF4.Accordion.Msg
+    | LauncherClicked String
+    | NavSelected String
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory
-    | ToggleExpandableSection
     | SwitchChanged Bool
+    | ToggleExpandableSection
