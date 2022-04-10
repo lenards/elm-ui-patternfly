@@ -128,12 +128,18 @@ isOpen (Menu options) =
 itemMarkup : Options msg -> MenuItem msg -> Element msg
 itemMarkup _ (MenuItem ( _, itemOptions )) =
     let
-        attrs_ =
-            [ Element.paddingXY 14 0
+        rowAttrs =
+            [ Element.width Element.fill
+            , Element.paddingXY 16 8
+            , Element.mouseOver
+                [ Background.color <| Element.rgb255 240 240 240 ]
             , Element.pointer
             ]
+
+        attrs_ =
+            [ Element.alignLeft ]
     in
-    Element.el attrs_ <| Element.text itemOptions.name
+    Element.row rowAttrs [ Element.el attrs_ <| Element.text itemOptions.name ]
 
 
 andAppend : Maybe a -> (a -> b) -> List b -> List b
@@ -160,7 +166,7 @@ menuMarkup options =
         menuAttrs_ =
             [ Background.color options.backgroundColor
             , Border.glow
-                (Element.rgb255 106 110 115)
+                (Element.rgba255 3 3 3 0.12)
                 3
             , Element.paddingXY 0 12
             ]

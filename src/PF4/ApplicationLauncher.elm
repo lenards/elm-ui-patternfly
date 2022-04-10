@@ -118,9 +118,16 @@ withActiveMenu menuId (AppLauncher options) =
 -}
 toMarkup : ApplicationLauncher msg -> Element msg
 toMarkup (AppLauncher options) =
+    let
+        toggleAttrs =
+            [ Element.paddingXY 16 6 ]
+
+        toggleEl =
+            Element.el toggleAttrs Icons.nineBox
+    in
     Element.column
         [ Events.onClick options.onToggle ]
-        [ Icons.nineBox
+        [ toggleEl
         , options.menu
             |> Menu.toMarkup
         ]
