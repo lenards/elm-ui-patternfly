@@ -71,6 +71,7 @@ init =
       , sectionExpanded = False
       , checked = True
       , activeMenuId = ""
+      , selectedRadio = Nothing
       }
     , Cmd.none
     )
@@ -150,6 +151,11 @@ update msg model =
                         menuId
             in
             ( { model | activeMenuId = nextMenuId }
+            , Cmd.none
+            )
+
+        RadioSelected option ->
+            ( { model | selectedRadio = Just option }
             , Cmd.none
             )
 

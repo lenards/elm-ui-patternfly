@@ -4,12 +4,10 @@ import Element exposing (Element)
 import Html exposing (Html)
 import PF4.ApplicationLauncher as AppLauncher
 import PF4.Card as Card
-import PF4.ExpandableSection as ExpandableSection
-import PF4.Icons as Icons
 import PF4.Info as Info
-import PF4.Label as Label
 import PF4.Navigation as Navigation exposing (Navigation)
 import PF4.Page as Page
+import PF4.Radio as Radio
 import PF4.Switch as Switch
 import PF4.Title as Title
 import PF4.Tooltip as Tooltip
@@ -59,6 +57,26 @@ body model =
                 |> AppLauncher.toMarkup
             ]
             |> Card.withTitle "Menu Example - sort of ..."
+            |> Card.withBodyPaddingEach
+                { top = 10
+                , right = 0
+                , bottom = 10
+                , left = 0
+                }
+            |> Card.toMarkup
+        , Card.card
+            [ Radio.radio
+                { onChange = RadioSelected
+                , selected = model.selectedRadio
+                , label = "Radio!"
+                , options =
+                    [ { value = "boot-volume", text = "Boot Volume" }
+                    , { value = "block-volume", text = "Block Storage Volume" }
+                    ]
+                }
+                |> Radio.toMarkup
+            ]
+            |> Card.withTitle "Radio Selection Example"
             |> Card.withBodyPaddingEach
                 { top = 10
                 , right = 0

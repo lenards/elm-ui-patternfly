@@ -20,6 +20,7 @@ type alias Model =
     , sectionExpanded : Bool
     , checked : Bool
     , activeMenuId : String
+    , selectedRadio : Maybe String
     }
 
 
@@ -29,6 +30,7 @@ type Msg
     | AccordionMultiSelected PF4.Accordion.Msg
     | LauncherClicked String
     | NavSelected String
+    | RadioSelected String
     | RemoveExampleChip
     | RemoveChip String
     | RemoveCategory
