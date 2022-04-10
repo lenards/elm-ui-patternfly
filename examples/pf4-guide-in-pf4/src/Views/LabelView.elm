@@ -31,7 +31,7 @@ view model =
                         |> Navigation.withSelectedItem
                             model.selectedNav
                 , body =
-                    [ Title.title "Chip Component"
+                    [ Title.title "Label Component"
                         |> Title.withSize2xl
                         |> Title.toMarkup
                     , Info.info
