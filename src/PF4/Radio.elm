@@ -25,7 +25,7 @@ module PF4.Radio exposing
 
 # Rendering element
 
-@doc toMarkup
+@docs toMarkup
 
 -}
 
