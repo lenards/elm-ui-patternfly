@@ -30,6 +30,7 @@ import Views.ExpandableSectionView as ExpandableSectionView
 import Views.HomeView as HomeView
 import Views.InfoView as InfoView
 import Views.LabelView as LabelView
+import Views.RadioView as RadioView
 import Views.SwitchView as SwitchView
 import Views.TitleView as TitleView
 import Views.TooltipView as TooltipView
@@ -61,6 +62,7 @@ init =
             , "Info"
             , "Label"
             , "Navigation"
+            , "Radio"
             , "Switch"
             , "Title"
             , "Tooltip"
@@ -72,6 +74,9 @@ init =
       , checked = True
       , activeMenuId = ""
       , selectedRadio = Nothing
+      , webDesktopSelected = Nothing
+      , advOptionsSelected = Just Types.Hide
+      , rootDiskSizeSelected = Just Types.EightGigabytes
       }
     , Cmd.none
     )
@@ -159,6 +164,21 @@ update msg model =
             , Cmd.none
             )
 
+        WebDesktopSelected option ->
+            ( { model | webDesktopSelected = Just option }
+            , Cmd.none
+            )
+
+        AdvancedOptionsSelected option ->
+            ( { model | advOptionsSelected = Just option }
+            , Cmd.none
+            )
+
+        RootDiskSizeSelected option ->
+            ( { model | rootDiskSizeSelected = Just option }
+            , Cmd.none
+            )
+
 
 
 ---- VIEW ----
@@ -196,6 +216,9 @@ view model =
 
         "Label" ->
             LabelView.view model
+
+        "Radio" ->
+            RadioView.view model
 
         "Switch" ->
             SwitchView.view model

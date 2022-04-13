@@ -1,4 +1,4 @@
-module Types exposing (Category, Model, Msg(..))
+module Types exposing (AdvancedOptionsOptions(..), Category, Model, Msg(..), RootDiskSizeOptions(..), WebDesktopOptions(..))
 
 import PF4.Accordion
 
@@ -7,6 +7,21 @@ type alias Category =
     { name : String
     , items : List String
     }
+
+
+type WebDesktopOptions
+    = Yes
+    | No
+
+
+type AdvancedOptionsOptions
+    = Hide
+    | Show
+
+
+type RootDiskSizeOptions
+    = EightGigabytes
+    | CustomDiskSize
 
 
 type alias Model =
@@ -21,6 +36,9 @@ type alias Model =
     , checked : Bool
     , activeMenuId : String
     , selectedRadio : Maybe String
+    , webDesktopSelected : Maybe WebDesktopOptions
+    , advOptionsSelected : Maybe AdvancedOptionsOptions
+    , rootDiskSizeSelected : Maybe RootDiskSizeOptions
     }
 
 
@@ -36,3 +54,6 @@ type Msg
     | RemoveCategory
     | SwitchChanged Bool
     | ToggleExpandableSection
+    | WebDesktopSelected WebDesktopOptions
+    | AdvancedOptionsSelected AdvancedOptionsOptions
+    | RootDiskSizeSelected RootDiskSizeOptions
