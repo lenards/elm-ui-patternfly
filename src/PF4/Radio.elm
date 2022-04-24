@@ -13,7 +13,7 @@ module PF4.Radio exposing
 @docs Radio
 
 
-# Constructo function
+# Constructor function
 
 @docs radio
 
@@ -58,7 +58,7 @@ type alias ItemOption option =
 
 {-| A palette rendering the color of the radio button given the possible
 [OptionState](https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/Element-Input#OptionState)
-definited in `elm-ui`.
+defined in `elm-ui`.
 -}
 type alias OptionStatePalette =
     { idle : Element.Color

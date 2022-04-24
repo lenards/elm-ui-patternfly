@@ -4,6 +4,7 @@ import Element exposing (Element)
 import Html exposing (Html)
 import PF4.ApplicationLauncher as AppLauncher
 import PF4.Card as Card
+import PF4.Checkbox as Checkbox
 import PF4.Info as Info
 import PF4.Navigation as Navigation exposing (Navigation)
 import PF4.Page as Page
@@ -75,6 +76,12 @@ body model =
                     ]
                 }
                 |> Radio.toMarkup
+            , Checkbox.checkbox
+                { checked = model.checked
+                , onCheck = CheckboxChanged
+                , label = "Default Checkbox"
+                }
+                |> Checkbox.toMarkup
             ]
             |> Card.withTitle "Radio Selection Example"
             |> Card.withBodyPaddingEach

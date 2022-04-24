@@ -179,6 +179,11 @@ update msg model =
             , Cmd.none
             )
 
+        CheckboxChanged checked ->
+            ( { model | checked = checked }
+            , Cmd.none
+            )
+
 
 
 ---- VIEW ----

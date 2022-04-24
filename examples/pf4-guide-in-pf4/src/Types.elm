@@ -57,3 +57,4 @@ type Msg
     | WebDesktopSelected WebDesktopOptions
     | AdvancedOptionsSelected AdvancedOptionsOptions
     | RootDiskSizeSelected RootDiskSizeOptions
+    | CheckboxChanged Bool
