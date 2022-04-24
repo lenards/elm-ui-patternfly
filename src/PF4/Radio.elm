@@ -140,7 +140,7 @@ asRow (Radio options) =
     Radio { options | flow = Row }
 
 
-{-| Configure to render otpions in a column, **_stacked_**
+{-| Configure to render options in a column, **_stacked_**
 -}
 asColumn : Radio option msg -> Radio option msg
 asColumn (Radio options) =
