@@ -1,7 +1,7 @@
 module PF4.Checkbox exposing
     ( Checkbox
     , checkbox
-    , Palette, withPalette
+    , Palette, withPalette, withLabelAttributes
     , toMarkup
     )
 
@@ -21,7 +21,7 @@ typically this is a choose to do an action or reflects an "on/off" or binary set
 
 # Configuration functions
 
-@docs Palette, withPalette
+@docs Palette, withPalette, withLabelAttributes
 
 
 # Rendering element
@@ -48,8 +48,12 @@ type LabelText
     = LabelText String
 
 
-type CheckboxType
-    = Default LabelText
+type LabelAttributes msg
+    = LabelAttrs (List (Element.Attribute msg))
+
+
+type CheckboxType msg
+    = Default LabelText (LabelAttributes msg)
     | Standalone
 
 
@@ -57,7 +61,7 @@ type alias Options msg =
     { checked : Bool
     , onCheck : Bool -> msg
     , palette : Palette
-    , type_ : CheckboxType
+    , type_ : CheckboxType msg
     }
 
 
@@ -91,7 +95,10 @@ checkbox args =
         { checked = args.checked
         , onCheck = args.onCheck
         , palette = defaultPalette
-        , type_ = Default <| LabelText args.label
+        , type_ =
+            Default
+                (LabelText args.label)
+                (LabelAttrs [])
         }
 
 
@@ -102,6 +109,32 @@ withPalette newPalette (Checkbox options) =
     Checkbox { options | palette = newPalette }
 
 
+{-| Provide a list of attributes to include on the label element.
+
+In `Standalone` mode, the attributes won't have any impact because there is no label.
+
+Yes, that sure seems like an impossible state! I haven't quite grokked how I might
+disallow this. I realize that the Phantom Builder would be one way; but I'm not
+totally comfortable about that.
+
+Perhaps it makes more sense for "Standalone" to be a wholly different type.
+
+-}
+withLabelAttributes : List (Element.Attribute msg) -> Checkbox msg -> Checkbox msg
+withLabelAttributes attrs (Checkbox options) =
+    case options.type_ of
+        Default labelText _ ->
+            Checkbox
+                { options
+                    | type_ =
+                        Default labelText (LabelAttrs attrs)
+                }
+
+        Standalone ->
+            -- no label in standalone, ignore
+            Checkbox options
+
+
 white : Element.Color
 white =
     Element.rgb 1 1 1
@@ -109,7 +142,7 @@ white =
 
 checkmark : Bool -> Element msg
 checkmark checked =
-    -- based off of render check in elm-ui's `defaultCheckbox`
+    -- based off of rendering `defaultCheckbox` in elm-ui's
     Element.el
         [ Border.color white
         , Element.height (Element.px 6)
@@ -131,13 +164,14 @@ checkmark checked =
 
 defaultIcon : Palette -> Bool -> Element msg
 defaultIcon palette checked =
+    -- based off of rendering `defaultCheckbox` in elm-ui's
     let
         borderColor =
             if checked then
                 palette.checked
 
             else
-                Element.rgb (211 / 255) (211 / 255) (211 / 255)
+                palette.focused
 
         borderWidth =
             if checked then
@@ -145,13 +179,6 @@ defaultIcon palette checked =
 
             else
                 1
-
-        shadowColor =
-            if checked then
-                Element.rgba (238 / 255) (238 / 255) (238 / 255) 0
-
-            else
-                Element.rgb (238 / 255) (238 / 255) (238 / 255)
 
         backgroundColor =
             if checked then
@@ -170,12 +197,6 @@ defaultIcon palette checked =
         , Font.center
         , Border.rounded 3
         , Border.color borderColor
-        , Border.shadow
-            { offset = ( 0, 0 )
-            , blur = 1
-            , size = 1
-            , color = shadowColor
-            }
         , Background.color backgroundColor
         , Border.width borderWidth
         , Element.inFront (checkmark checked)
@@ -186,8 +207,8 @@ defaultIcon palette checked =
 inputLabelEl : Options msg -> Input.Label msg
 inputLabelEl options =
     case options.type_ of
-        Default (LabelText labelText) ->
-            Input.labelRight [] <| Element.text labelText
+        Default (LabelText labelText) (LabelAttrs attrs) ->
+            Input.labelRight attrs <| Element.text labelText
 
         Standalone ->
             Input.labelRight [] Element.none

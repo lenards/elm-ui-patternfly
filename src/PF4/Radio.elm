@@ -2,6 +2,7 @@ module PF4.Radio exposing
     ( Radio
     , radio
     , OptionStatePalette, withOptionStatePalette, asRow, asColumn
+    , withOptionExtraAttributes, withLabelAttributes
     , toMarkup
     )
 
@@ -23,6 +24,11 @@ module PF4.Radio exposing
 @docs OptionStatePalette, withOptionStatePalette, asRow, asColumn
 
 
+# Extra Attributes functions
+
+@docs withOptionExtraAttributes, withLabelAttributes
+
+
 # Rendering element
 
 @docs toMarkup
@@ -41,13 +47,18 @@ type Radio option msg
     = Radio (Options option msg)
 
 
+type LabelText msg
+    = LabelText String (List (Element.Attribute msg))
+
+
 type alias Options option msg =
     { selected : Maybe option
     , options : List (ItemOption option)
     , position : Position
     , flow : Flow
-    , label : String
+    , label : LabelText msg
     , optionStatePalette : OptionStatePalette
+    , optionExtraAttributes : List (Element.Attribute msg)
     , onChange : option -> msg
     }
 
@@ -111,10 +122,11 @@ radio :
 radio args =
     Radio
         { selected = args.selected
-        , label = args.label
+        , label = LabelText args.label []
         , position = Default
         , flow = Column
         , optionStatePalette = defaultOptionStatePalette
+        , optionExtraAttributes = []
         , options = args.options
         , onChange = args.onChange
         }
@@ -131,6 +143,35 @@ withOptionStatePalette :
     -> Radio option msg
 withOptionStatePalette customPalette (Radio options) =
     Radio { options | optionStatePalette = customPalette }
+
+
+{-| Provide a list of attributes to include on **option** label elements.
+
+This will not impact the `label` rendered above the `Radio` button options.
+
+Use `withLabelAttributes` to impact that element.
+
+-}
+withOptionExtraAttributes :
+    List (Element.Attribute msg)
+    -> Radio option msg
+    -> Radio option msg
+withOptionExtraAttributes attrs (Radio options) =
+    Radio { options | optionExtraAttributes = attrs }
+
+
+{-| Provide a list of attributes to include on the label over the entire element.
+
+If you're looking to add attributes to the Radio buttons options, use `withOptionExtraAttributes`.
+
+-}
+withLabelAttributes : List (Element.Attribute msg) -> Radio option msg -> Radio option msg
+withLabelAttributes attrs (Radio options) =
+    let
+        (LabelText labelText _) =
+            options.label
+    in
+    Radio { options | label = LabelText labelText attrs }
 
 
 {-| Configure to render options in a row, left-to-right
@@ -211,8 +252,15 @@ customOption args text state =
                     [ optionLabelEl, radioOptionEl ]
     in
     Element.row
-        [ Element.spacing 10 ]
+        (Element.spacing 10 :: args.optionExtraAttributes)
         children
+
+
+inputLabelEl : LabelText msg -> Input.Label msg
+inputLabelEl (LabelText labelText attrs) =
+    Input.labelAbove
+        (Element.alignLeft :: attrs)
+        (Element.text labelText)
 
 
 {-| Given the custom type representation, renders as an `Element msg`.
@@ -236,10 +284,6 @@ toMarkup (Radio args) =
                             value
                             (customOption args text)
                     )
-
-        inputLabel =
-            Input.labelAbove [ Element.alignLeft ] <|
-                Element.text args.label
     in
     radioF_
         [ Element.padding 10
@@ -247,6 +291,6 @@ toMarkup (Radio args) =
         ]
         { onChange = args.onChange
         , selected = args.selected
-        , label = inputLabel
+        , label = inputLabelEl args.label
         , options = radioOptions
         }
