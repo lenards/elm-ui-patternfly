@@ -267,7 +267,7 @@ itemMarkup mItemName (NavItem options) =
                 |> Maybe.map (\n -> n == name_)
                 |> Maybe.withDefault False
 
-        attrs_ =
+        initialAttrs_ =
             if selected_ options.name then
                 [ Bg.color <| Element.rgb255 79 82 85
                 , Border.solid
@@ -290,18 +290,18 @@ itemMarkup mItemName (NavItem options) =
                 , Element.width Element.fill
                 ]
 
-        baseChildAttrs =
+        childAttrs_ =
             [ Element.padding 8 ]
 
-        childAttrs_ =
+        attrs_ =
             options.onPress
                 |> Maybe.map
                     (\pressMsg ->
                         Events.onClick pressMsg
-                            :: baseChildAttrs
+                            :: initialAttrs_
                     )
                 |> Maybe.withDefault
-                    baseChildAttrs
+                    initialAttrs_
     in
     Element.row attrs_ <|
         [ Element.el childAttrs_ <|
