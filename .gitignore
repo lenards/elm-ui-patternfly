@@ -12,3 +12,10 @@ node_modules
 
 # Desktop Services Store on macOS
 .DS_Store
+
+# pf6-guide build output
+examples/pf6-guide/main.js
+
+# Playwright test results and reports
+examples/pf6-guide/test-results/
+examples/pf6-guide/playwright-report/

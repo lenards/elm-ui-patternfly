@@ -1,0 +1,15 @@
+{
+  "name": "pf6-guide",
+  "version": "1.0.0",
+  "description": "PatternFly 6 component guide — interactive Elm UI demo",
+  "scripts": {
+    "build": "elm make src/Main.elm --output=main.js",
+    "serve": "serve . -p 8001 -s",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "serve": "^14.2.4"
+  }
+}

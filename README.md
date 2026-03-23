@@ -155,7 +155,16 @@ Key token groups: `color*`, `spacer*`, `fontSize*`, `radius*`, `fontWeight*`.
 
 ## Example app — pf6-guide
 
-The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 46 components with live state. To run it:
+The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 46 components with live state.
+
+```bash
+cd examples/pf6-guide
+npm install           # install dev tools (first time only)
+npm run build         # compile Elm → main.js
+npm run serve         # serve on http://localhost:8001
+```
+
+Or if you just want to compile and open directly without a server:
 
 ```bash
 cd examples/pf6-guide
@@ -163,7 +172,18 @@ elm make src/Main.elm --output=main.js
 open index.html
 ```
 
+> **Note:** `elm reactor` will show a blank page because it doesn't pre-compile `main.js`. Use `npm run serve` or open `index.html` after running `elm make`.
+
 The guide is organized into 9 sections matching the component groups above. Every component is shown with multiple variants and real interactive state (forms you can type in, modals you can open, accordions you can expand, etc.).
+
+To run the Playwright tests:
+
+```bash
+cd examples/pf6-guide
+npm test
+```
+
+The test suite compiles the app automatically before running.
 
 ---
 
