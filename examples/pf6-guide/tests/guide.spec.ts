@@ -49,7 +49,7 @@ test.describe('pf6-guide', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.getByRole('button', { name: 'Overlays' }).click();
-    await expect(page.getByText('Modal')).toBeVisible();
+    await expect(page.getByText('Modal', { exact: true }).first()).toBeVisible();
   });
 
   test('navigates to Content section', async ({ page }) => {
@@ -93,5 +93,35 @@ test.describe('pf6-guide', () => {
     const input = page.locator('input').first();
     await input.fill('hello');
     await expect(input).toHaveValue('hello');
+  });
+
+  test('content area is scrollable — last section reachable', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // Navigate to a section with lots of content
+    await page.getByRole('button', { name: 'Primitives' }).click();
+
+    // The Divider section heading should be reachable by scrolling
+    // Use exact match to avoid matching "Above divider" / "Below divider" text
+    const dividerHeading = page.getByText('Divider', { exact: true }).first();
+    await expect(dividerHeading).toBeAttached();
+    await dividerHeading.scrollIntoViewIfNeeded();
+    await expect(dividerHeading).toBeVisible();
+  });
+
+  test('content area scroll position resets between sections', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // Scroll to the bottom of Primitives
+    await page.getByRole('button', { name: 'Primitives' }).click();
+    const dividerHeading = page.getByText('Divider', { exact: true }).first();
+    await expect(dividerHeading).toBeAttached();
+    await dividerHeading.scrollIntoViewIfNeeded();
+
+    // Switch section — top content should be visible without scrolling
+    await page.getByRole('button', { name: 'Forms' }).click();
+    await expect(page.getByText('TextInput')).toBeVisible();
   });
 });
