@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "elm-test-rs": "^3.0.1-0"
+  }
+}
