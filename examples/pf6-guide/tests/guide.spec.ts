@@ -35,7 +35,7 @@ test.describe('pf6-guide', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     await page.getByRole('button', { name: 'Feedback & Status' }).click();
-    await expect(page.getByText('Alert')).toBeVisible();
+    await expect(page.getByText('Alert', { exact: true }).first()).toBeVisible();
   });
 
   test('navigates to Navigation section', async ({ page }) => {

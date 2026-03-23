@@ -5,6 +5,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import Html.Attributes
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..), Section(..))
 
@@ -105,11 +106,13 @@ withShell model content =
         , Element.row
             [ Element.width Element.fill
             , Element.height Element.fill
+            , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
             ]
             [ sidebar model
             , Element.el
                 [ Element.width Element.fill
                 , Element.height Element.fill
+                , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                 , Bg.color Tokens.colorBackgroundSecondary
                 , Element.scrollbarY
                 ]

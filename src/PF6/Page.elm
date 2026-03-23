@@ -43,6 +43,7 @@ See: <https://www.patternfly.org/components/page>
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
+import Html.Attributes
 import PF6.Tokens as Tokens
 
 
@@ -179,13 +180,16 @@ toMarkup (Page opts) =
             Element.column
                 [ Element.width Element.fill
                 , Element.height Element.fill
+                , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                 ]
                 [ breadcrumbEl
                 , Element.el
                     [ Element.width Element.fill
                     , Element.height Element.fill
+                    , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                     , Element.padding Tokens.spacerMd
                     , Bg.color Tokens.colorBackgroundSecondary
+                    , Element.scrollbarY
                     ]
                     opts.mainContent
                 ]
@@ -194,6 +198,7 @@ toMarkup (Page opts) =
             Element.row
                 [ Element.width Element.fill
                 , Element.height Element.fill
+                , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                 ]
                 [ sidebarEl
                 , mainArea
