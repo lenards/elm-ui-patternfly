@@ -67,7 +67,10 @@
             "PF6.TextInput",
             "PF6.Title",
             "PF6.Toolbar",
-            "PF6.Tooltip"
+            "PF6.Tooltip",
+            "PF6.JumpLinks",
+            "PF6.NotificationDrawer",
+            "PF6.Popover"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",

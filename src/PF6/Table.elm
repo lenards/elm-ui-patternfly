@@ -1,5 +1,5 @@
 module PF6.Table exposing
-    ( Table, Column, SortDirection
+    ( Table, Column, SortDirection(..)
     , table
     , column
     , withCaption, withSortable, withStriped, withCompact, withBordered

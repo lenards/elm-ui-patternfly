@@ -1,0 +1,151 @@
+module Views.ContentView exposing (view)
+
+import Element exposing (Element)
+import Element.Background as Bg
+import Element.Border as Border
+import Element.Font as Font
+import PF6.ActionList as ActionList
+import PF6.Button as Button
+import PF6.ClipboardCopy as ClipboardCopy
+import PF6.CodeBlock as CodeBlock
+import PF6.DescriptionList as DescriptionList
+import PF6.List as PFList
+import PF6.Tokens as Tokens
+import Types exposing (Model, Msg(..))
+
+
+section : String -> List (Element Msg) -> Element Msg
+section heading items =
+    Element.column
+        [ Element.width Element.fill
+        , Element.spacing Tokens.spacerMd
+        , Element.padding Tokens.spacerMd
+        , Bg.color Tokens.colorBackgroundDefault
+        , Border.rounded Tokens.radiusMd
+        , Border.solid
+        , Border.width 1
+        , Border.color Tokens.colorBorderDefault
+        ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+            (Element.text heading)
+            :: items
+        )
+
+
+view : Model -> Element Msg
+view _ =
+    Element.column
+        [ Element.width Element.fill
+        , Element.spacing Tokens.spacerLg
+        ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+            (Element.text "Content")
+
+        -- CODE BLOCK
+        , section "CodeBlock"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ CodeBlock.codeBlock "$ elm make src/Main.elm --output=main.js\nSuccessfully compiled Main.elm"
+                    |> CodeBlock.toMarkup
+                , CodeBlock.codeBlock "module Hello exposing (..)\n\nhello : String\nhello =\n    \"Hello, World!\""
+                    |> CodeBlock.toMarkup
+                ]
+            ]
+
+        -- CLIPBOARD COPY
+        , section "ClipboardCopy"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ ClipboardCopy.clipboardCopy "elm install mdgriffith/elm-ui"
+                    |> ClipboardCopy.toMarkup
+                , ClipboardCopy.clipboardCopy "https://github.com/lenards/elm-ui-patternfly"
+                    |> ClipboardCopy.withInline
+                    |> ClipboardCopy.toMarkup
+                , ClipboardCopy.clipboardCopy "{\n  \"type\": \"application\",\n  \"elm-version\": \"0.19.1\"\n}"
+                    |> ClipboardCopy.withBlock
+                    |> ClipboardCopy.toMarkup
+                ]
+            ]
+
+        -- LIST
+        , section "List"
+            [ Element.wrappedRow [ Element.spacing Tokens.spacerXl ]
+                [ Element.column [ Element.spacing Tokens.spacerXs ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                        (Element.text "Unordered (bullet)")
+                    , PFList.pFList
+                        [ Element.text "First list item"
+                        , Element.text "Second list item"
+                        , Element.text "Third list item"
+                        ]
+                        |> PFList.toMarkup
+                    ]
+                , Element.column [ Element.spacing Tokens.spacerXs ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                        (Element.text "Ordered (numbered)")
+                    , PFList.pFList
+                        [ Element.text "Step one"
+                        , Element.text "Step two"
+                        , Element.text "Step three"
+                        ]
+                        |> PFList.withOrdered
+                        |> PFList.toMarkup
+                    ]
+                , Element.column [ Element.spacing Tokens.spacerXs ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                        (Element.text "Plain (no bullets)")
+                    , PFList.pFList
+                        [ Element.text "Plain item one"
+                        , Element.text "Plain item two"
+                        , Element.text "Plain item three"
+                        ]
+                        |> PFList.withPlain
+                        |> PFList.toMarkup
+                    ]
+                , Element.column [ Element.spacing Tokens.spacerXs ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                        (Element.text "Inline")
+                    , PFList.pFList
+                        [ Element.text "Inline one"
+                        , Element.text "Inline two"
+                        , Element.text "Inline three"
+                        ]
+                        |> PFList.withInlined
+                        |> PFList.toMarkup
+                    ]
+                ]
+            ]
+
+        -- DESCRIPTION LIST
+        , section "DescriptionList"
+            [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
+                [ DescriptionList.descriptionList
+                    [ DescriptionList.group "Name" [ Element.text "Lenards" ]
+                    , DescriptionList.group "Framework" [ Element.text "Elm 0.19.1" ]
+                    , DescriptionList.group "Design System" [ Element.text "PatternFly 6" ]
+                    , DescriptionList.group "UI Library" [ Element.text "elm-ui" ]
+                    ]
+                    |> DescriptionList.toMarkup
+                , DescriptionList.descriptionList
+                    [ DescriptionList.group "Status" [ Element.text "Active" ]
+                    , DescriptionList.group "Components" [ Element.text "43" ]
+                    , DescriptionList.group "Tests" [ Element.text "85" ]
+                    ]
+                    |> DescriptionList.withHorizontal
+                    |> DescriptionList.toMarkup
+                ]
+            ]
+
+        -- ACTION LIST
+        , section "ActionList"
+            [ ActionList.actionList
+                [ ActionList.actionItem
+                    (Button.primary { label = "Save", onPress = Nothing }
+                        |> Button.toMarkup
+                    )
+                , ActionList.actionItem
+                    (Button.secondary { label = "Cancel", onPress = Nothing }
+                        |> Button.toMarkup
+                    )
+                ]
+                |> ActionList.toMarkup
+            ]
+        ]
