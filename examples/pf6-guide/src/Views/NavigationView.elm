@@ -30,7 +30,7 @@ section heading items =
 
 
 view : Model -> Element Msg
-view _ =
+view model =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
@@ -53,8 +53,8 @@ view _ =
         , section "Tabs"
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Tabs.tabs
-                    { activeKey = "tab1"
-                    , onSelect = \_ -> NoOp
+                    { activeKey = model.activeTab
+                    , onSelect = TabSelected
                     , tabs =
                         [ Tabs.tab "tab1" "Users"
                         , Tabs.tab "tab2" "Containers"
@@ -63,8 +63,8 @@ view _ =
                     }
                     |> Tabs.toMarkup
                 , Tabs.tabs
-                    { activeKey = "tab1"
-                    , onSelect = \_ -> NoOp
+                    { activeKey = model.activeBoxTab
+                    , onSelect = BoxTabSelected
                     , tabs =
                         [ Tabs.tab "tab1" "Overview"
                         , Tabs.tab "tab2" "YAML"

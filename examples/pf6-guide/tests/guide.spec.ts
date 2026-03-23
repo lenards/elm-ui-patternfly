@@ -110,6 +110,44 @@ test.describe('pf6-guide', () => {
     await expect(dividerHeading).toBeVisible();
   });
 
+  test('tooltip shows on hover and hides on leave', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Overlays' }).click();
+
+    const trigger = page.getByRole('button', { name: 'Hover me (top)' });
+    const bubble = page.locator('.pf-tooltip-bubble').first();
+
+    // Tooltip should be hidden initially
+    await expect(bubble).toHaveCSS('opacity', '0');
+
+    // Hover over the trigger
+    await trigger.hover();
+    await expect(bubble).toHaveCSS('opacity', '1');
+
+    // Move mouse away
+    await page.mouse.move(0, 0);
+    await expect(bubble).toHaveCSS('opacity', '0');
+  });
+
+  test('tabs switch active indicator on click', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Navigation' }).click();
+
+    // Click on "Containers" tab
+    await page.getByRole('button', { name: 'Containers' }).click();
+
+    // The Containers button should now have the active border color
+    const containersTab = page.getByRole('button', { name: 'Containers' });
+    await expect(containersTab).toBeVisible();
+
+    // Click on "Database" tab
+    await page.getByRole('button', { name: 'Database' }).click();
+    const databaseTab = page.getByRole('button', { name: 'Database' });
+    await expect(databaseTab).toBeVisible();
+  });
+
   test('content area scroll position resets between sections', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');

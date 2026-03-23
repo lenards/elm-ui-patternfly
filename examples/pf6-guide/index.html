@@ -19,6 +19,23 @@
   <script src="main.js"></script>
   <script>
     var app = Elm.Main.init({ node: document.getElementById('app') });
+    if (app.ports && app.ports.copyToClipboard) {
+      app.ports.copyToClipboard.subscribe(function(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text);
+        } else {
+          // Fallback for non-HTTPS contexts
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+      });
+    }
   </script>
 </body>
 </html>

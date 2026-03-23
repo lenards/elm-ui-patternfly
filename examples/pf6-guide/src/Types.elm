@@ -45,6 +45,10 @@ type alias Model =
 
     -- Drawer state
     , drawerOpen : Bool
+
+    -- Navigation state
+    , activeTab : String
+    , activeBoxTab : String
     }
 
 
@@ -71,3 +75,6 @@ type Msg
     | TableSortBy String
     | DataListCheckToggled Int
     | DrawerToggled Bool
+    | TabSelected String
+    | BoxTabSelected String
+    | CopyText String

@@ -43,6 +43,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import Html
 import Html.Attributes
 import PF6.Tokens as Tokens
 
@@ -125,6 +126,21 @@ withMaxWidth px (Tooltip opts) =
 
 tooltipBubble : Options msg -> Element msg
 tooltipBubble opts =
+    let
+        spacing =
+            case opts.position of
+                Top ->
+                    Element.moveUp 8
+
+                Bottom ->
+                    Element.moveDown 8
+
+                Left ->
+                    Element.moveLeft 8
+
+                Right ->
+                    Element.moveRight 8
+    in
     Element.el
         [ Bg.color (Element.rgb255 21 21 21)
         , Font.color Tokens.colorTextOnDark
@@ -132,23 +148,37 @@ tooltipBubble opts =
         , Border.rounded Tokens.radiusMd
         , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
         , Element.width (Element.maximum opts.maxWidth Element.shrink)
+        , Element.htmlAttribute (Html.Attributes.class "pf-tooltip-bubble")
         , Element.htmlAttribute (Html.Attributes.style "pointer-events" "none")
         , Element.htmlAttribute (Html.Attributes.style "white-space" "normal")
+        , Element.htmlAttribute (Html.Attributes.style "opacity" "0")
+        , Element.htmlAttribute (Html.Attributes.style "transition" "opacity 0.15s ease-in-out")
+        , spacing
         ]
         (Element.paragraph [] [ Element.text opts.content ])
 
 
+{-| CSS that shows the tooltip bubble on hover.
+
+elm-ui's `mouseOver` only supports Decoration values (colors, shadows),
+not visibility or opacity. We inject a small CSS rule that uses the
+`:hover` pseudo-class to show the bubble when the trigger is hovered.
+
+-}
+hoverCss : Element msg
+hoverCss =
+    Element.html
+        (Html.node "style"
+            []
+            [ Html.text ".pf-tooltip-wrap:hover .pf-tooltip-bubble { opacity: 1 !important; }" ]
+        )
+
+
 {-| Render the Tooltip as an `Element msg`
 
-The tooltip bubble is shown via elm-ui's `above`, `below`, `onLeft`, or `onRight`
-attributes, so it appears on hover when composed with `Element.mouseOver` or
-always visible when embedded directly.
-
-For real hover behavior, use the `above`/`below` variant directly on your element:
-
-    Element.el
-        [ Element.above (tooltipView "My tooltip") ]
-        myTrigger
+The tooltip bubble is hidden by default (opacity: 0) and shown on hover
+via an injected CSS rule. The bubble is positioned using elm-ui's
+`above`/`below`/`onLeft`/`onRight` attributes with an 8px gap.
 
 -}
 toMarkup : Tooltip msg -> Element msg
@@ -172,5 +202,8 @@ toMarkup (Tooltip opts) =
                     Element.onRight bubble
     in
     Element.el
-        [ positionAttr ]
+        [ positionAttr
+        , Element.htmlAttribute (Html.Attributes.class "pf-tooltip-wrap")
+        , Element.inFront hoverCss
+        ]
         opts.trigger

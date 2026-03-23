@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Element
@@ -36,9 +36,14 @@ init _ =
       , tableSort = Nothing
       , dataListChecked = []
       , drawerOpen = False
+      , activeTab = "tab1"
+      , activeBoxTab = "tab1"
       }
     , Cmd.none
     )
+
+
+port copyToClipboard : String -> Cmd msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -139,6 +144,15 @@ update msg model =
 
         DrawerToggled open ->
             ( { model | drawerOpen = open }, Cmd.none )
+
+        TabSelected key ->
+            ( { model | activeTab = key }, Cmd.none )
+
+        BoxTabSelected key ->
+            ( { model | activeBoxTab = key }, Cmd.none )
+
+        CopyText text ->
+            ( model, copyToClipboard text )
 
 
 view : Model -> Browser.Document Msg

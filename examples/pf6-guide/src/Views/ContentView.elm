@@ -55,12 +55,15 @@ view _ =
         , section "ClipboardCopy"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ ClipboardCopy.clipboardCopy "elm install mdgriffith/elm-ui"
+                    |> ClipboardCopy.withOnCopy (CopyText "elm install mdgriffith/elm-ui")
                     |> ClipboardCopy.toMarkup
                 , ClipboardCopy.clipboardCopy "https://github.com/lenards/elm-ui-patternfly"
                     |> ClipboardCopy.withInline
+                    |> ClipboardCopy.withOnCopy (CopyText "https://github.com/lenards/elm-ui-patternfly")
                     |> ClipboardCopy.toMarkup
                 , ClipboardCopy.clipboardCopy "{\n  \"type\": \"application\",\n  \"elm-version\": \"0.19.1\"\n}"
                     |> ClipboardCopy.withBlock
+                    |> ClipboardCopy.withOnCopy (CopyText "{\n  \"type\": \"application\",\n  \"elm-version\": \"0.19.1\"\n}")
                     |> ClipboardCopy.toMarkup
                 ]
             ]
