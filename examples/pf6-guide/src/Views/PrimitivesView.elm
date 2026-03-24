@@ -115,15 +115,15 @@ view model =
         -- AVATAR
         , section "Avatar"
             [ row
-                [ Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "User avatar" }
+                [ Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withSmallSize
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "User avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "User avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withLargeSize
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "User avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withLargeSize
                     |> Avatar.withBorder
                     |> Avatar.toMarkup
