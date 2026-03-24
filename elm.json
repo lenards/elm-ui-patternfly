@@ -74,7 +74,8 @@
             "PF6.BackToTop",
             "PF6.Brand",
             "PF6.Hint",
-            "PF6.Masthead"
+            "PF6.Masthead",
+            "PF6.NotificationBadge"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
