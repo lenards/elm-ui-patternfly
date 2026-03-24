@@ -10,9 +10,13 @@ import PF6.NumberInput as NumberInput
 import PF6.Radio as Radio
 import PF6.SearchInput as SearchInput
 import PF6.Select as Select
+import PF6.SimpleList as SimpleList
 import PF6.Switch as Switch
+import PF6.TextArea as TextArea
 import PF6.TextInput as TextInput
+import PF6.Tile as Tile
 import PF6.Tokens as Tokens
+import PF6.ToggleGroup as ToggleGroup
 import Types exposing (Model, Msg(..))
 
 
@@ -180,6 +184,130 @@ view model =
                 |> Select.withPlaceholder "Select a framework..."
                 |> Select.withHelperText "Choose your frontend framework"
                 |> Select.toMarkup
+            ]
+
+        -- TEXT AREA
+        , section "TextArea"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ TextArea.textArea { value = model.textAreaValue, onChange = TextAreaChanged }
+                    |> TextArea.withLabel "Description"
+                    |> TextArea.withPlaceholder "Enter a description..."
+                    |> TextArea.withRows 4
+                    |> TextArea.toMarkup
+                , TextArea.textArea { value = "", onChange = TextAreaChanged }
+                    |> TextArea.withLabel "Required field"
+                    |> TextArea.withRequired
+                    |> TextArea.withDanger
+                    |> TextArea.withHelperText "This field is required."
+                    |> TextArea.withRows 3
+                    |> TextArea.toMarkup
+                , TextArea.textArea { value = "Read-only content", onChange = TextAreaChanged }
+                    |> TextArea.withLabel "Disabled"
+                    |> TextArea.withDisabled
+                    |> TextArea.toMarkup
+                ]
+            ]
+
+        -- TILE
+        , section "Tile"
+            [ Element.wrappedRow [ Element.spacing Tokens.spacerSm ]
+                [ Tile.tile { title = "Option A", onSelect = TileSelected "a" }
+                    |> (if model.selectedTile == Just "a" then
+                            Tile.withSelected
+
+                        else
+                            identity
+                       )
+                    |> Tile.withIcon (Element.text "\u{2601}")
+                    |> Tile.toMarkup
+                , Tile.tile { title = "Option B", onSelect = TileSelected "b" }
+                    |> (if model.selectedTile == Just "b" then
+                            Tile.withSelected
+
+                        else
+                            identity
+                       )
+                    |> Tile.withIcon (Element.text "\u{26A1}")
+                    |> Tile.toMarkup
+                , Tile.tile { title = "Stacked", onSelect = TileSelected "c" }
+                    |> (if model.selectedTile == Just "c" then
+                            Tile.withSelected
+
+                        else
+                            identity
+                       )
+                    |> Tile.withIcon (Element.text "\u{2699}")
+                    |> Tile.withStacked
+                    |> Tile.toMarkup
+                , Tile.tile { title = "Disabled", onSelect = NoOp }
+                    |> Tile.withDisabled
+                    |> Tile.toMarkup
+                ]
+            ]
+
+        -- TOGGLE GROUP
+        , section "ToggleGroup"
+            [ Element.column [ Element.spacing Tokens.spacerSm ]
+                [ ToggleGroup.toggleGroup
+                    { items =
+                        [ ToggleGroup.toggleItem { label = "Grid", isSelected = model.toggleViewMode == "grid", onToggle = ToggleViewMode "grid" }
+                        , ToggleGroup.toggleItem { label = "List", isSelected = model.toggleViewMode == "list", onToggle = ToggleViewMode "list" }
+                        , ToggleGroup.toggleItem { label = "Table", isSelected = model.toggleViewMode == "table", onToggle = ToggleViewMode "table" }
+                        ]
+                    }
+                    |> ToggleGroup.toMarkup
+                , ToggleGroup.toggleGroup
+                    { items =
+                        [ ToggleGroup.toggleItem { label = "Day", isSelected = False, onToggle = NoOp }
+                            |> ToggleGroup.withItemIcon (Element.text "\u{1F4C5}")
+                        , ToggleGroup.toggleItem { label = "Week", isSelected = True, onToggle = NoOp }
+                            |> ToggleGroup.withItemIcon (Element.text "\u{1F5D3}")
+                        , ToggleGroup.toggleItem { label = "Disabled", isSelected = False, onToggle = NoOp }
+                            |> ToggleGroup.withItemDisabled
+                        ]
+                    }
+                    |> ToggleGroup.withCompact
+                    |> ToggleGroup.toMarkup
+                ]
+            ]
+
+        -- SIMPLE LIST
+        , section "SimpleList"
+            [ Element.row [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
+                [ SimpleList.simpleList
+                    [ SimpleList.simpleListItem "Dashboard" (SimpleListSelected "item1")
+                        |> (if model.simpleListActive == "item1" then
+                                SimpleList.withItemActive
+
+                            else
+                                identity
+                           )
+                    , SimpleList.simpleListItem "Settings" (SimpleListSelected "item2")
+                        |> (if model.simpleListActive == "item2" then
+                                SimpleList.withItemActive
+
+                            else
+                                identity
+                           )
+                    , SimpleList.simpleListItem "Users" (SimpleListSelected "item3")
+                        |> (if model.simpleListActive == "item3" then
+                                SimpleList.withItemActive
+
+                            else
+                                identity
+                           )
+                    , SimpleList.simpleListItem "Disabled" NoOp
+                        |> SimpleList.withItemDisabled
+                    ]
+                    |> SimpleList.toMarkup
+                , SimpleList.simpleList
+                    [ SimpleList.simpleListItem "Item A" NoOp |> SimpleList.withItemActive
+                    , SimpleList.simpleListItem "Item B" NoOp
+                    , SimpleList.simpleListItem "Item C" NoOp
+                    ]
+                    |> SimpleList.withGrouped
+                    |> SimpleList.toMarkup
+                ]
             ]
 
         -- FORM LAYOUT

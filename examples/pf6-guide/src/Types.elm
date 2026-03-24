@@ -49,6 +49,13 @@ type alias Model =
     -- Navigation state
     , activeTab : String
     , activeBoxTab : String
+
+    -- New component state
+    , textAreaValue : String
+    , selectedTile : Maybe String
+    , toggleViewMode : String
+    , simpleListActive : String
+    , notificationExpanded : Bool
     }
 
 
@@ -78,3 +85,10 @@ type Msg
     | TabSelected String
     | BoxTabSelected String
     | CopyText String
+      -- New component messages
+    | TextAreaChanged String
+    | TileSelected String
+    | ToggleViewMode String
+    | SimpleListSelected String
+    | NotificationToggled
+    | ScrollToTop

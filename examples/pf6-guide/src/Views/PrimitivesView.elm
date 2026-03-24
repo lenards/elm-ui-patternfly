@@ -6,12 +6,16 @@ import Element.Border as Border
 import Element.Font as Font
 import PF6.Avatar as Avatar
 import PF6.Badge as Badge
+import PF6.Brand as Brand
 import PF6.Button as Button
 import PF6.Divider as Divider
 import PF6.Icon as Icon
 import PF6.Label as Label
+import PF6.NotificationBadge as NotificationBadge
+import PF6.Timestamp as Timestamp
 import PF6.Title as Title
 import PF6.Tokens as Tokens
+import PF6.Truncate as Truncate
 import Types exposing (Model, Msg(..))
 
 
@@ -165,6 +169,65 @@ view model =
                 , Element.text "With medium inset"
                 ]
             ]
+
+        -- BRAND
+        , section "Brand"
+            [ row
+                [ Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand--logo.svg", alt = "PatternFly" }
+                    |> Brand.withHeight 36
+                    |> Brand.toMarkup
+                , Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand--logo.svg", alt = "PatternFly large" }
+                    |> Brand.withHeight 48
+                    |> Brand.withWidth 200
+                    |> Brand.toMarkup
+                ]
+            ]
+
+        -- NOTIFICATION BADGE
+        , section "NotificationBadge"
+            [ row
+                [ NotificationBadge.notificationBadge { count = 5, onClick = NotificationToggled }
+                    |> NotificationBadge.withExpanded model.notificationExpanded
+                    |> NotificationBadge.toMarkup
+                , NotificationBadge.notificationBadge { count = 0, onClick = NoOp }
+                    |> NotificationBadge.withRead
+                    |> NotificationBadge.toMarkup
+                , NotificationBadge.notificationBadge { count = 12, onClick = NoOp }
+                    |> NotificationBadge.withAttentionVariant
+                    |> NotificationBadge.toMarkup
+                , NotificationBadge.notificationBadge { count = 150, onClick = NoOp }
+                    |> NotificationBadge.toMarkup
+                ]
+            ]
+
+        -- TIMESTAMP
+        , section "Timestamp"
+            [ row
+                [ Timestamp.timestamp "Jan 1, 2024, 12:00 PM"
+                    |> Timestamp.toMarkup
+                , Timestamp.timestamp "Mar 15, 2024"
+                    |> Timestamp.withIcon
+                    |> Timestamp.toMarkup
+                , Timestamp.timestamp "2024-03-15T14:30:00Z"
+                    |> Timestamp.withTooltip "March 15, 2024 at 2:30 PM UTC"
+                    |> Timestamp.withCustomIcon (Element.text "\u{1F4C5}")
+                    |> Timestamp.toMarkup
+                ]
+            ]
+
+        -- TRUNCATE
+        , section "Truncate"
+            [ Element.column [ Element.spacing Tokens.spacerSm ]
+                [ Truncate.truncate "This is a very long text string that should be truncated at the end"
+                    |> Truncate.withMaxChars 30
+                    |> Truncate.toMarkup
+                , Truncate.truncate "This is a long text that gets truncated in the middle to show both ends"
+                    |> Truncate.withMaxChars 30
+                    |> Truncate.withMiddleTruncation
+                    |> Truncate.toMarkup
+                , Truncate.truncate "Short text"
+                    |> Truncate.withMaxChars 30
+                    |> Truncate.toMarkup
+                ]
+            ]
         ]
-
-

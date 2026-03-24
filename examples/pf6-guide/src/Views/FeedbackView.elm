@@ -6,9 +6,12 @@ import Element.Border as Border
 import Element.Font as Font
 import PF6.Alert as Alert
 import PF6.Banner as Banner
+import PF6.Button as Button
 import PF6.EmptyState as EmptyState
 import PF6.HelperText as HelperText
+import PF6.Hint as Hint
 import PF6.Progress as Progress
+import PF6.ProgressStepper as ProgressStepper
 import PF6.Skeleton as Skeleton
 import PF6.Spinner as Spinner
 import PF6.Tokens as Tokens
@@ -167,6 +170,51 @@ view model =
                 , HelperText.helperText "Check your input." |> HelperText.withWarning |> HelperText.toMarkup
                 , HelperText.helperText "Username is available." |> HelperText.withSuccess |> HelperText.toMarkup
                 , HelperText.helperText "Checking availability..." |> HelperText.withIndeterminate |> HelperText.toMarkup
+                ]
+            ]
+
+        -- HINT
+        , section "Hint"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ Hint.hint "Try searching for items by name or description to quickly find what you need."
+                    |> Hint.toMarkup
+                , Hint.hint "You can filter results by selecting categories from the sidebar."
+                    |> Hint.withTitle "Pro tip"
+                    |> Hint.withActions
+                        (Button.link { label = "Learn more", onPress = Nothing } |> Button.toMarkup)
+                    |> Hint.toMarkup
+                , Hint.hint "Your changes will be saved automatically as you edit."
+                    |> Hint.withTitle "Auto-save enabled"
+                    |> Hint.withFooter
+                        (Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+                            (Element.text "Last saved 2 minutes ago")
+                        )
+                    |> Hint.toMarkup
+                ]
+            ]
+
+        -- PROGRESS STEPPER
+        , section "ProgressStepper"
+            [ Element.column [ Element.spacing Tokens.spacerLg, Element.width Element.fill ]
+                [ ProgressStepper.progressStepper
+                    [ ProgressStepper.step "Setup" |> ProgressStepper.withStepComplete
+                    , ProgressStepper.step "Configure" |> ProgressStepper.withStepComplete
+                    , ProgressStepper.step "Review" |> ProgressStepper.withStepCurrent
+                    , ProgressStepper.step "Deploy"
+                    ]
+                    |> ProgressStepper.toMarkup
+                , ProgressStepper.progressStepper
+                    [ ProgressStepper.step "Create account"
+                        |> ProgressStepper.withStepComplete
+                        |> ProgressStepper.withStepDescription "Account created"
+                    , ProgressStepper.step "Set preferences"
+                        |> ProgressStepper.withStepCurrent
+                        |> ProgressStepper.withStepDescription "In progress"
+                    , ProgressStepper.step "Launch"
+                        |> ProgressStepper.withStepDescription "Not started"
+                    ]
+                    |> ProgressStepper.withCompact
+                    |> ProgressStepper.toMarkup
                 ]
             ]
         ]

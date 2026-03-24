@@ -4,9 +4,14 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.BackToTop as BackToTop
+import PF6.Brand as Brand
 import PF6.Button as Button
 import PF6.Card as Card
 import PF6.Drawer as Drawer
+import PF6.Masthead as Masthead
+import PF6.Panel as Panel
+import PF6.Sidebar as Sidebar
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
@@ -73,6 +78,75 @@ view model =
                     |> Card.withCompact
                     |> Card.toMarkup
                 ]
+            ]
+
+        -- PANEL
+        , section "Panel"
+            [ Element.wrappedRow [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
+                [ Panel.panel (Element.text "Basic panel content")
+                    |> Panel.withBordered
+                    |> Panel.toMarkup
+                , Panel.panel (Element.text "Panel with header and footer")
+                    |> Panel.withBordered
+                    |> Panel.withHeader (Element.el [ Font.bold ] (Element.text "Panel Header"))
+                    |> Panel.withFooter (Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "Panel Footer"))
+                    |> Panel.toMarkup
+                , Panel.panel (Element.text "Raised panel with shadow")
+                    |> Panel.withRaised
+                    |> Panel.toMarkup
+                ]
+            ]
+
+        -- SIDEBAR
+        , section "Sidebar"
+            [ Sidebar.sidebar
+                { content =
+                    Element.paragraph
+                        [ Element.padding Tokens.spacerMd
+                        , Font.size Tokens.fontSizeMd
+                        , Font.color Tokens.colorTextSubtle
+                        ]
+                        [ Element.text "This is the main content area. The sidebar panel is on the left by default. You can use withPanelRight to move it." ]
+                , panel =
+                    Element.column
+                        [ Element.padding Tokens.spacerMd
+                        , Bg.color Tokens.colorBackgroundSecondary
+                        , Element.width Element.fill
+                        , Element.height Element.fill
+                        , Element.spacing Tokens.spacerSm
+                        ]
+                        [ Element.el [ Font.bold, Font.size Tokens.fontSizeMd ] (Element.text "Sidebar Panel")
+                        , Element.text "Navigation or filters here"
+                        ]
+                }
+                |> Sidebar.withGutter
+                |> Sidebar.withPanelWidth 180
+                |> Sidebar.toMarkup
+            ]
+
+        -- MASTHEAD
+        , section "Masthead"
+            [ Masthead.masthead
+                |> Masthead.withBrand
+                    (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorTextOnDark ]
+                        (Element.text "My App")
+                    )
+                |> Masthead.withContent
+                    (Element.el [ Font.color (Element.rgb255 160 160 160), Font.size Tokens.fontSizeMd ]
+                        (Element.text "Dashboard")
+                    )
+                |> Masthead.withToolbar
+                    (Element.el [ Font.color Tokens.colorTextOnDark ] (Element.text "\u{2699}"))
+                |> Masthead.toMarkup
+            ]
+
+        -- BACK TO TOP
+        , section "BackToTop"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                [ Element.text "The BackToTop button is rendered as a fixed-position element in the bottom-right corner. A demo button is shown below (non-fixed for visibility):" ]
+            , Button.primary { label = "\u{2191} Back to top", onPress = Just ScrollToTop }
+                |> Button.withSmallSize
+                |> Button.toMarkup
             ]
 
         -- DRAWER

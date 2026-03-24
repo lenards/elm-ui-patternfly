@@ -38,6 +38,11 @@ init _ =
       , drawerOpen = False
       , activeTab = "tab1"
       , activeBoxTab = "tab1"
+      , textAreaValue = ""
+      , selectedTile = Nothing
+      , toggleViewMode = "grid"
+      , simpleListActive = "item1"
+      , notificationExpanded = False
       }
     , Cmd.none
     )
@@ -153,6 +158,24 @@ update msg model =
 
         CopyText text ->
             ( model, copyToClipboard text )
+
+        TextAreaChanged value ->
+            ( { model | textAreaValue = value }, Cmd.none )
+
+        TileSelected value ->
+            ( { model | selectedTile = Just value }, Cmd.none )
+
+        ToggleViewMode mode ->
+            ( { model | toggleViewMode = mode }, Cmd.none )
+
+        SimpleListSelected item ->
+            ( { model | simpleListActive = item }, Cmd.none )
+
+        NotificationToggled ->
+            ( { model | notificationExpanded = not model.notificationExpanded }, Cmd.none )
+
+        ScrollToTop ->
+            ( model, Cmd.none )
 
 
 view : Model -> Browser.Document Msg
