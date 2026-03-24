@@ -77,7 +77,8 @@
             "PF6.Masthead",
             "PF6.NotificationBadge",
             "PF6.Panel",
-            "PF6.ProgressStepper"
+            "PF6.ProgressStepper",
+            "PF6.Sidebar"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
