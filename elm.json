@@ -90,7 +90,8 @@
             "PF6.Backdrop",
             "PF6.TextInputGroup",
             "PF6.InputGroup",
-            "PF6.Menu"
+            "PF6.Menu",
+            "PF6.Wizard"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
