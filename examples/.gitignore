@@ -1,0 +1,12 @@
+# Elm build output
+main.js
+
+# Elm compilation cache
+elm-stuff/
+
+# Node
+node_modules/
+
+# Playwright artifacts
+test-results/
+playwright-report/
