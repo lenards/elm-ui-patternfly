@@ -72,7 +72,8 @@
             "PF6.NotificationDrawer",
             "PF6.Popover",
             "PF6.BackToTop",
-            "PF6.Brand"
+            "PF6.Brand",
+            "PF6.Hint"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
