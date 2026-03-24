@@ -25,6 +25,8 @@ type alias Model =
 
     -- Forms state
     , textValue : String
+    , successValue : String
+    , errorValue : String
     , searchValue : String
     , checkboxChecked : Bool
     , radioSelected : Maybe String
@@ -67,6 +69,8 @@ type Msg
     | ProgressSet Float
     | AlertDismiss
     | TextChanged String
+    | SuccessTextChanged String
+    | ErrorTextChanged String
     | SearchChanged String
     | CheckboxToggled Bool
     | RadioSelected String

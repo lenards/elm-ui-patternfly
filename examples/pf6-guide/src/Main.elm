@@ -22,6 +22,8 @@ init _ =
       , progressValue = 60
       , alertVisible = True
       , textValue = ""
+      , successValue = ""
+      , errorValue = ""
       , searchValue = ""
       , checkboxChecked = False
       , radioSelected = Nothing
@@ -74,6 +76,12 @@ update msg model =
 
         TextChanged value ->
             ( { model | textValue = value }, Cmd.none )
+
+        SuccessTextChanged value ->
+            ( { model | successValue = value }, Cmd.none )
+
+        ErrorTextChanged value ->
+            ( { model | errorValue = value }, Cmd.none )
 
         SearchChanged value ->
             ( { model | searchValue = value }, Cmd.none )

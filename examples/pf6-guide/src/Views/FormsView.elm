@@ -54,12 +54,12 @@ view model =
                     |> TextInput.withLabel "Default"
                     |> TextInput.withPlaceholder "Enter text..."
                     |> TextInput.toMarkup
-                , TextInput.textInput { value = "", onChange = TextChanged }
+                , TextInput.textInput { value = model.successValue, onChange = SuccessTextChanged }
                     |> TextInput.withLabel "Success validation"
                     |> TextInput.withSuccess
                     |> TextInput.withHelperText "Looks good!"
                     |> TextInput.toMarkup
-                , TextInput.textInput { value = "", onChange = TextChanged }
+                , TextInput.textInput { value = model.errorValue, onChange = ErrorTextChanged }
                     |> TextInput.withLabel "Error validation"
                     |> TextInput.withDanger
                     |> TextInput.withHelperText "This field is required."
