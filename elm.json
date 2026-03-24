@@ -80,7 +80,8 @@
             "PF6.ProgressStepper",
             "PF6.Sidebar",
             "PF6.SimpleList",
-            "PF6.TextArea"
+            "PF6.TextArea",
+            "PF6.Tile"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
