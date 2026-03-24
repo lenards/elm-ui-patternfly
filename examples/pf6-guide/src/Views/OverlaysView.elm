@@ -5,9 +5,11 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import PF6.Accordion as Accordion
+import PF6.Backdrop as Backdrop
 import PF6.Button as Button
 import PF6.Dropdown as Dropdown
 import PF6.ExpandableSection as ExpandableSection
+import PF6.Menu as Menu
 import PF6.Modal as Modal
 import PF6.Tokens as Tokens
 import PF6.Tooltip as Tooltip
@@ -55,6 +57,11 @@ view model =
                         )
                     |> Modal.withCloseMsg ModalClose
                     |> Modal.toMarkup
+
+             else if model.backdropVisible then
+                Backdrop.backdrop (BackdropToggled False)
+                    |> Backdrop.withOpacity 0.3
+                    |> Backdrop.toMarkup
 
              else
                 Element.none
@@ -163,6 +170,43 @@ view model =
                     }
                 ]
                 |> Accordion.toMarkup
+            ]
+
+        -- MENU
+        , section "Menu"
+            [ Element.row [ Element.spacing Tokens.spacerLg, Element.width Element.fill ]
+                [ Element.el [ Element.width (Element.px 280) ]
+                    (Menu.menu
+                        [ Menu.menuHeader "Actions"
+                        , Menu.menuItem "Edit" (MenuItemClicked "edit")
+                            |> Menu.withItemIcon (Element.text "\u{270F}")
+                        , Menu.menuItem "Duplicate" (MenuItemClicked "duplicate")
+                            |> Menu.withItemIcon (Element.text "\u{2398}")
+                            |> Menu.withItemDescription "Create a copy"
+                        , Menu.menuDivider
+                        , Menu.menuItem "Share" (MenuItemClicked "share")
+                            |> Menu.withItemSelected
+                        , Menu.menuItem "Disabled item" (MenuItemClicked "disabled")
+                            |> Menu.withItemDisabled
+                        , Menu.menuDivider
+                        , Menu.menuItem "Delete" (MenuItemClicked "delete")
+                            |> Menu.withItemDanger
+                            |> Menu.withItemIcon (Element.text "\u{2717}")
+                        ]
+                        |> Menu.withMaxHeight 300
+                        |> Menu.toMarkup
+                    )
+                ]
+            ]
+
+        -- BACKDROP
+        , section "Backdrop"
+            [ Element.column [ Element.spacing Tokens.spacerSm ]
+                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.text "The Backdrop component provides a semi-transparent overlay. It is used internally by Modal. Click the button below to toggle a demo backdrop." ]
+                , Button.secondary { label = "Toggle backdrop", onPress = Just (BackdropToggled (not model.backdropVisible)) }
+                    |> Button.toMarkup
+                ]
             ]
 
         -- EXPANDABLE SECTION

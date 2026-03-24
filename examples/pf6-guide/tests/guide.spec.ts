@@ -160,6 +160,6 @@ test.describe('pf6-guide', () => {
 
     // Switch section — top content should be visible without scrolling
     await page.getByRole('button', { name: 'Forms' }).click();
-    await expect(page.getByText('TextInput')).toBeVisible();
+    await expect(page.getByText('TextInput', { exact: true })).toBeVisible();
   });
 });

@@ -58,6 +58,13 @@ type alias Model =
     , toggleViewMode : String
     , simpleListActive : String
     , notificationExpanded : Bool
+
+    -- New PF6 component state
+    , sliderValue : Float
+    , wizardStep : Int
+    , menuSearchValue : String
+    , textInputGroupValue : String
+    , backdropVisible : Bool
     }
 
 
@@ -96,3 +103,14 @@ type Msg
     | SimpleListSelected String
     | NotificationToggled
     | ScrollToTop
+      -- New PF6 component messages
+    | SliderChanged Float
+    | WizardStepChanged Int
+    | WizardNext
+    | WizardBack
+    | WizardCancel
+    | WizardFinish
+    | MenuSearchChanged String
+    | TextInputGroupChanged String
+    | BackdropToggled Bool
+    | MenuItemClicked String

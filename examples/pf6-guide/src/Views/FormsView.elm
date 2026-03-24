@@ -4,9 +4,12 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Button as Button
 import PF6.Checkbox as Checkbox
 import PF6.Form as Form
+import PF6.InputGroup as InputGroup
 import PF6.NumberInput as NumberInput
+import PF6.Slider as Slider
 import PF6.Radio as Radio
 import PF6.SearchInput as SearchInput
 import PF6.Select as Select
@@ -14,9 +17,11 @@ import PF6.SimpleList as SimpleList
 import PF6.Switch as Switch
 import PF6.TextArea as TextArea
 import PF6.TextInput as TextInput
+import PF6.TextInputGroup as TextInputGroup
 import PF6.Tile as Tile
 import PF6.Tokens as Tokens
 import PF6.ToggleGroup as ToggleGroup
+import PF6.Wizard as Wizard
 import Types exposing (Model, Msg(..))
 
 
@@ -308,6 +313,102 @@ view model =
                     |> SimpleList.withGrouped
                     |> SimpleList.toMarkup
                 ]
+            ]
+
+        -- SLIDER
+        , section "Slider"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ Slider.slider { value = model.sliderValue, onChange = SliderChanged, min = 0, max = 100 }
+                    |> Slider.withLabel "Volume"
+                    |> Slider.withShowValue
+                    |> Slider.withShowTicks
+                    |> Slider.toMarkup
+                , Slider.slider { value = model.sliderValue, onChange = SliderChanged, min = 0, max = 100 }
+                    |> Slider.withLabel "With step (10)"
+                    |> Slider.withStep 10
+                    |> Slider.withShowValue
+                    |> Slider.toMarkup
+                , Slider.slider { value = 30, onChange = \_ -> NoOp, min = 0, max = 100 }
+                    |> Slider.withLabel "Disabled"
+                    |> Slider.withDisabled
+                    |> Slider.withShowValue
+                    |> Slider.toMarkup
+                ]
+            ]
+
+        -- TEXT INPUT GROUP
+        , section "TextInputGroup"
+            [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
+                [ TextInputGroup.textInputGroup { value = model.textInputGroupValue, onChange = TextInputGroupChanged }
+                    |> TextInputGroup.withLabel "Amount"
+                    |> TextInputGroup.withPrefix (Element.text "$")
+                    |> TextInputGroup.withSuffix (Element.text ".00")
+                    |> TextInputGroup.withPlaceholder "0"
+                    |> TextInputGroup.toMarkup
+                , TextInputGroup.textInputGroup { value = "", onChange = TextInputGroupChanged }
+                    |> TextInputGroup.withLabel "Search"
+                    |> TextInputGroup.withPrefix (Element.text "\u{1F50D}")
+                    |> TextInputGroup.withPlaceholder "Search items..."
+                    |> TextInputGroup.toMarkup
+                ]
+            ]
+
+        -- INPUT GROUP
+        , section "InputGroup"
+            [ InputGroup.inputGroup
+                [ InputGroup.inputGroupText "$"
+                , InputGroup.inputGroupItem
+                    (TextInput.textInput { value = model.textInputGroupValue, onChange = TextInputGroupChanged }
+                        |> TextInput.withPlaceholder "Amount"
+                        |> TextInput.toMarkup
+                    )
+                , InputGroup.inputGroupText ".00"
+                ]
+                |> InputGroup.toMarkup
+            ]
+
+        -- WIZARD
+        , section "Wizard"
+            [ Element.el [ Element.width Element.fill, Element.height (Element.px 400) ]
+                (Wizard.wizard
+                    { steps =
+                        [ Wizard.wizardStep
+                            { title = "Setup"
+                            , content =
+                                Element.column [ Element.spacing Tokens.spacerMd ]
+                                    [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 1: Setup")
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                        [ Element.text "Configure the basic settings for your project." ]
+                                    ]
+                            }
+                        , Wizard.wizardStep
+                            { title = "Configure"
+                            , content =
+                                Element.column [ Element.spacing Tokens.spacerMd ]
+                                    [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 2: Configure")
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                        [ Element.text "Set up advanced configuration options." ]
+                                    ]
+                            }
+                        , Wizard.wizardStep
+                            { title = "Review"
+                            , content =
+                                Element.column [ Element.spacing Tokens.spacerMd ]
+                                    [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 3: Review")
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                        [ Element.text "Review your settings before finishing." ]
+                                    ]
+                            }
+                        ]
+                    , activeStep = model.wizardStep
+                    }
+                    |> Wizard.withOnStepChange WizardStepChanged
+                    |> Wizard.withOnNext WizardNext
+                    |> Wizard.withOnBack WizardBack
+                    |> Wizard.withOnCancel WizardCancel
+                    |> Wizard.withOnFinish WizardFinish
+                    |> Wizard.toMarkup
+                )
             ]
 
         -- FORM LAYOUT

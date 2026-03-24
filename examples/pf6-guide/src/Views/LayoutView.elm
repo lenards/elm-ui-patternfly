@@ -12,6 +12,7 @@ import PF6.Drawer as Drawer
 import PF6.Masthead as Masthead
 import PF6.Panel as Panel
 import PF6.Sidebar as Sidebar
+import PF6.SkipToContent as SkipToContent
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
@@ -42,6 +43,18 @@ view model =
         ]
         [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
             (Element.text "Layout")
+
+        -- SKIP TO CONTENT
+        , section "SkipToContent"
+            [ Element.column [ Element.spacing Tokens.spacerSm ]
+                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.text "SkipToContent provides an accessibility skip-navigation link that is visually hidden until focused via keyboard. Place it at the very top of the page layout." ]
+                , SkipToContent.skipToContent { href = "#main-content", label = "Skip to main content" }
+                    |> SkipToContent.toMarkup
+                , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+                    (Element.text "(Tab to this section to reveal the skip link)")
+                ]
+            ]
 
         -- CARD
         , section "Card"

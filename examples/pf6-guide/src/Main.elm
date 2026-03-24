@@ -45,6 +45,11 @@ init _ =
       , toggleViewMode = "grid"
       , simpleListActive = "item1"
       , notificationExpanded = False
+      , sliderValue = 50
+      , wizardStep = 0
+      , menuSearchValue = ""
+      , textInputGroupValue = ""
+      , backdropVisible = False
       }
     , Cmd.none
     )
@@ -183,6 +188,36 @@ update msg model =
             ( { model | notificationExpanded = not model.notificationExpanded }, Cmd.none )
 
         ScrollToTop ->
+            ( model, Cmd.none )
+
+        SliderChanged value ->
+            ( { model | sliderValue = value }, Cmd.none )
+
+        WizardStepChanged step ->
+            ( { model | wizardStep = step }, Cmd.none )
+
+        WizardNext ->
+            ( { model | wizardStep = min 2 (model.wizardStep + 1) }, Cmd.none )
+
+        WizardBack ->
+            ( { model | wizardStep = max 0 (model.wizardStep - 1) }, Cmd.none )
+
+        WizardCancel ->
+            ( { model | wizardStep = 0 }, Cmd.none )
+
+        WizardFinish ->
+            ( { model | wizardStep = 0 }, Cmd.none )
+
+        MenuSearchChanged value ->
+            ( { model | menuSearchValue = value }, Cmd.none )
+
+        TextInputGroupChanged value ->
+            ( { model | textInputGroupValue = value }, Cmd.none )
+
+        BackdropToggled visible ->
+            ( { model | backdropVisible = visible }, Cmd.none )
+
+        MenuItemClicked _ ->
             ( model, Cmd.none )
 
 
