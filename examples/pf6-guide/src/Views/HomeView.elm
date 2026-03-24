@@ -47,10 +47,10 @@ view _ =
                 , Font.color Tokens.colorTextSubtle
                 ]
                 [ Element.text "An elm-ui implementation of the PatternFly 6 design system. "
-                , Element.text "59 components, all following the builder pattern."
+                , Element.text "66 components, all following the builder pattern."
                 ]
             , Element.row [ Element.spacing Tokens.spacerSm ]
-                [ Label.label "59 components" |> Label.withBlueColor |> Label.toMarkup
+                [ Label.label "66 components" |> Label.withBlueColor |> Label.toMarkup
                 , Label.label "elm-ui" |> Label.withGreenColor |> Label.toMarkup
                 , Label.label "PF6" |> Label.withPurpleColor |> Label.toMarkup
                 , Label.label "0.19.1" |> Label.withGoldColor |> Label.toMarkup
