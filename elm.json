@@ -85,7 +85,8 @@
             "PF6.Timestamp",
             "PF6.ToggleGroup",
             "PF6.Truncate",
-            "PF6.Slider"
+            "PF6.Slider",
+            "PF6.SkipToContent"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
