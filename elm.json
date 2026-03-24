@@ -70,7 +70,8 @@
             "PF6.Tooltip",
             "PF6.JumpLinks",
             "PF6.NotificationDrawer",
-            "PF6.Popover"
+            "PF6.Popover",
+            "PF6.BackToTop"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
