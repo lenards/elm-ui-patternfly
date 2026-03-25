@@ -43,7 +43,7 @@ See: <https://www.patternfly.org/components/skeleton>
 import Element exposing (Element)
 import Html
 import Html.Attributes
-import PF6.Theme exposing (Theme)
+import PF6.Theme as Theme exposing (Theme)
 
 
 {-| Opaque Skeleton type
@@ -137,9 +137,36 @@ withCircle (Skeleton opts) =
 
 {-| Render the Skeleton as an `Element msg`
 -}
-toMarkup : Theme -> Skeleton -> Element msg
-toMarkup _ (Skeleton opts) =
+colorToCss : Element.Color -> String
+colorToCss color =
     let
+        c =
+            Element.toRgb color
+
+        r =
+            String.fromInt (round (c.red * 255))
+
+        g =
+            String.fromInt (round (c.green * 255))
+
+        b =
+            String.fromInt (round (c.blue * 255))
+
+        a =
+            String.fromFloat c.alpha
+    in
+    "rgba(" ++ r ++ "," ++ g ++ "," ++ b ++ "," ++ a ++ ")"
+
+
+toMarkup : Theme -> Skeleton -> Element msg
+toMarkup theme (Skeleton opts) =
+    let
+        baseColor =
+            colorToCss (Theme.backgroundSecondary theme)
+
+        highlightColor =
+            colorToCss (Theme.backgroundDefault theme)
+
         widthStyle =
             case opts.widthPx of
                 Just px ->
@@ -179,14 +206,22 @@ toMarkup _ (Skeleton opts) =
                 _ ->
                     "4px"
 
+        gradient =
+            "linear-gradient(90deg, "
+                ++ baseColor
+                ++ " 25%, "
+                ++ highlightColor
+                ++ " 50%, "
+                ++ baseColor
+                ++ " 75%)"
+
         skeletonHtml =
             Html.span
                 [ Html.Attributes.style "display" "inline-block"
                 , Html.Attributes.style "width" widthStyle
                 , Html.Attributes.style "height" heightStyle
-                , Html.Attributes.style "background-color" "#e0e0e0"
                 , Html.Attributes.style "border-radius" borderRadius
-                , Html.Attributes.style "background" "linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)"
+                , Html.Attributes.style "background" gradient
                 , Html.Attributes.style "background-size" "200% 100%"
                 , Html.Attributes.style "animation" "pf6-shimmer 1.5s infinite"
                 ]

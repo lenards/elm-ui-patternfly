@@ -42,7 +42,7 @@ See: <https://www.patternfly.org/components/spinner>
 import Element exposing (Element)
 import Html
 import Html.Attributes
-import PF6.Theme exposing (Theme)
+import PF6.Theme as Theme exposing (Theme)
 
 
 {-| Opaque Spinner type
@@ -133,8 +133,29 @@ Uses CSS animation via inline HTML for the spinning effect.
 The spinner is a circle with a colored arc rotating via CSS.
 
 -}
+colorToCss : Element.Color -> String
+colorToCss color =
+    let
+        c =
+            Element.toRgb color
+
+        r =
+            String.fromInt (round (c.red * 255))
+
+        g =
+            String.fromInt (round (c.green * 255))
+
+        b =
+            String.fromInt (round (c.blue * 255))
+
+        a =
+            String.fromFloat c.alpha
+    in
+    "rgba(" ++ r ++ "," ++ g ++ "," ++ b ++ "," ++ a ++ ")"
+
+
 toMarkup : Theme -> Spinner -> Element msg
-toMarkup _ (Spinner opts) =
+toMarkup theme (Spinner opts) =
     let
         px =
             sizePx opts.size
@@ -148,13 +169,19 @@ toMarkup _ (Spinner opts) =
         borderStr =
             String.fromInt borderPx ++ "px"
 
+        trackColor =
+            colorToCss (Theme.borderDefault theme)
+
+        arcColor =
+            colorToCss (Theme.primary theme)
+
         spinnerHtml =
             Html.span
                 [ Html.Attributes.style "display" "inline-block"
                 , Html.Attributes.style "width" pxStr
                 , Html.Attributes.style "height" pxStr
-                , Html.Attributes.style "border" (borderStr ++ " solid #e0e0e0")
-                , Html.Attributes.style "border-top-color" "#0066CC"
+                , Html.Attributes.style "border" (borderStr ++ " solid " ++ trackColor)
+                , Html.Attributes.style "border-top-color" arcColor
                 , Html.Attributes.style "border-radius" "50%"
                 , Html.Attributes.style "animation" "pf6-spin 0.75s linear infinite"
                 , Html.Attributes.attribute "aria-label" opts.ariaLabel
