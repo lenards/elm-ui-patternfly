@@ -63,8 +63,7 @@ type TextArea msg
 {-| Resize direction
 -}
 type ResizeDirection
-    = NoResize
-    | Vertical
+    = Vertical
     | Horizontal
     | Both
 
@@ -270,9 +269,6 @@ toMarkup (TextArea opts) =
                 , Element.htmlAttribute
                     (Html.Attributes.style "resize"
                         (case opts.resize of
-                            NoResize ->
-                                "none"
-
                             Vertical ->
                                 "vertical"
 

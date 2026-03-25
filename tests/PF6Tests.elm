@@ -16,7 +16,7 @@ Tests are organized into:
 
 import Element
 import Expect
-import Fuzz exposing (int, intRange, string)
+import Fuzz exposing (int, intRange)
 import PF6.Badge as Badge
 import PF6.Form as Form
 import PF6.Modal as Modal

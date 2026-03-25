@@ -57,11 +57,6 @@ created { createdOn, now } =
         }
 
 
-withExtraAttributes : List (Element.Attribute msg) -> Created msg -> Created msg
-withExtraAttributes extra (Created options) =
-    Created { options | extraAttributes = extra }
-
-
 calcUnitsAgo_ : Options msg -> { number : Int, label : String }
 calcUnitsAgo_ options =
     let

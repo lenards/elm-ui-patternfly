@@ -253,30 +253,6 @@ popoverPanel opts =
         ]
 
 
-positionAttr : Position -> Bool -> Element.Attribute msg
-positionAttr position isOpen =
-    if not isOpen then
-        Element.htmlAttribute (Html.Attributes.style "display" "none")
-
-    else
-        case position of
-            Top ->
-                Element.above Element.none
-                    |> always (Element.above Element.none)
-
-            Bottom ->
-                Element.below Element.none
-                    |> always (Element.below Element.none)
-
-            Left ->
-                Element.onLeft Element.none
-                    |> always (Element.onLeft Element.none)
-
-            Right ->
-                Element.onRight Element.none
-                    |> always (Element.onRight Element.none)
-
-
 {-| Render the Popover as an `Element msg`
 
 The popover uses elm-ui's `Element.above`/`Element.below`/`Element.onLeft`/`Element.onRight`

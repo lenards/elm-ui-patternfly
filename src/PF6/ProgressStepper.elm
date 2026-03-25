@@ -41,7 +41,6 @@ See: <https://www.patternfly.org/components/progress-stepper>
 
 import Element exposing (Element)
 import Element.Background as Bg
-import Element.Border as Border
 import Element.Font as Font
 import PF6.Tokens as Tokens
 
@@ -178,13 +177,13 @@ defaultIcon status =
     Element.text
         (case status of
             Complete ->
-                "\u{2713}"
+                "✓"
 
             Current ->
-                "\u{25CF}"
+                "●"
 
             Pending ->
-                "\u{25CB}"
+                "○"
         )
 
 
@@ -254,8 +253,8 @@ stepMarkup isCompact (Step opts) =
         ]
 
 
-connectorLine : StepStatus -> Bool -> Element msg
-connectorLine status isCompact =
+connectorLine : StepStatus -> Element msg
+connectorLine status =
     Element.el
         [ Element.width Element.fill
         , Element.height (Element.px 2)
@@ -338,7 +337,7 @@ toMarkup (ProgressStepper opts) =
                             Element.none
 
                           else
-                            connectorLine stepOpts.status opts.compact
+                            connectorLine stepOpts.status
                         ]
                 )
                 opts.steps

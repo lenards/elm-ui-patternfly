@@ -129,7 +129,7 @@ bullet b =
 
 
 renderBulletItem : Bool -> Int -> Element msg -> Element msg
-renderBulletItem isLarge index content =
+renderBulletItem isLarge _ content =
     Element.row
         [ Element.spacing Tokens.spacerXs
         , Font.size

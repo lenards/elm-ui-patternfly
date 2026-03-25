@@ -32,7 +32,7 @@ module PF4.Radio exposing
 import Element exposing (Element)
 import Element.Background as Background
 import Element.Border as Border
-import Element.Input as Input exposing (Option)
+import Element.Input as Input
 
 
 {-| Opaque `Radio` element that can produce `msg` messages from a mutually exclusive choices of `option`
@@ -69,7 +69,6 @@ type alias OptionStatePalette =
 
 type Position
     = Default
-    | Reversed
 
 
 type Flow
@@ -206,9 +205,6 @@ customOption args text state =
             case args.position of
                 Default ->
                     [ radioOptionEl, optionLabelEl ]
-
-                Reversed ->
-                    [ optionLabelEl, radioOptionEl ]
     in
     Element.row
         [ Element.spacing 10 ]

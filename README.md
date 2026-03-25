@@ -2,9 +2,9 @@
 
 An [`elm-ui`](https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/) implementation of the [PatternFly 6](https://www.patternfly.org/) design system.
 
-**73 components** · **Elm 0.19.1** · **Builder pattern** · **No CSS required**
+**74 components** · **7 layouts** · **Dark mode** · **Elm 0.19.1** · **Builder pattern**
 
-**[Live Demo](https://lenards.github.io/elm-ui-patternfly/)** — Browse all 73 components interactively.
+**[Live Demo](https://lenards.github.io/elm-ui-patternfly/)** — Browse all components interactively (with dark mode toggle).
 
 ---
 
@@ -58,6 +58,24 @@ Element.el
 ```
 
 Key token groups: `color*`, `spacer*`, `fontSize*`, `radius*`, `fontWeight*`.
+
+### Dark mode
+
+`PF6.Theme` provides a theme system with light and dark palettes:
+
+```elm
+import PF6.Theme as Theme exposing (Mode(..), Theme)
+
+theme = Theme.fromMode model.themeMode  -- Light or Dark
+
+Element.el
+    [ Bg.color (Theme.backgroundDefault theme)
+    , Font.color (Theme.text theme)
+    ]
+    content
+```
+
+The pf6-guide live demo includes a dark mode toggle in the masthead.
 
 ---
 
@@ -149,15 +167,56 @@ Key token groups: `color*`, `spacer*`, `fontSize*`, `radius*`, `fontWeight*`.
 
 | Component | Module | Description |
 |-----------|--------|-------------|
-| NotificationDrawer | `PF6.NotificationDrawer` | Slide-out notification panel with variant icons and read/unread state |
-| JumpLinks | `PF6.JumpLinks` | In-page anchor navigation with subsections and optional label |
+| BackToTop | `PF6.BackToTop` | Floating scroll-to-top button |
+| Backdrop | `PF6.Backdrop` | Semi-transparent overlay background |
+| Brand | `PF6.Brand` | Logo/brand image with responsive sizing |
+| Hint | `PF6.Hint` | Contextual hint with lighter styling than Alert |
+| InputGroup | `PF6.InputGroup` | Groups form controls with shared borders |
+| JumpLinks | `PF6.JumpLinks` | In-page anchor navigation with subsections |
+| Masthead | `PF6.Masthead` | Top header bar with brand, content, and toolbar slots |
+| Menu | `PF6.Menu` | Generic menu with items, dividers, headers, and search |
 | Navigation | `PF6.Navigation` | Vertical/horizontal application navigation |
+| NotificationBadge | `PF6.NotificationBadge` | Bell icon with unread count overlay |
+| NotificationDrawer | `PF6.NotificationDrawer` | Slide-out notification panel with variant icons |
+| Panel | `PF6.Panel` | Simple bordered container with header/body/footer |
+| Popover | `PF6.Popover` | Click-triggered overlay with title, body, and footer |
+| ProgressStepper | `PF6.ProgressStepper` | Multi-step progress indicator |
+| Sidebar | `PF6.Sidebar` | Layout container with sidebar panel and content area |
+| SimpleList | `PF6.SimpleList` | Clickable list with selection state |
+| SkipToContent | `PF6.SkipToContent` | Accessibility skip-nav link, hidden until focused |
+| Slider | `PF6.Slider` | Range slider input with PF6 styling |
+| TextArea | `PF6.TextArea` | Multi-line text input with validation and resize |
+| TextInputGroup | `PF6.TextInputGroup` | Input with prefix/suffix elements |
+| Tile | `PF6.Tile` | Selectable card-like option tiles |
+| Timestamp | `PF6.Timestamp` | Formatted date/time display with optional icon |
+| ToggleGroup | `PF6.ToggleGroup` | Button group with toggle selection |
+| Truncate | `PF6.Truncate` | Text truncation with tooltip |
+| Wizard | `PF6.Wizard` | Multi-step form wizard with sidebar navigation |
+
+### Layouts
+
+| Layout | Module | Description |
+|--------|--------|-------------|
+| Bullseye | `PF6.Bullseye` | Centers content vertically and horizontally |
+| Flex | `PF6.Flex` | Configurable flex layout with direction, alignment, gap |
+| Gallery | `PF6.Gallery` | Responsive grid of uniform items with min/max widths |
+| Grid | `PF6.Grid` | 12-column grid system with percentage-based spans |
+| Level | `PF6.Level` | Even horizontal distribution of items |
+| Split | `PF6.Split` | Horizontal layout with fill items and wrapping |
+| Stack | `PF6.Stack` | Vertical layout with fill items |
+
+### Theming
+
+| Module | Description |
+|--------|-------------|
+| `PF6.Theme` | Light and dark mode color token system |
+| `PF6.Tokens` | Static design tokens (light mode defaults) |
 
 ---
 
 ## Example app — pf6-guide
 
-The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 73 components with live state. A live version is deployed automatically to **[lenards.github.io/elm-ui-patternfly](https://lenards.github.io/elm-ui-patternfly/)** on every push to `main`.
+The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 74 components with live state. A live version is deployed automatically to **[lenards.github.io/elm-ui-patternfly](https://lenards.github.io/elm-ui-patternfly/)** on every push to `main`.
 
 ```bash
 cd examples/pf6-guide

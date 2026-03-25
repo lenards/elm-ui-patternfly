@@ -43,7 +43,6 @@ See: <https://www.patternfly.org/components/skeleton>
 import Element exposing (Element)
 import Html
 import Html.Attributes
-import PF6.Tokens as Tokens
 
 
 {-| Opaque Skeleton type

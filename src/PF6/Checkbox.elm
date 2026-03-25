@@ -2,8 +2,7 @@ module PF6.Checkbox exposing
     ( Checkbox
     , checkbox
     , withLabel, withDescription, withBody
-    , withChecked, withIndeterminate
-    , withDisabled
+    , withChecked, withIndeterminate, withDisabled
     , toMarkup
     )
 
@@ -41,8 +40,6 @@ See: <https://www.patternfly.org/components/checkbox>
 -}
 
 import Element exposing (Element)
-import Element.Background as Bg
-import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import PF6.Tokens as Tokens

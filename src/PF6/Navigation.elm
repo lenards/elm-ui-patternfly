@@ -49,7 +49,6 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
-import Element.Input as Input
 import PF6.Tokens as Tokens
 
 
@@ -63,7 +62,6 @@ type Navigation msg
 -}
 type NavItem msg
     = NavLink { label : String, href : String, isActive : Bool }
-    | NavButton { label : String, onClick : msg, isActive : Bool }
     | NavGroupItem (NavGroup msg)
 
 
@@ -181,37 +179,6 @@ renderNavItem opts navItem_ =
                        )
                 )
                 (Element.text label)
-
-        NavButton { label, onClick, isActive } ->
-            Input.button
-                ([ Element.paddingXY Tokens.spacerMd Tokens.spacerSm
-                 , Font.size Tokens.fontSizeMd
-                 , Font.color
-                    (if isActive then
-                        activeColor
-
-                     else
-                        textColor
-                    )
-                 ]
-                    ++ (if isActive && not isHorizontal then
-                            [ Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
-                            , Border.color activeColor
-                            , Bg.color (Element.rgba255 0 102 204 0.1)
-                            ]
-
-                        else if isActive then
-                            [ Border.widthEach { top = 0, right = 0, bottom = 3, left = 0 }
-                            , Border.color activeColor
-                            ]
-
-                        else
-                            []
-                       )
-                )
-                { onPress = Just onClick
-                , label = Element.text label
-                }
 
         NavGroupItem (NavGroup { title, items }) ->
             Element.column

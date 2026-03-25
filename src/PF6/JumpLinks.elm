@@ -51,7 +51,6 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
-import Element.Input as Input
 import PF6.Tokens as Tokens
 
 
@@ -77,8 +76,7 @@ type alias LinkOptions msg =
 
 
 type Layout
-    = Horizontal
-    | Vertical
+    = Vertical
 
 
 type alias Options msg =
@@ -128,7 +126,8 @@ link label href =
 
 {-| Construct a jump link with subsection links
 
-    subsectionLink "Overview" "#overview"
+    subsectionLink "Overview"
+        "#overview"
         [ link "Introduction" "#intro"
         , link "Quick start" "#quick-start"
         ]
@@ -211,18 +210,12 @@ renderLink layout (JumpLink opts) =
                     (case layout of
                         Vertical ->
                             Tokens.spacerMd
-
-                        Horizontal ->
-                            Tokens.spacerSm
                     )
                     Tokens.spacerSm
                 , Border.widthEach
                     (case layout of
                         Vertical ->
                             { top = 0, right = 0, bottom = 0, left = 3 }
-
-                        Horizontal ->
-                            { top = 0, right = 0, bottom = 3, left = 0 }
                     )
                 , Border.color
                     (if opts.isActive then
@@ -257,9 +250,6 @@ renderLink layout (JumpLink opts) =
             Element.column [ Element.width Element.fill ]
                 (linkEl :: List.map renderSubLink opts.subsections)
 
-        Horizontal ->
-            linkEl
-
 
 {-| Render the JumpLinks as an `Element msg`
 
@@ -279,19 +269,6 @@ toMarkup (JumpLinks opts) =
                         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
                         , Border.color Tokens.colorBorderDefault
                         , Bg.color Tokens.colorBackgroundDefault
-                        ]
-
-                Horizontal ->
-                    Element.row
-                        [ Element.spacing 0
-                        , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
-                        , Bg.color Tokens.colorBackgroundDefault
-                        , if opts.isCentered then
-                            Element.centerX
-
-                          else
-                            Element.alignLeft
                         ]
     in
     Element.column

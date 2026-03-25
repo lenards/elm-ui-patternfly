@@ -66,7 +66,6 @@ type Variant
     | Secondary
     | Tertiary
     | Danger
-    | DangerSecondary
     | Warning
     | Plain
     | Link
@@ -277,15 +276,6 @@ variantAttrs variant =
             , Font.color Tokens.colorTextOnDark
             , Border.rounded Tokens.radiusMd
             , Border.width 0
-            ]
-
-        DangerSecondary ->
-            [ Bg.color Tokens.colorBackgroundDefault
-            , Font.color Tokens.colorDanger
-            , Border.rounded Tokens.radiusMd
-            , Border.solid
-            , Border.width 1
-            , Border.color Tokens.colorDanger
             ]
 
         Warning ->

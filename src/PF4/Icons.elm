@@ -24,7 +24,6 @@ Most icons has functions for a default color and `Rgb255` form.
 import Element exposing (Element)
 import Html exposing (Html)
 import Html.Attributes exposing (style)
-import String
 import Svg
 import Svg.Attributes as SvgAttrs
 

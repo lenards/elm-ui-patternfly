@@ -67,9 +67,6 @@ type alias FormOptions msg =
 -}
 type Validation
     = NoValidation
-    | ValidSuccess
-    | ValidDanger
-    | ValidWarning
 
 
 type alias GroupOptions msg =
@@ -152,15 +149,6 @@ validationColor v =
     case v of
         NoValidation ->
             Tokens.colorTextSubtle
-
-        ValidSuccess ->
-            Tokens.colorSuccess
-
-        ValidDanger ->
-            Tokens.colorDanger
-
-        ValidWarning ->
-            Tokens.colorWarning
 
 
 {-| Render a FormGroup as an `Element msg`

@@ -131,14 +131,6 @@ withPressMsg onPress (ExpandableSection options) =
         { options | onPress = Just onPress }
 
 
-{-| Make the element not respond to `onPress`
--}
-disableOnPress : ExpandableSection msg -> ExpandableSection msg
-disableOnPress (ExpandableSection options) =
-    ExpandableSection
-        { options | onPress = Nothing }
-
-
 {-| Requests the state change of the element to an expanded, or open state
 -}
 expandSection : ExpandableSection msg -> ExpandableSection msg
@@ -199,9 +191,6 @@ toMarkup (ExpandableSection options) =
 
         textEl =
             textMarkup options
-
-        childAttrs_ =
-            []
 
         contentEl =
             case options.state of

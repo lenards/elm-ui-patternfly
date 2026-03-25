@@ -88,9 +88,6 @@ type PageSection msg
 
 type SectionVariant
     = Default
-    | Light
-    | Dark
-    | Darker
 
 
 type alias SectionOptions msg =

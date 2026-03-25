@@ -49,7 +49,6 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
-import Element.Input as Input
 import PF6.Tokens as Tokens
 
 

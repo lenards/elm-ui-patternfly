@@ -295,11 +295,6 @@ insert itemId_ ids =
     ids |> Dict.insert itemId_ itemId_
 
 
-allowMultipleSelected : Behavior -> Bool
-allowMultipleSelected behavior =
-    currentBehavior behavior |> Tuple.first
-
-
 getExpandState : Behavior -> Maybe SelectedIds
 getExpandState behavior =
     currentBehavior behavior |> Tuple.second

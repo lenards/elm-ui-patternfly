@@ -45,8 +45,7 @@ type ApplicationLauncher msg
 
 
 type ElementId
-    = None
-    | Id_ String
+    = Id_ String
 
 
 type alias Options msg =

@@ -57,20 +57,6 @@ type alias TextOptions msg =
     }
 
 
-{-| Opaque `IconSwitch` element that can produce `msg` messages
--}
-type IconSwitch msg
-    = IconSwitch (IconOptions msg)
-
-
-type alias IconOptions msg =
-    { checked : Bool
-    , ariaLabel : String
-    , icon : Element msg
-    , onChange : Bool -> msg
-    }
-
-
 type Position
     = Default
     | Reversed
@@ -95,22 +81,6 @@ switch args =
         , onText = args.onText
         , offText = args.offText
         , position = Default
-        , onChange = args.onChange
-        }
-
-
-iconSwitch :
-    { checked : Bool
-    , ariaLabel : String
-    , icon : Element msg
-    , onChange : Bool -> msg
-    }
-    -> IconSwitch msg
-iconSwitch args =
-    IconSwitch
-        { checked = args.checked
-        , ariaLabel = args.ariaLabel
-        , icon = args.icon
         , onChange = args.onChange
         }
 

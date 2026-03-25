@@ -48,8 +48,7 @@ type ChipGroup msg
 {-| Defines how many `Chip`s to show when rendering.
 -}
 type ChipsShown
-    = All
-    | Show Int
+    = Show Int
 
 
 defaultNumChips : Int
@@ -63,12 +62,6 @@ type alias Options msg =
     , numChips : ChipsShown
     , onClick : Maybe msg
     }
-
-
-expandedText : Int -> String
-expandedText remaining =
-    String.fromInt remaining
-        ++ "more"
 
 
 defaultClose : Element msg

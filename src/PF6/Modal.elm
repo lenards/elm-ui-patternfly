@@ -48,7 +48,6 @@ See: <https://www.patternfly.org/components/modal>
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
-import Element.Events
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
@@ -193,30 +192,6 @@ toMarkup (Modal opts) =
     let
         px =
             widthPx opts.size
-
-        backdropAttrs =
-            case opts.onClose of
-                Just msg ->
-                    [ Element.htmlAttribute (Html.Attributes.style "cursor" "pointer")
-                    , Element.Events.onClick msg
-                    ]
-
-                Nothing ->
-                    []
-
-        backdrop =
-            Element.el
-                ([ Element.width Element.fill
-                 , Element.height Element.fill
-                 , Bg.color (Element.rgba 0 0 0 0.5)
-                 , Element.htmlAttribute (Html.Attributes.style "position" "fixed")
-                 , Element.htmlAttribute (Html.Attributes.style "top" "0")
-                 , Element.htmlAttribute (Html.Attributes.style "left" "0")
-                 , Element.htmlAttribute (Html.Attributes.style "z-index" "1000")
-                 ]
-                    ++ backdropAttrs
-                )
-                Element.none
 
         closeBtn =
             if opts.showClose then

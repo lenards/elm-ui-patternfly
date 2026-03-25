@@ -30,8 +30,7 @@ type MenuId
 
 
 type Position
-    = Above
-    | Below
+    = Below
 
 
 type MenuItem msg
@@ -80,44 +79,9 @@ menu args =
         }
 
 
-withId : String -> Menu msg -> Menu msg
-withId rawId (Menu options) =
-    Menu { options | id = Id_ rawId }
-
-
 withActiveId : String -> Menu msg -> Menu msg
 withActiveId rawId (Menu options) =
     Menu { options | activeMenu = Id_ rawId }
-
-
-withOnMouseEnter : msg -> Menu msg -> Menu msg
-withOnMouseEnter msg (Menu options) =
-    Menu { options | onMouseEnter = Just msg }
-
-
-withOnMouseLeave : msg -> Menu msg -> Menu msg
-withOnMouseLeave msg (Menu options) =
-    Menu { options | onMouseLeave = Just msg }
-
-
-withBackgroundColor : Element.Color -> Menu msg -> Menu msg
-withBackgroundColor bgColor (Menu options) =
-    Menu { options | backgroundColor = bgColor }
-
-
-withPositionAbove : Menu msg -> Menu msg
-withPositionAbove (Menu options) =
-    Menu <| setPosition Above options
-
-
-withPositionBelow : Menu msg -> Menu msg
-withPositionBelow (Menu options) =
-    Menu <| setPosition Below options
-
-
-setPosition : Position -> Options msg -> Options msg
-setPosition newPosition options =
-    { options | position = newPosition }
 
 
 isOpen : Menu msg -> Bool
@@ -125,8 +89,8 @@ isOpen (Menu options) =
     options.id == options.activeMenu
 
 
-itemMarkup : Options msg -> MenuItem msg -> Element msg
-itemMarkup _ (MenuItem ( _, itemOptions )) =
+itemMarkup : MenuItem msg -> Element msg
+itemMarkup (MenuItem ( _, itemOptions )) =
     let
         rowAttrs =
             [ Element.width Element.fill
@@ -154,9 +118,6 @@ menuMarkup options =
     let
         menuPositionF =
             case options.position of
-                Above ->
-                    Element.above
-
                 Below ->
                     Element.below
 
@@ -186,7 +147,7 @@ menuMarkup options =
 
         itemsEl =
             options.items
-                |> List.map (itemMarkup options)
+                |> List.map itemMarkup
     in
     Element.el attrs_ <| Element.none
 

@@ -40,11 +40,8 @@ See: <https://www.patternfly.org/components/spinner>
 -}
 
 import Element exposing (Element)
-import Element.Background as Bg
-import Element.Border as Border
 import Html
 import Html.Attributes
-import PF6.Tokens as Tokens
 
 
 {-| Opaque Spinner type
