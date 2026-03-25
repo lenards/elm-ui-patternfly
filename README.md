@@ -2,9 +2,9 @@
 
 An [`elm-ui`](https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/) implementation of the [PatternFly 6](https://www.patternfly.org/) design system.
 
-**66 components** · **Elm 0.19.1** · **Builder pattern** · **No CSS required**
+**73 components** · **Elm 0.19.1** · **Builder pattern** · **No CSS required**
 
-**[Live Demo](https://lenards.github.io/elm-ui-patternfly/)** — Browse all 66 components interactively.
+**[Live Demo](https://lenards.github.io/elm-ui-patternfly/)** — Browse all 73 components interactively.
 
 ---
 
@@ -157,7 +157,7 @@ Key token groups: `color*`, `spacer*`, `fontSize*`, `radius*`, `fontWeight*`.
 
 ## Example app — pf6-guide
 
-The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 66 components with live state. A live version is deployed automatically to **[lenards.github.io/elm-ui-patternfly](https://lenards.github.io/elm-ui-patternfly/)** on every push to `main`.
+The `examples/pf6-guide/` directory contains a full interactive TEA application that demonstrates all 73 components with live state. A live version is deployed automatically to **[lenards.github.io/elm-ui-patternfly](https://lenards.github.io/elm-ui-patternfly/)** on every push to `main`.
 
 ```bash
 cd examples/pf6-guide

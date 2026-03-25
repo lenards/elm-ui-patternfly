@@ -47,10 +47,10 @@ view _ =
                 , Font.color Tokens.colorTextSubtle
                 ]
                 [ Element.text "An elm-ui implementation of the PatternFly 6 design system. "
-                , Element.text "66 components, all following the builder pattern."
+                , Element.text "73 components, all following the builder pattern."
                 ]
             , Element.row [ Element.spacing Tokens.spacerSm ]
-                [ Label.label "66 components" |> Label.withBlueColor |> Label.toMarkup
+                [ Label.label "73 components" |> Label.withBlueColor |> Label.toMarkup
                 , Label.label "elm-ui" |> Label.withGreenColor |> Label.toMarkup
                 , Label.label "PF6" |> Label.withPurpleColor |> Label.toMarkup
                 , Label.label "0.19.1" |> Label.withGoldColor |> Label.toMarkup
@@ -74,7 +74,7 @@ view _ =
                     "Breadcrumb, Tabs, Pagination"
                     Navigation
                 , sectionCard "Layout"
-                    "Card, Page, Drawer"
+                    "Card, Drawer, Bullseye, Stack, Split, Level, Gallery, Grid, Flex"
                     Layout
                 , sectionCard "Overlays"
                     "Modal, Tooltip, Dropdown, Accordion, ExpandableSection"
