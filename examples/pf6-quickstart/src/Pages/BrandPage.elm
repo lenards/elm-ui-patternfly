@@ -15,12 +15,12 @@ view =
         , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
             [ Element.text "A brand image with alt text, typically used in the masthead." ]
         , exampleSection "Basic brand"
-            (Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand__logo.svg", alt = "PatternFly logo" }
+            (Brand.brand { src = "brand-logo.svg", alt = "PatternFly logo" }
                 |> Brand.withWidth 200
                 |> Brand.toMarkup
             )
         , exampleSection "With explicit dimensions"
-            (Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand__logo.svg", alt = "PatternFly logo" }
+            (Brand.brand { src = "brand-logo.svg", alt = "PatternFly logo" }
                 |> Brand.withWidth 300
                 |> Brand.withHeight 50
                 |> Brand.toMarkup

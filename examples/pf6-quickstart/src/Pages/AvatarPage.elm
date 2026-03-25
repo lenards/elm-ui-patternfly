@@ -16,22 +16,22 @@ view =
             [ Element.text "An avatar displays a user's profile image with optional border and size variants." ]
         , exampleSection "Sizes"
             (Element.wrappedRow [ Element.spacing 16 ]
-                [ Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "Small avatar" }
+                [ Avatar.avatar { src = "avatar.svg", alt = "Small avatar" }
                     |> Avatar.withSmallSize
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "Medium avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "Medium avatar" }
                     |> Avatar.withMediumSize
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "Large avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "Large avatar" }
                     |> Avatar.withLargeSize
                     |> Avatar.toMarkup
-                , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "Extra-large avatar" }
+                , Avatar.avatar { src = "avatar.svg", alt = "Extra-large avatar" }
                     |> Avatar.withXLargeSize
                     |> Avatar.toMarkup
                 ]
             )
         , exampleSection "With border"
-            (Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "Bordered avatar" }
+            (Avatar.avatar { src = "avatar.svg", alt = "Bordered avatar" }
                 |> Avatar.withLargeSize
                 |> Avatar.withBorder
                 |> Avatar.toMarkup

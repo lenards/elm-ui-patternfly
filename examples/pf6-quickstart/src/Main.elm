@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
@@ -112,8 +112,12 @@ type alias Model =
     }
 
 
+port copyToClipboard : String -> Cmd msg
+
+
 type Msg
     = NoOp
+    | CopyText String
     | UrlRequested Browser.UrlRequest
     | UrlChanged Url
     | NavigateTo Route
@@ -187,6 +191,9 @@ update msg model =
     case msg of
         NoOp ->
             ( model, Cmd.none )
+
+        CopyText text ->
+            ( model, copyToClipboard text )
 
         UrlRequested request ->
             case request of
@@ -355,7 +362,7 @@ view model =
                         }
 
                 ClipboardCopyRoute ->
-                    ClipboardCopyPage.view NoOp
+                    ClipboardCopyPage.view CopyText
 
                 CodeBlockRoute ->
                     CodeBlockPage.view
