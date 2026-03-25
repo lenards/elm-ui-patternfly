@@ -1,0 +1,12 @@
+{
+  "name": "pf6-quickstart",
+  "version": "1.0.0",
+  "description": "PatternFly 6 Quickstart — elm-ui component showcase",
+  "scripts": {
+    "build": "elm make src/Main.elm --output=main.js",
+    "serve": "serve . -p 8002 -s"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
