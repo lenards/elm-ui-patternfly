@@ -12,6 +12,7 @@ import PF6.Divider as Divider
 import PF6.Icon as Icon
 import PF6.Label as Label
 import PF6.NotificationBadge as NotificationBadge
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Timestamp as Timestamp
 import PF6.Title as Title
 import PF6.Tokens as Tokens
@@ -19,19 +20,19 @@ import PF6.Truncate as Truncate
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -44,15 +45,20 @@ row items =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Primitives")
 
         -- BUTTON
-        , section "Button"
+        , section theme
+            "Button"
             [ row
                 [ Button.primary { label = "Primary", onPress = Nothing } |> Button.toMarkup
                 , Button.secondary { label = "Secondary", onPress = Nothing } |> Button.toMarkup
@@ -82,7 +88,8 @@ view model =
             ]
 
         -- BADGE
-        , section "Badge"
+        , section theme
+            "Badge"
             [ row
                 [ Badge.badge 7 |> Badge.toMarkup
                 , Badge.unreadBadge 3 |> Badge.toMarkup
@@ -93,7 +100,8 @@ view model =
             ]
 
         -- LABEL
-        , section "Label"
+        , section theme
+            "Label"
             [ row
                 [ Label.label "Default" |> Label.toMarkup
                 , Label.label "Blue" |> Label.withBlueColor |> Label.toMarkup
@@ -113,7 +121,8 @@ view model =
             ]
 
         -- AVATAR
-        , section "Avatar"
+        , section theme
+            "Avatar"
             [ row
                 [ Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withSmallSize
@@ -131,7 +140,8 @@ view model =
             ]
 
         -- ICON
-        , section "Icon"
+        , section theme
+            "Icon"
             [ row
                 [ Icon.icon (Element.text "★") |> Icon.toMarkup
                 , Icon.icon (Element.text "✓") |> Icon.withSuccessStatus |> Icon.toMarkup
@@ -148,7 +158,8 @@ view model =
             ]
 
         -- TITLE
-        , section "Title"
+        , section theme
+            "Title"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Title.title "Heading level 1" |> Title.withH1 |> Title.toMarkup
                 , Title.title "Heading level 2" |> Title.withH2 |> Title.toMarkup
@@ -160,7 +171,8 @@ view model =
             ]
 
         -- DIVIDER
-        , section "Divider"
+        , section theme
+            "Divider"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Element.text "Above divider"
                 , Divider.divider |> Divider.toMarkup
@@ -171,7 +183,8 @@ view model =
             ]
 
         -- BRAND
-        , section "Brand"
+        , section theme
+            "Brand"
             [ row
                 [ Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand--logo.svg", alt = "PatternFly" }
                     |> Brand.withHeight 36
@@ -184,7 +197,8 @@ view model =
             ]
 
         -- NOTIFICATION BADGE
-        , section "NotificationBadge"
+        , section theme
+            "NotificationBadge"
             [ row
                 [ NotificationBadge.notificationBadge { count = 5, onClick = NotificationToggled }
                     |> NotificationBadge.withExpanded model.notificationExpanded
@@ -201,7 +215,8 @@ view model =
             ]
 
         -- TIMESTAMP
-        , section "Timestamp"
+        , section theme
+            "Timestamp"
             [ row
                 [ Timestamp.timestamp "Jan 1, 2024, 12:00 PM"
                     |> Timestamp.toMarkup
@@ -216,7 +231,8 @@ view model =
             ]
 
         -- TRUNCATE
-        , section "Truncate"
+        , section theme
+            "Truncate"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Truncate.truncate "This is a very long text string that should be truncated at the end"
                     |> Truncate.withMaxChars 30

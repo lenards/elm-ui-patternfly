@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Browser
 import Element
+import PF6.Theme exposing (Mode(..))
 import Types exposing (Model, Msg(..), Section(..))
 import Views.ContentView as ContentView
 import Views.DataView as DataView
@@ -50,6 +51,7 @@ init _ =
       , menuSearchValue = ""
       , textInputGroupValue = ""
       , backdropVisible = False
+      , themeMode = Light
       }
     , Cmd.none
     )
@@ -219,6 +221,18 @@ update msg model =
 
         MenuItemClicked _ ->
             ( model, Cmd.none )
+
+        ToggleTheme ->
+            ( { model
+                | themeMode =
+                    if model.themeMode == Light then
+                        Dark
+
+                    else
+                        Light
+              }
+            , Cmd.none
+            )
 
 
 view : Model -> Browser.Document Msg

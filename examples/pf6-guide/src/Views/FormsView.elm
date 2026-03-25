@@ -9,15 +9,16 @@ import PF6.Checkbox as Checkbox
 import PF6.Form as Form
 import PF6.InputGroup as InputGroup
 import PF6.NumberInput as NumberInput
-import PF6.Slider as Slider
 import PF6.Radio as Radio
 import PF6.SearchInput as SearchInput
 import PF6.Select as Select
 import PF6.SimpleList as SimpleList
+import PF6.Slider as Slider
 import PF6.Switch as Switch
 import PF6.TextArea as TextArea
 import PF6.TextInput as TextInput
 import PF6.TextInputGroup as TextInputGroup
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tile as Tile
 import PF6.Tokens as Tokens
 import PF6.ToggleGroup as ToggleGroup
@@ -25,19 +26,19 @@ import PF6.Wizard as Wizard
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -45,15 +46,20 @@ section heading items =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Forms")
 
         -- TEXT INPUT
-        , section "TextInput"
+        , section theme
+            "TextInput"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ TextInput.textInput { value = model.textValue, onChange = TextChanged }
                     |> TextInput.withLabel "Default"
@@ -77,7 +83,8 @@ view model =
             ]
 
         -- SEARCH INPUT
-        , section "SearchInput"
+        , section theme
+            "SearchInput"
             [ SearchInput.searchInput { value = model.searchValue, onChange = SearchChanged }
                 |> SearchInput.withPlaceholder "Search components..."
                 |> SearchInput.withClearMsg (SearchChanged "")
@@ -94,7 +101,8 @@ view model =
             ]
 
         -- NUMBER INPUT
-        , section "NumberInput"
+        , section theme
+            "NumberInput"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ NumberInput.numberInput { value = model.numberValue, onChange = NumberChanged }
                     |> NumberInput.withLabel "Quantity"
@@ -112,7 +120,8 @@ view model =
             ]
 
         -- CHECKBOX
-        , section "Checkbox"
+        , section theme
+            "Checkbox"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Checkbox.checkbox { id = "cb1", onChange = CheckboxToggled }
                     |> Checkbox.withLabel "Default checkbox"
@@ -131,7 +140,8 @@ view model =
             ]
 
         -- RADIO
-        , section "Radio"
+        , section theme
+            "Radio"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Radio.radio { id = "r1", onChange = \_ -> RadioSelected "option1" }
                     |> Radio.withLabel "Option 1"
@@ -150,7 +160,8 @@ view model =
             ]
 
         -- SWITCH
-        , section "Switch"
+        , section theme
+            "Switch"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Switch.switch { onChange = SwitchToggled }
                     |> Switch.withLabel "Feature enabled"
@@ -169,7 +180,8 @@ view model =
             ]
 
         -- SELECT
-        , section "Select"
+        , section theme
+            "Select"
             [ Select.select
                 { selected = model.selectValue
                 , isOpen = model.selectOpen
@@ -192,7 +204,8 @@ view model =
             ]
 
         -- TEXT AREA
-        , section "TextArea"
+        , section theme
+            "TextArea"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ TextArea.textArea { value = model.textAreaValue, onChange = TextAreaChanged }
                     |> TextArea.withLabel "Description"
@@ -214,7 +227,8 @@ view model =
             ]
 
         -- TILE
-        , section "Tile"
+        , section theme
+            "Tile"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerSm ]
                 [ Tile.tile { title = "Option A", onSelect = TileSelected "a" }
                     |> (if model.selectedTile == Just "a" then
@@ -251,7 +265,8 @@ view model =
             ]
 
         -- TOGGLE GROUP
-        , section "ToggleGroup"
+        , section theme
+            "ToggleGroup"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ ToggleGroup.toggleGroup
                     { items =
@@ -277,7 +292,8 @@ view model =
             ]
 
         -- SIMPLE LIST
-        , section "SimpleList"
+        , section theme
+            "SimpleList"
             [ Element.row [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ SimpleList.simpleList
                     [ SimpleList.simpleListItem "Dashboard" (SimpleListSelected "item1")
@@ -316,7 +332,8 @@ view model =
             ]
 
         -- SLIDER
-        , section "Slider"
+        , section theme
+            "Slider"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Slider.slider { value = model.sliderValue, onChange = SliderChanged, min = 0, max = 100 }
                     |> Slider.withLabel "Volume"
@@ -337,7 +354,8 @@ view model =
             ]
 
         -- TEXT INPUT GROUP
-        , section "TextInputGroup"
+        , section theme
+            "TextInputGroup"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ TextInputGroup.textInputGroup { value = model.textInputGroupValue, onChange = TextInputGroupChanged }
                     |> TextInputGroup.withLabel "Amount"
@@ -354,7 +372,8 @@ view model =
             ]
 
         -- INPUT GROUP
-        , section "InputGroup"
+        , section theme
+            "InputGroup"
             [ InputGroup.inputGroup
                 [ InputGroup.inputGroupText "$"
                 , InputGroup.inputGroupItem
@@ -368,7 +387,8 @@ view model =
             ]
 
         -- WIZARD
-        , section "Wizard"
+        , section theme
+            "Wizard"
             [ Element.el [ Element.width Element.fill, Element.height (Element.px 400) ]
                 (Wizard.wizard
                     { steps =
@@ -377,7 +397,7 @@ view model =
                             , content =
                                 Element.column [ Element.spacing Tokens.spacerMd ]
                                     [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 1: Setup")
-                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                                         [ Element.text "Configure the basic settings for your project." ]
                                     ]
                             }
@@ -386,7 +406,7 @@ view model =
                             , content =
                                 Element.column [ Element.spacing Tokens.spacerMd ]
                                     [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 2: Configure")
-                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                                         [ Element.text "Set up advanced configuration options." ]
                                     ]
                             }
@@ -395,7 +415,7 @@ view model =
                             , content =
                                 Element.column [ Element.spacing Tokens.spacerMd ]
                                     [ Element.el [ Font.bold, Font.size Tokens.fontSizeLg ] (Element.text "Step 3: Review")
-                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                                    , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                                         [ Element.text "Review your settings before finishing." ]
                                     ]
                             }
@@ -412,7 +432,8 @@ view model =
             ]
 
         -- FORM LAYOUT
-        , section "Form (full layout)"
+        , section theme
+            "Form (full layout)"
             [ Form.form
                 [ Form.formGroup
                     (TextInput.textInput { value = "", onChange = TextChanged }

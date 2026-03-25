@@ -14,23 +14,24 @@ import PF6.Progress as Progress
 import PF6.ProgressStepper as ProgressStepper
 import PF6.Skeleton as Skeleton
 import PF6.Spinner as Spinner
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -38,15 +39,20 @@ section heading items =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Feedback & Status")
 
         -- ALERT
-        , section "Alert"
+        , section theme
+            "Alert"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Alert.alert "Default alert — informational message."
                     |> Alert.withTitle "Default alert title"
@@ -72,7 +78,8 @@ view model =
             ]
 
         -- BANNER
-        , section "Banner"
+        , section theme
+            "Banner"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Banner.banner "Default banner — site-wide information."
                     |> Banner.toMarkup
@@ -93,29 +100,31 @@ view model =
             ]
 
         -- SPINNER
-        , section "Spinner"
+        , section theme
+            "Spinner"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerLg ]
                 [ Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "Small")
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Small")
                     , Spinner.spinner |> Spinner.withSmallSize |> Spinner.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "Medium")
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Medium")
                     , Spinner.spinner |> Spinner.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "Large")
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Large")
                     , Spinner.spinner |> Spinner.withLargeSize |> Spinner.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "XL")
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "XL")
                     , Spinner.spinner |> Spinner.withXLargeSize |> Spinner.toMarkup
                     ]
                 ]
             ]
 
         -- SKELETON
-        , section "Skeleton"
+        , section theme
+            "Skeleton"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Skeleton.skeleton |> Skeleton.withWidth 100 |> Skeleton.toMarkup
                 , Skeleton.skeleton |> Skeleton.withWidth 75 |> Skeleton.toMarkup
@@ -129,7 +138,8 @@ view model =
             ]
 
         -- PROGRESS
-        , section "Progress"
+        , section theme
+            "Progress"
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Progress.progress model.progressValue
                     |> Progress.withTitle "Default"
@@ -154,7 +164,8 @@ view model =
             ]
 
         -- EMPTY STATE
-        , section "EmptyState"
+        , section theme
+            "EmptyState"
             [ EmptyState.emptyState
                 |> EmptyState.withIcon (Element.text "📭")
                 |> EmptyState.withTitleH2 "No results found"
@@ -163,7 +174,8 @@ view model =
             ]
 
         -- HELPER TEXT
-        , section "HelperText"
+        , section theme
+            "HelperText"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ HelperText.helperText "This is default helper text." |> HelperText.toMarkup
                 , HelperText.helperText "This field is required." |> HelperText.withError |> HelperText.toMarkup
@@ -174,7 +186,8 @@ view model =
             ]
 
         -- HINT
-        , section "Hint"
+        , section theme
+            "Hint"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Hint.hint "Try searching for items by name or description to quickly find what you need."
                     |> Hint.toMarkup
@@ -186,7 +199,7 @@ view model =
                 , Hint.hint "Your changes will be saved automatically as you edit."
                     |> Hint.withTitle "Auto-save enabled"
                     |> Hint.withFooter
-                        (Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+                        (Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                             (Element.text "Last saved 2 minutes ago")
                         )
                     |> Hint.toMarkup
@@ -194,7 +207,8 @@ view model =
             ]
 
         -- PROGRESS STEPPER
-        , section "ProgressStepper"
+        , section theme
+            "ProgressStepper"
             [ Element.column [ Element.spacing Tokens.spacerLg, Element.width Element.fill ]
                 [ ProgressStepper.progressStepper
                     [ ProgressStepper.step "Setup" |> ProgressStepper.withStepComplete

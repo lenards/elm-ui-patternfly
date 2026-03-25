@@ -6,6 +6,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Mode(..), Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..), Section(..))
 
@@ -24,11 +25,25 @@ navSections =
     ]
 
 
-navItem : Section -> ( Section, String ) -> Element Msg
-navItem current ( section, label ) =
+navItem : Theme -> Section -> ( Section, String ) -> Element Msg
+navItem theme current ( section, label ) =
     let
         isActive =
             current == section
+
+        primaryRgb =
+            Element.toRgb (Theme.primary theme)
+
+        activeBg =
+            if isActive then
+                Element.rgba255
+                    (primaryRgb.red * 255 |> round)
+                    (primaryRgb.green * 255 |> round)
+                    (primaryRgb.blue * 255 |> round)
+                    0.12
+
+            else
+                Theme.backgroundDefault theme
     in
     Input.button
         [ Element.width Element.fill
@@ -36,22 +51,16 @@ navItem current ( section, label ) =
         , Font.size 14
         , Font.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
-                Tokens.colorText
+                Theme.text theme
             )
-        , Bg.color
-            (if isActive then
-                Element.rgb255 215 235 255
-
-             else
-                Tokens.colorBackgroundDefault
-            )
+        , Bg.color activeBg
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
         , Border.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
                 Element.rgba 0 0 0 0
@@ -62,20 +71,20 @@ navItem current ( section, label ) =
         }
 
 
-sidebar : Model -> Element Msg
-sidebar model =
+sidebar : Theme -> Model -> Element Msg
+sidebar theme model =
     Element.column
         [ Element.width (Element.px 220)
         , Element.height Element.fill
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (List.map (navItem model.section) navSections)
+        (List.map (navItem theme model.section) navSections)
 
 
-masthead : Element Msg
-masthead =
+masthead : Model -> Element Msg
+masthead model =
     Element.row
         [ Element.width Element.fill
         , Bg.color (Element.rgb255 21 21 21)
@@ -91,29 +100,49 @@ masthead =
         , Element.el
             [ Font.size 14
             , Font.color (Element.rgb255 160 160 160)
+            , Element.width Element.fill
             ]
             (Element.text "Elm UI Guide")
+        , Input.button
+            [ Font.color Tokens.colorTextOnDark
+            , Element.padding 8
+            , Font.size 18
+            ]
+            { onPress = Just ToggleTheme
+            , label =
+                Element.text
+                    (if model.themeMode == Light then
+                        "☾"
+
+                     else
+                        "☀"
+                    )
+            }
         ]
 
 
 withShell : Model -> Element Msg -> Element Msg
 withShell model content =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.height Element.fill
         ]
-        [ masthead
+        [ masthead model
         , Element.row
             [ Element.width Element.fill
             , Element.height Element.fill
             , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
             ]
-            [ sidebar model
+            [ sidebar theme model
             , Element.el
                 [ Element.width Element.fill
                 , Element.height Element.fill
                 , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
-                , Bg.color Tokens.colorBackgroundSecondary
+                , Bg.color (Theme.backgroundSecondary theme)
                 , Element.scrollbarY
                 ]
                 (Element.column

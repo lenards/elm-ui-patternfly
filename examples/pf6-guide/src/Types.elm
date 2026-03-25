@@ -1,5 +1,7 @@
 module Types exposing (Model, Msg(..), Section(..))
 
+import PF6.Theme exposing (Mode(..))
+
 
 type Section
     = Home
@@ -65,6 +67,7 @@ type alias Model =
     , menuSearchValue : String
     , textInputGroupValue : String
     , backdropVisible : Bool
+    , themeMode : Mode
     }
 
 
@@ -114,3 +117,4 @@ type Msg
     | TextInputGroupChanged String
     | BackdropToggled Bool
     | MenuItemClicked String
+    | ToggleTheme

@@ -11,24 +11,25 @@ import PF6.Dropdown as Dropdown
 import PF6.ExpandableSection as ExpandableSection
 import PF6.Menu as Menu
 import PF6.Modal as Modal
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import PF6.Tooltip as Tooltip
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -36,6 +37,10 @@ section heading items =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
@@ -67,15 +72,16 @@ view model =
                 Element.none
             )
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Overlays")
 
         -- MODAL
-        , section "Modal"
+        , section theme
+            "Modal"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Button.primary { label = "Open modal", onPress = Just ModalOpen }
                     |> Button.toMarkup
-                , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+                , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                     (Element.text
                         (if model.modalOpen then
                             "Modal is open — see overlay above"
@@ -88,7 +94,8 @@ view model =
             ]
 
         -- TOOLTIP
-        , section "Tooltip"
+        , section theme
+            "Tooltip"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerLg ]
                 [ Tooltip.tooltip
                     { trigger =
@@ -126,7 +133,8 @@ view model =
             ]
 
         -- DROPDOWN
-        , section "Dropdown"
+        , section theme
+            "Dropdown"
             [ Dropdown.dropdown
                 { toggleLabel = "Actions"
                 , isOpen = model.dropdownOpen
@@ -142,12 +150,13 @@ view model =
             ]
 
         -- ACCORDION
-        , section "Accordion"
+        , section theme
+            "Accordion"
             [ Accordion.accordion
                 [ Accordion.item
                     { title = "What is PatternFly?"
                     , body =
-                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorText ]
+                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.text theme) ]
                             [ Element.text "PatternFly is an open source design system built to drive consistency and unify teams." ]
                     , isExpanded = model.accordionExpanded == Just "acc1"
                     , onToggle = AccordionToggled "acc1"
@@ -155,7 +164,7 @@ view model =
                 , Accordion.item
                     { title = "What is elm-ui?"
                     , body =
-                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorText ]
+                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.text theme) ]
                             [ Element.text "elm-ui is a library for creating interfaces in Elm. It provides layout, spacing, and styling primitives that generate HTML and CSS." ]
                     , isExpanded = model.accordionExpanded == Just "acc2"
                     , onToggle = AccordionToggled "acc2"
@@ -163,7 +172,7 @@ view model =
                 , Accordion.item
                     { title = "Why combine them?"
                     , body =
-                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorText ]
+                        Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.text theme) ]
                             [ Element.text "Combining PatternFly's design tokens and component patterns with elm-ui's type-safe layout system gives you a robust, accessible UI toolkit." ]
                     , isExpanded = model.accordionExpanded == Just "acc3"
                     , onToggle = AccordionToggled "acc3"
@@ -173,7 +182,8 @@ view model =
             ]
 
         -- MENU
-        , section "Menu"
+        , section theme
+            "Menu"
             [ Element.row [ Element.spacing Tokens.spacerLg, Element.width Element.fill ]
                 [ Element.el [ Element.width (Element.px 280) ]
                     (Menu.menu
@@ -200,9 +210,10 @@ view model =
             ]
 
         -- BACKDROP
-        , section "Backdrop"
+        , section theme
+            "Backdrop"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
-                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                     [ Element.text "The Backdrop component provides a semi-transparent overlay. It is used internally by Modal. Click the button below to toggle a demo backdrop." ]
                 , Button.secondary { label = "Toggle backdrop", onPress = Just (BackdropToggled (not model.backdropVisible)) }
                     |> Button.toMarkup
@@ -210,11 +221,12 @@ view model =
             ]
 
         -- EXPANDABLE SECTION
-        , section "ExpandableSection"
+        , section theme
+            "ExpandableSection"
             [ ExpandableSection.expandableSection
                 { body =
                     Element.column [ Element.spacing Tokens.spacerSm ]
-                        [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                        [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                             [ Element.text "These are advanced settings. Only modify if you know what you are doing." ]
                         , Element.text "• Debug mode: off"
                         , Element.text "• Verbose logging: off"

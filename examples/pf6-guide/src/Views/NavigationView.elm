@@ -7,23 +7,24 @@ import Element.Font as Font
 import PF6.Breadcrumb as Breadcrumb
 import PF6.Pagination as Pagination
 import PF6.Tabs as Tabs
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -31,15 +32,20 @@ section heading items =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Navigation")
 
         -- BREADCRUMB
-        , section "Breadcrumb"
+        , section theme
+            "Breadcrumb"
             [ Breadcrumb.breadcrumb
                 [ Breadcrumb.item { label = "Home", href = "#" }
                 , Breadcrumb.item { label = "Section", href = "#" }
@@ -50,7 +56,8 @@ view model =
             ]
 
         -- TABS
-        , section "Tabs"
+        , section theme
+            "Tabs"
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Tabs.tabs
                     { activeKey = model.activeTab
@@ -77,7 +84,8 @@ view model =
             ]
 
         -- PAGINATION
-        , section "Pagination"
+        , section theme
+            "Pagination"
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Pagination.pagination
                     { page = 1

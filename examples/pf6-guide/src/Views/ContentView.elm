@@ -10,39 +10,45 @@ import PF6.ClipboardCopy as ClipboardCopy
 import PF6.CodeBlock as CodeBlock
 import PF6.DescriptionList as DescriptionList
 import PF6.List as PFList
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
 
 
 view : Model -> Element Msg
-view _ =
+view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Content")
 
         -- CODE BLOCK
-        , section "CodeBlock"
+        , section theme
+            "CodeBlock"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ CodeBlock.codeBlock "$ elm make src/Main.elm --output=main.js\nSuccessfully compiled Main.elm"
                     |> CodeBlock.toMarkup
@@ -52,7 +58,8 @@ view _ =
             ]
 
         -- CLIPBOARD COPY
-        , section "ClipboardCopy"
+        , section theme
+            "ClipboardCopy"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ ClipboardCopy.clipboardCopy "elm install mdgriffith/elm-ui"
                     |> ClipboardCopy.withOnCopy (CopyText "elm install mdgriffith/elm-ui")
@@ -69,10 +76,11 @@ view _ =
             ]
 
         -- LIST
-        , section "List"
+        , section theme
+            "List"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerXl ]
                 [ Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme), Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
                         (Element.text "Unordered (bullet)")
                     , PFList.pFList
                         [ Element.text "First list item"
@@ -82,7 +90,7 @@ view _ =
                         |> PFList.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme), Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
                         (Element.text "Ordered (numbered)")
                     , PFList.pFList
                         [ Element.text "Step one"
@@ -93,7 +101,7 @@ view _ =
                         |> PFList.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme), Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
                         (Element.text "Plain (no bullets)")
                     , PFList.pFList
                         [ Element.text "Plain item one"
@@ -104,7 +112,7 @@ view _ =
                         |> PFList.toMarkup
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle, Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme), Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = 0, right = 0 } ]
                         (Element.text "Inline")
                     , PFList.pFList
                         [ Element.text "Inline one"
@@ -118,7 +126,8 @@ view _ =
             ]
 
         -- DESCRIPTION LIST
-        , section "DescriptionList"
+        , section theme
+            "DescriptionList"
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ DescriptionList.descriptionList
                     [ DescriptionList.group "Name" [ Element.text "Lenards" ]
@@ -138,7 +147,8 @@ view _ =
             ]
 
         -- ACTION LIST
-        , section "ActionList"
+        , section theme
+            "ActionList"
             [ ActionList.actionList
                 [ ActionList.actionItem
                     (Button.primary { label = "Save", onPress = Nothing }

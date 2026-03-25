@@ -20,23 +20,24 @@ import PF6.Sidebar as Sidebar
 import PF6.SkipToContent as SkipToContent
 import PF6.Split as Split
 import PF6.Stack as Stack
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
 
-section : String -> List (Element Msg) -> Element Msg
-section heading items =
+section : Theme -> String -> List (Element Msg) -> Element Msg
+section theme heading items =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerMd
         , Element.padding Tokens.spacerMd
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
             (Element.text heading)
             :: items
         )
@@ -70,33 +71,39 @@ demoBoxFill label color =
 
 view : Model -> Element Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
         ]
-        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color Tokens.colorText ]
+        [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Layout")
 
         -- SKIP TO CONTENT
-        , section "SkipToContent"
+        , section theme
+            "SkipToContent"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
-                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                     [ Element.text "SkipToContent provides an accessibility skip-navigation link that is visually hidden until focused via keyboard. Place it at the very top of the page layout." ]
                 , SkipToContent.skipToContent { href = "#main-content", label = "Skip to main content" }
                     |> SkipToContent.toMarkup
-                , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+                , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                     (Element.text "(Tab to this section to reveal the skip link)")
                 ]
             ]
 
         -- BULLSEYE
-        , section "Bullseye"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Bullseye"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Bullseye centers content vertically and horizontally in a container." ]
             , Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px 200)
-                , Bg.color Tokens.colorBackgroundSecondary
+                , Bg.color (Theme.backgroundSecondary theme)
                 , Border.rounded Tokens.radiusMd
                 ]
                 (Bullseye.bullseye
@@ -113,13 +120,14 @@ view model =
             ]
 
         -- STACK
-        , section "Stack"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Stack"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Stack arranges items vertically. One or more items can fill remaining vertical space." ]
             , Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px 250)
-                , Bg.color Tokens.colorBackgroundSecondary
+                , Bg.color (Theme.backgroundSecondary theme)
                 , Border.rounded Tokens.radiusMd
                 , Element.padding Tokens.spacerSm
                 ]
@@ -134,12 +142,13 @@ view model =
             ]
 
         -- SPLIT
-        , section "Split"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Split"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Split distributes items horizontally. Useful for title + actions headers." ]
             , Split.split
                 [ Split.splitItem
-                    (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText ]
+                    (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme) ]
                         (Element.text "Page Title")
                     )
                     |> Split.withFill
@@ -155,8 +164,9 @@ view model =
             ]
 
         -- LEVEL
-        , section "Level"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Level"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Level distributes items evenly, centered horizontally." ]
             , Level.level
                 [ demoBox "Status: Active" Tokens.colorSuccess
@@ -169,8 +179,9 @@ view model =
             ]
 
         -- GALLERY
-        , section "Gallery"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Gallery"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Gallery creates a responsive grid of uniform items with consistent sizing." ]
             , Gallery.gallery
                 (List.map
@@ -190,8 +201,9 @@ view model =
             ]
 
         -- GRID
-        , section "Grid"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Grid"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Grid provides a 12-column system. Items specify how many columns they span." ]
             , Grid.grid
                 [ Grid.gridItem (demoBoxFill "Span 12" Tokens.colorPrimary)
@@ -208,11 +220,12 @@ view model =
             ]
 
         -- FLEX
-        , section "Flex"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "Flex"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Flex provides configurable direction, alignment, justification, and gap." ]
             , Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
-                [ Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color Tokens.colorText ] (Element.text "Row with space-between:")
+                [ Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color (Theme.text theme) ] (Element.text "Row with space-between:")
                 , Flex.flex
                     [ Flex.flexItem (demoBox "Item 1" Tokens.colorPrimary)
                     , Flex.flexItem (demoBox "Item 2" Tokens.colorInfo)
@@ -221,7 +234,7 @@ view model =
                     |> Flex.withJustifySpaceBetween
                     |> Flex.withGapMd
                     |> Flex.toMarkup
-                , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color Tokens.colorText ] (Element.text "Column with center alignment:")
+                , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color (Theme.text theme) ] (Element.text "Column with center alignment:")
                 , Flex.flex
                     [ Flex.flexItem (demoBox "Top" Tokens.colorPrimary)
                     , Flex.flexItem (demoBox "Middle" Tokens.colorInfo)
@@ -231,7 +244,7 @@ view model =
                     |> Flex.withAlignCenter
                     |> Flex.withGapSm
                     |> Flex.toMarkup
-                , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color Tokens.colorText ] (Element.text "Row with grow item:")
+                , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color (Theme.text theme) ] (Element.text "Row with grow item:")
                 , Flex.flex
                     [ Flex.flexItem (demoBox "Fixed" Tokens.colorPrimary)
                     , Flex.flexItem (demoBoxFill "Grows" Tokens.colorInfo) |> Flex.withGrow
@@ -243,16 +256,17 @@ view model =
             ]
 
         -- CARD
-        , section "Card"
+        , section theme
+            "Card"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerMd ]
                 [ Card.card
-                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "A basic card with title and body content. Cards are used to group related information." ]
                     ]
                     |> Card.withTitle "Basic card"
                     |> Card.toMarkup
                 , Card.card
-                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "This card has a footer with action buttons." ]
                     , Element.el [ Element.paddingEach { top = Tokens.spacerSm, right = 0, bottom = 0, left = 0 } ]
                         (Button.primary { label = "View details", onPress = Nothing }
@@ -263,14 +277,14 @@ view model =
                     |> Card.withTitle "Card with actions"
                     |> Card.toMarkup
                 , Card.card
-                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "A flat card variant without the default box shadow." ]
                     ]
                     |> Card.withTitle "Flat card"
                     |> Card.withFlat
                     |> Card.toMarkup
                 , Card.card
-                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+                    [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "A compact card with reduced padding." ]
                     ]
                     |> Card.withTitle "Compact card"
@@ -280,7 +294,8 @@ view model =
             ]
 
         -- PANEL
-        , section "Panel"
+        , section theme
+            "Panel"
             [ Element.wrappedRow [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Panel.panel (Element.text "Basic panel content")
                     |> Panel.withBordered
@@ -288,7 +303,7 @@ view model =
                 , Panel.panel (Element.text "Panel with header and footer")
                     |> Panel.withBordered
                     |> Panel.withHeader (Element.el [ Font.bold ] (Element.text "Panel Header"))
-                    |> Panel.withFooter (Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text "Panel Footer"))
+                    |> Panel.withFooter (Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Panel Footer"))
                     |> Panel.toMarkup
                 , Panel.panel (Element.text "Raised panel with shadow")
                     |> Panel.withRaised
@@ -297,19 +312,20 @@ view model =
             ]
 
         -- SIDEBAR
-        , section "Sidebar"
+        , section theme
+            "Sidebar"
             [ Sidebar.sidebar
                 { content =
                     Element.paragraph
                         [ Element.padding Tokens.spacerMd
                         , Font.size Tokens.fontSizeMd
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         ]
                         [ Element.text "This is the main content area. The sidebar panel is on the left by default. You can use withPanelRight to move it." ]
                 , panel =
                     Element.column
                         [ Element.padding Tokens.spacerMd
-                        , Bg.color Tokens.colorBackgroundSecondary
+                        , Bg.color (Theme.backgroundSecondary theme)
                         , Element.width Element.fill
                         , Element.height Element.fill
                         , Element.spacing Tokens.spacerSm
@@ -324,7 +340,8 @@ view model =
             ]
 
         -- MASTHEAD
-        , section "Masthead"
+        , section theme
+            "Masthead"
             [ Masthead.masthead
                 |> Masthead.withBrand
                     (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorTextOnDark ]
@@ -340,8 +357,9 @@ view model =
             ]
 
         -- BACK TO TOP
-        , section "BackToTop"
-            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        , section theme
+            "BackToTop"
+            [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "The BackToTop button is rendered as a fixed-position element in the bottom-right corner. A demo button is shown below (non-fixed for visibility):" ]
             , Button.primary { label = "\u{2191} Back to top", onPress = Just ScrollToTop }
                 |> Button.withSmallSize
@@ -349,24 +367,25 @@ view model =
             ]
 
         -- DRAWER
-        , section "Drawer"
+        , section theme
+            "Drawer"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Button.secondary { label = "Toggle drawer", onPress = Just (DrawerToggled (not model.drawerOpen)) }
                     |> Button.toMarkup
                 , Drawer.drawer
                     (Element.paragraph
                         [ Font.size Tokens.fontSizeMd
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         , Element.padding Tokens.spacerMd
                         ]
                         [ Element.text "Main content area. Click the button above to toggle the drawer panel. The drawer slides in from the right without pushing the main content." ]
                     )
                     |> Drawer.withPanelHead
-                        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color Tokens.colorText, Element.padding Tokens.spacerMd ]
+                        (Element.el [ Font.bold, Font.size Tokens.fontSizeLg, Font.color (Theme.text theme), Element.padding Tokens.spacerMd ]
                             (Element.text "Drawer panel")
                         )
                     |> Drawer.withPanelBody
-                        (Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle, Element.padding Tokens.spacerMd ]
+                        (Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme), Element.padding Tokens.spacerMd ]
                             [ Element.text "This is the drawer panel content. It slides in from the right side of the page." ]
                         )
                     |> Drawer.withExpanded model.drawerOpen

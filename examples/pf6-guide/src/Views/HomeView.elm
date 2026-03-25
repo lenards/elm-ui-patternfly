@@ -6,6 +6,7 @@ import PF6.Badge as Badge
 import PF6.Button as Button
 import PF6.Card as Card
 import PF6.Label as Label
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..), Section(..))
 
@@ -30,7 +31,11 @@ sectionCard title description section =
 
 
 view : Model -> Element Msg
-view _ =
+view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
@@ -39,12 +44,12 @@ view _ =
             [ Element.el
                 [ Font.size Tokens.fontSize4xl
                 , Font.bold
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 ]
                 (Element.text "PatternFly 6")
             , Element.paragraph
                 [ Font.size Tokens.fontSizeLg
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 [ Element.text "An elm-ui implementation of the PatternFly 6 design system. "
                 , Element.text "73 components, all following the builder pattern."
@@ -57,7 +62,7 @@ view _ =
                 ]
             ]
         , Element.column [ Element.spacing Tokens.spacerMd ]
-            [ Element.el [ Font.size Tokens.fontSizeXl, Font.bold, Font.color Tokens.colorText ]
+            [ Element.el [ Font.size Tokens.fontSizeXl, Font.bold, Font.color (Theme.text theme) ]
                 (Element.text "Component sections")
             , Element.wrappedRow
                 [ Element.spacing Tokens.spacerMd ]
@@ -88,15 +93,15 @@ view _ =
                 ]
             ]
         , Element.column [ Element.spacing Tokens.spacerSm ]
-            [ Element.el [ Font.size Tokens.fontSizeXl, Font.bold, Font.color Tokens.colorText ]
+            [ Element.el [ Font.size Tokens.fontSizeXl, Font.bold, Font.color (Theme.text theme) ]
                 (Element.text "Usage pattern")
-            , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color Tokens.colorText ]
+            , Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.text theme) ]
                 [ Element.text "Every component follows the same builder pattern:" ]
             , Element.column
                 [ Element.spacing Tokens.spacerXs
                 , Font.family [ Font.monospace ]
                 , Font.size Tokens.fontSizeSm
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , Element.padding Tokens.spacerMd
                 , Element.width Element.fill
                 ]
