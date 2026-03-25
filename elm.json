@@ -94,7 +94,8 @@
             "PF6.Wizard",
             "PF6.Bullseye",
             "PF6.Stack",
-            "PF6.Split"
+            "PF6.Split",
+            "PF6.Level"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
