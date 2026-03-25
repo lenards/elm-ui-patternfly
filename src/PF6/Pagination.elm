@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -120,22 +121,22 @@ totalPages opts =
         1
 
 
-navButton : String -> Maybe msg -> Element msg
-navButton label onPress =
+navButton : Theme -> String -> Maybe msg -> Element msg
+navButton theme label onPress =
     Input.button
         [ Element.paddingXY Tokens.spacerSm Tokens.spacerXs
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
-        , Bg.color Tokens.colorBackgroundDefault
+        , Border.color (Theme.borderDefault theme)
+        , Bg.color (Theme.backgroundDefault theme)
         , Font.color
             (case onPress of
                 Nothing ->
-                    Tokens.colorTextSubtle
+                    Theme.textSubtle theme
 
                 Just _ ->
-                    Tokens.colorText
+                    Theme.text theme
             )
         ]
         { onPress = onPress
@@ -145,8 +146,8 @@ navButton label onPress =
 
 {-| Render the Pagination as an `Element msg`
 -}
-toMarkup : Pagination msg -> Element msg
-toMarkup (Pagination opts) =
+toMarkup : Theme -> Pagination msg -> Element msg
+toMarkup theme (Pagination opts) =
     let
         total =
             totalPages opts
@@ -175,7 +176,7 @@ toMarkup (Pagination opts) =
                 String.fromInt opts.page ++ " of " ++ String.fromInt total
 
         firstBtn =
-            navButton "«"
+            navButton theme "«"
                 (if isFirst then
                     Nothing
 
@@ -184,7 +185,7 @@ toMarkup (Pagination opts) =
                 )
 
         prevBtn =
-            navButton "‹"
+            navButton theme "‹"
                 (if isFirst then
                     Nothing
 
@@ -193,7 +194,7 @@ toMarkup (Pagination opts) =
                 )
 
         nextBtn =
-            navButton "›"
+            navButton theme "›"
                 (if isLast then
                     Nothing
 
@@ -202,7 +203,7 @@ toMarkup (Pagination opts) =
                 )
 
         lastBtn =
-            navButton "»"
+            navButton theme "»"
                 (if isLast then
                     Nothing
 
@@ -213,7 +214,7 @@ toMarkup (Pagination opts) =
         pageDisplay =
             Element.el
                 [ Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , Element.paddingXY Tokens.spacerSm 0
                 ]
                 (Element.text rangeText)

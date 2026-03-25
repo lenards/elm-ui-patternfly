@@ -4,16 +4,19 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Accordion as Accordion
 import PF6.Card as Card
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
 view :
-    { expanded : Maybe String
-    , onToggle : String -> Bool -> msg
-    }
+    Theme
+    ->
+        { expanded : Maybe String
+        , onToggle : String -> Bool -> msg
+        }
     -> Element msg
-view config =
+view theme config =
     let
         isExpanded id =
             config.expanded == Just id
@@ -22,10 +25,10 @@ view config =
             config.onToggle id open
     in
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Accordion" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Accordion" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Accordions toggle the visibility of sections of content." ]
-        , exampleSection "Basic accordion"
+        , exampleSection theme "Basic accordion"
             (Accordion.accordion
                 [ Accordion.item
                     { title = "Item one"
@@ -46,9 +49,9 @@ view config =
                     , onToggle = onToggle "three"
                     }
                 ]
-                |> Accordion.toMarkup
+                |> Accordion.toMarkup theme
             )
-        , exampleSection "Bordered accordion"
+        , exampleSection theme "Bordered accordion"
             (Accordion.accordion
                 [ Accordion.item
                     { title = "First section"
@@ -64,13 +67,13 @@ view config =
                     }
                 ]
                 |> Accordion.withBordered
-                |> Accordion.toMarkup
+                |> Accordion.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

@@ -50,6 +50,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -170,26 +171,26 @@ withSecondary (Tabs opts) =
     Tabs { opts | isSecondary = True }
 
 
-tabItemEl : Options msg -> Tab msg -> Element msg
-tabItemEl opts (Tab tabOpts) =
+tabItemEl : Theme -> Options msg -> Tab msg -> Element msg
+tabItemEl theme opts (Tab tabOpts) =
     let
         isActive =
             tabOpts.key == opts.activeKey
 
         textColor =
             if tabOpts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else if isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         borderAttrs =
             if isActive then
                 [ Border.widthEach { top = 0, right = 0, bottom = 3, left = 0 }
-                , Border.color Tokens.colorPrimary
+                , Border.color (Theme.primary theme)
                 ]
 
             else
@@ -224,7 +225,7 @@ tabItemEl opts (Tab tabOpts) =
         ([ paddingVal
          , Font.size fontSize
          , Font.color textColor
-         , Bg.color Tokens.colorBackgroundDefault
+         , Bg.color (Theme.backgroundDefault theme)
          ]
             ++ borderAttrs
         )
@@ -240,11 +241,11 @@ tabItemEl opts (Tab tabOpts) =
 
 {-| Render the Tabs as an `Element msg`
 -}
-toMarkup : Tabs msg -> Element msg
-toMarkup (Tabs opts) =
+toMarkup : Theme -> Tabs msg -> Element msg
+toMarkup theme (Tabs opts) =
     let
         tabEls =
-            List.map (tabItemEl opts) opts.tabs
+            List.map (tabItemEl theme opts) opts.tabs
 
         tabRow =
             case opts.variant of
@@ -252,7 +253,7 @@ toMarkup (Tabs opts) =
                     Element.column
                         [ Element.spacing 0
                         , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         tabEls
 
@@ -261,7 +262,7 @@ toMarkup (Tabs opts) =
                         [ Element.width Element.fill
                         , Element.spacing 0
                         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         (List.map (\t -> Element.el [ Element.width Element.fill ] t) tabEls)
 
@@ -269,7 +270,7 @@ toMarkup (Tabs opts) =
                     Element.row
                         [ Element.spacing 0
                         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         tabEls
     in

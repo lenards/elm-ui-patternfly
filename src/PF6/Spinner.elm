@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/spinner>
 import Element exposing (Element)
 import Html
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 
 
 {-| Opaque Spinner type
@@ -132,8 +133,8 @@ Uses CSS animation via inline HTML for the spinning effect.
 The spinner is a circle with a colored arc rotating via CSS.
 
 -}
-toMarkup : Spinner -> Element msg
-toMarkup (Spinner opts) =
+toMarkup : Theme -> Spinner -> Element msg
+toMarkup _ (Spinner opts) =
     let
         px =
             sizePx opts.size

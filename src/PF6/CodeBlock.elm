@@ -38,6 +38,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -92,8 +93,8 @@ withExpanded expanded (CodeBlock opts) =
 
 {-| Render the CodeBlock as an `Element msg`
 -}
-toMarkup : CodeBlock msg -> Element msg
-toMarkup (CodeBlock opts) =
+toMarkup : Theme -> CodeBlock msg -> Element msg
+toMarkup theme (CodeBlock opts) =
     let
         headerEl =
             case opts.actions of
@@ -105,7 +106,7 @@ toMarkup (CodeBlock opts) =
                         [ Element.width Element.fill
                         , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
                         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         , Bg.color (Element.rgb255 245 245 245)
                         ]
                         (Element.el [ Element.alignRight ] actions)
@@ -117,12 +118,12 @@ toMarkup (CodeBlock opts) =
                         [ Element.width Element.fill
                         , Element.paddingXY Tokens.spacerMd Tokens.spacerXs
                         , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         , Bg.color (Element.rgb255 245 245 245)
                         ]
                         (Input.button
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorPrimary
+                            , Font.color (Theme.primary theme)
                             ]
                             { onPress = Just (onToggle (not opts.isExpanded))
                             , label =
@@ -155,7 +156,7 @@ toMarkup (CodeBlock opts) =
                 , Element.padding Tokens.spacerMd
                 , Font.family [ Font.monospace ]
                 , Font.size Tokens.fontSizeSm
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , Element.scrollbarX
                 ]
                 (Element.text codeLines)
@@ -166,7 +167,7 @@ toMarkup (CodeBlock opts) =
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         [ headerEl
         , codeEl

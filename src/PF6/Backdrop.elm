@@ -37,6 +37,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Events
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 
 
 {-| Opaque Backdrop type
@@ -88,8 +89,8 @@ The backdrop covers the entire viewport using fixed positioning.
 Consumers control visibility by conditionally rendering the backdrop.
 
 -}
-toMarkup : Backdrop msg -> Element msg
-toMarkup (Backdrop opts) =
+toMarkup : Theme -> Backdrop msg -> Element msg
+toMarkup _ (Backdrop opts) =
     Element.el
         [ Element.width Element.fill
         , Element.height Element.fill

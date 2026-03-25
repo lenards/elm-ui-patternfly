@@ -4,36 +4,37 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.Hint as Hint
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : Element msg
-view =
+view : Theme -> Element msg
+view theme =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Hint" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Hint" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "A hint provides supplemental information or guidance with lighter styling than an alert." ]
-        , exampleSection "Basic hint"
+        , exampleSection theme "Basic hint"
             (Hint.hint "This is a hint body. Use hints to provide supplemental information without the urgency of an alert."
-                |> Hint.toMarkup
+                |> Hint.toMarkup theme
             )
-        , exampleSection "With title"
+        , exampleSection theme "With title"
             (Hint.hint "Longer descriptions can be placed in the body."
                 |> Hint.withTitle "Do you know?"
-                |> Hint.toMarkup
+                |> Hint.toMarkup theme
             )
-        , exampleSection "With title and footer"
+        , exampleSection theme "With title and footer"
             (Hint.hint "Hints can contain a title, body, and footer."
                 |> Hint.withTitle "Helpful hint"
-                |> Hint.withFooter (Element.el [ Font.size 12, Font.color Tokens.colorTextSubtle ] (Element.text "Last updated 2 hours ago"))
-                |> Hint.toMarkup
+                |> Hint.withFooter (Element.el [ Font.size 12, Font.color (Theme.textSubtle theme) ] (Element.text "Last updated 2 hours ago"))
+                |> Hint.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

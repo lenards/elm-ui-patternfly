@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -126,25 +127,25 @@ withCompact (ToggleGroup opts) =
     ToggleGroup { opts | compact = True }
 
 
-itemMarkup : Bool -> ToggleItem msg -> Element msg
-itemMarkup isCompact (ToggleItem opts) =
+itemMarkup : Theme -> Bool -> ToggleItem msg -> Element msg
+itemMarkup theme isCompact (ToggleItem opts) =
     let
         bgColor =
             if opts.isSelected then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         textColor =
             if opts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else if opts.isSelected then
-                Tokens.colorTextOnDark
+                Theme.textOnDark theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         onPress =
             if opts.isDisabled then
@@ -187,10 +188,10 @@ itemMarkup isCompact (ToggleItem opts) =
         , Border.width 1
         , Border.color
             (if opts.isSelected then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
-                Tokens.colorBorderDefault
+                Theme.borderDefault theme
             )
         ]
         { onPress = onPress
@@ -200,10 +201,10 @@ itemMarkup isCompact (ToggleItem opts) =
 
 {-| Render the ToggleGroup as an `Element msg`
 -}
-toMarkup : ToggleGroup msg -> Element msg
-toMarkup (ToggleGroup opts) =
+toMarkup : Theme -> ToggleGroup msg -> Element msg
+toMarkup theme (ToggleGroup opts) =
     Element.row
         [ Border.rounded Tokens.radiusMd
         , Element.clip
         ]
-        (List.map (itemMarkup opts.compact) opts.items)
+        (List.map (itemMarkup theme opts.compact) opts.items)

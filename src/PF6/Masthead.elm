@@ -37,6 +37,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Font as Font
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -111,8 +112,8 @@ withSticky (Masthead opts) =
 
 {-| Render the Masthead as an `Element msg`
 -}
-toMarkup : Masthead msg -> Element msg
-toMarkup (Masthead opts) =
+toMarkup : Theme -> Masthead msg -> Element msg
+toMarkup theme (Masthead opts) =
     let
         brandEl =
             opts.brand |> Maybe.withDefault Element.none
@@ -150,7 +151,7 @@ toMarkup (Masthead opts) =
          , Bg.color (Element.rgb255 21 21 21)
          , padding
          , Element.spacing Tokens.spacerMd
-         , Font.color Tokens.colorTextOnDark
+         , Font.color (Theme.textOnDark theme)
          ]
             ++ stickyAttrs
         )

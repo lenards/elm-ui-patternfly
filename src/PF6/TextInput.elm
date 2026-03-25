@@ -62,6 +62,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -222,42 +223,42 @@ withIcon icon (TextInput opts) =
     TextInput { opts | icon = Just icon }
 
 
-validationBorderColor : ValidationStatus -> Element.Color
-validationBorderColor status =
+validationBorderColor : Theme -> ValidationStatus -> Element.Color
+validationBorderColor theme status =
     case status of
         None ->
-            Tokens.colorBorderDefault
+            Theme.borderDefault theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
 
-validationHelperColor : ValidationStatus -> Element.Color
-validationHelperColor status =
+validationHelperColor : Theme -> ValidationStatus -> Element.Color
+validationHelperColor theme status =
     case status of
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
         _ ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
 
 {-| Render the TextInput as an `Element msg`
 -}
-toMarkup : TextInput msg -> Element msg
-toMarkup (TextInput opts) =
+toMarkup : Theme -> TextInput msg -> Element msg
+toMarkup theme (TextInput opts) =
     let
         borderColor =
-            validationBorderColor opts.validation
+            validationBorderColor theme opts.validation
 
         labelEl =
             opts.label
@@ -265,7 +266,7 @@ toMarkup (TextInput opts) =
                     (\l ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text l)
@@ -277,7 +278,7 @@ toMarkup (TextInput opts) =
                 |> Maybe.map
                     (\p ->
                         Input.placeholder
-                            [ Font.color Tokens.colorTextSubtle ]
+                            [ Font.color (Theme.textSubtle theme) ]
                             (Element.text p)
                     )
 
@@ -294,10 +295,10 @@ toMarkup (TextInput opts) =
                         , Font.size Tokens.fontSizeMd
                         , Bg.color
                             (if opts.isDisabled then
-                                Tokens.colorBackgroundSecondary
+                                Theme.backgroundSecondary theme
 
                              else
-                                Tokens.colorBackgroundDefault
+                                Theme.backgroundDefault theme
                             )
                         ]
                         { onChange = opts.onChange
@@ -318,10 +319,10 @@ toMarkup (TextInput opts) =
                         , Font.size Tokens.fontSizeMd
                         , Bg.color
                             (if opts.isDisabled then
-                                Tokens.colorBackgroundSecondary
+                                Theme.backgroundSecondary theme
 
                              else
-                                Tokens.colorBackgroundDefault
+                                Theme.backgroundDefault theme
                             )
                         ]
                         { onChange = opts.onChange
@@ -336,7 +337,7 @@ toMarkup (TextInput opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color (validationHelperColor opts.validation)
+                            , Font.color (validationHelperColor theme opts.validation)
                             , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                             ]
                             (Element.text t)

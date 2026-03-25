@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/layouts/stack>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -92,8 +93,8 @@ withGutter (Stack opts) =
 
 {-| Render the Stack as an Element msg
 -}
-toMarkup : Stack msg -> Element msg
-toMarkup (Stack opts) =
+toMarkup : Theme -> Stack msg -> Element msg
+toMarkup _ (Stack opts) =
     let
         spacingAttr =
             if opts.hasGutter then

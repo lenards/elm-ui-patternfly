@@ -45,6 +45,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -123,16 +124,16 @@ isUnread (Badge opts) =
 
 {-| Render the Badge as an `Element msg`
 -}
-toMarkup : Badge -> Element msg
-toMarkup (Badge opts) =
+toMarkup : Theme -> Badge -> Element msg
+toMarkup theme (Badge opts) =
     let
         ( bg, fg ) =
             case opts.status of
                 Read ->
-                    ( Tokens.colorNeutral, Tokens.colorText )
+                    ( Theme.neutral theme, Theme.text theme )
 
                 Unread ->
-                    ( Tokens.colorPrimary, Tokens.colorTextOnDark )
+                    ( Theme.primary theme, Theme.textOnDark theme )
 
         displayValue =
             if opts.value > opts.overflowAt then

@@ -11,8 +11,8 @@ import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..), Section(..))
 
 
-sectionCard : String -> String -> Section -> Element Msg
-sectionCard title description section =
+sectionCard : Theme -> String -> String -> Section -> Element Msg
+sectionCard theme title description section =
     Card.card
         [ Element.paragraph
             [ Font.size Tokens.fontSizeMd
@@ -22,12 +22,12 @@ sectionCard title description section =
         , Element.el [ Element.paddingEach { top = Tokens.spacerSm, right = 0, bottom = 0, left = 0 } ]
             (Button.primary { label = "View examples", onPress = Just (NavSelected section) }
                 |> Button.withSmallSize
-                |> Button.toMarkup
+                |> Button.toMarkup theme
             )
         ]
         |> Card.withTitle title
         |> Card.withBodyPaddingXY Tokens.spacerMd Tokens.spacerSm
-        |> Card.toMarkup
+        |> Card.toMarkup theme
 
 
 view : Model -> Element Msg
@@ -55,10 +55,10 @@ view model =
                 , Element.text "74 components, all following the builder pattern."
                 ]
             , Element.row [ Element.spacing Tokens.spacerSm ]
-                [ Label.label "74 components" |> Label.withBlueColor |> Label.toMarkup
-                , Label.label "elm-ui" |> Label.withGreenColor |> Label.toMarkup
-                , Label.label "PF6" |> Label.withPurpleColor |> Label.toMarkup
-                , Label.label "0.19.1" |> Label.withGoldColor |> Label.toMarkup
+                [ Label.label "74 components" |> Label.withBlueColor |> Label.toMarkup theme
+                , Label.label "elm-ui" |> Label.withGreenColor |> Label.toMarkup theme
+                , Label.label "PF6" |> Label.withPurpleColor |> Label.toMarkup theme
+                , Label.label "0.19.1" |> Label.withGoldColor |> Label.toMarkup theme
                 ]
             ]
         , Element.column [ Element.spacing Tokens.spacerMd ]
@@ -66,28 +66,28 @@ view model =
                 (Element.text "Component sections")
             , Element.wrappedRow
                 [ Element.spacing Tokens.spacerMd ]
-                [ sectionCard "Primitives"
+                [ sectionCard theme "Primitives"
                     "Button, Badge, Label, Avatar, Icon, Title, Divider"
                     Primitives
-                , sectionCard "Feedback & Status"
+                , sectionCard theme "Feedback & Status"
                     "Alert, Banner, Spinner, Skeleton, EmptyState, Progress, HelperText"
                     Feedback
-                , sectionCard "Forms"
+                , sectionCard theme "Forms"
                     "TextInput, Checkbox, Radio, Switch, NumberInput, SearchInput, Select, Form"
                     Forms
-                , sectionCard "Navigation"
+                , sectionCard theme "Navigation"
                     "Breadcrumb, Tabs, Pagination"
                     Navigation
-                , sectionCard "Layout"
+                , sectionCard theme "Layout"
                     "Card, Drawer, Bullseye, Stack, Split, Level, Gallery, Grid, Flex"
                     Layout
-                , sectionCard "Overlays"
+                , sectionCard theme "Overlays"
                     "Modal, Tooltip, Dropdown, Accordion, ExpandableSection"
                     Overlays
-                , sectionCard "Content"
+                , sectionCard theme "Content"
                     "CodeBlock, ClipboardCopy, List, DescriptionList, ActionList"
                     Content
-                , sectionCard "Data"
+                , sectionCard theme "Data"
                     "Table, DataList, Toolbar"
                     Data
                 ]

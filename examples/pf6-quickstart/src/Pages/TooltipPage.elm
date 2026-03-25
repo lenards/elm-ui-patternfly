@@ -4,50 +4,51 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Button as Button
 import PF6.Card as Card
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 import PF6.Tooltip as Tooltip
 
 
-view : msg -> Element msg
-view noOp =
+view : Theme -> msg -> Element msg
+view theme noOp =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Tooltip" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Tooltip" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Tooltips display a short description when hovering over or focusing an element." ]
-        , exampleSection "Tooltip positions"
+        , exampleSection theme "Tooltip positions"
             (Element.wrappedRow [ Element.spacing 24, Element.padding 32 ]
                 [ Tooltip.tooltip
-                    { trigger = Button.secondary { label = "Top", onPress = Just noOp } |> Button.toMarkup
+                    { trigger = Button.secondary { label = "Top", onPress = Just noOp } |> Button.toMarkup theme
                     , content = "Tooltip on top"
                     }
                     |> Tooltip.withTop
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
-                    { trigger = Button.secondary { label = "Bottom", onPress = Just noOp } |> Button.toMarkup
+                    { trigger = Button.secondary { label = "Bottom", onPress = Just noOp } |> Button.toMarkup theme
                     , content = "Tooltip on bottom"
                     }
                     |> Tooltip.withBottom
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
-                    { trigger = Button.secondary { label = "Left", onPress = Just noOp } |> Button.toMarkup
+                    { trigger = Button.secondary { label = "Left", onPress = Just noOp } |> Button.toMarkup theme
                     , content = "Tooltip on left"
                     }
                     |> Tooltip.withLeft
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
-                    { trigger = Button.secondary { label = "Right", onPress = Just noOp } |> Button.toMarkup
+                    { trigger = Button.secondary { label = "Right", onPress = Just noOp } |> Button.toMarkup theme
                     , content = "Tooltip on right"
                     }
                     |> Tooltip.withRight
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 ]
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

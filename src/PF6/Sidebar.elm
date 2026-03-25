@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/components/sidebar>
 
 import Element exposing (Element)
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -104,8 +105,8 @@ withPanelWidth w (Sidebar opts) =
 
 {-| Render the Sidebar as an `Element msg`
 -}
-toMarkup : Sidebar msg -> Element msg
-toMarkup (Sidebar opts) =
+toMarkup : Theme -> Sidebar msg -> Element msg
+toMarkup _ (Sidebar opts) =
     let
         stickyAttrs =
             if opts.sticky then

@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/progress-stepper>
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -159,17 +160,17 @@ withCompact (ProgressStepper opts) =
     ProgressStepper { opts | compact = True }
 
 
-statusColor : StepStatus -> Element.Color
-statusColor status =
+statusColor : Theme -> StepStatus -> Element.Color
+statusColor theme status =
     case status of
         Complete ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Current ->
-            Tokens.colorPrimary
+            Theme.primary theme
 
         Pending ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
 
 defaultIcon : StepStatus -> Element msg
@@ -187,11 +188,11 @@ defaultIcon status =
         )
 
 
-stepMarkup : Bool -> Step msg -> Element msg
-stepMarkup isCompact (Step opts) =
+stepMarkup : Theme -> Bool -> Step msg -> Element msg
+stepMarkup theme isCompact (Step opts) =
     let
         color =
-            statusColor opts.status
+            statusColor theme opts.status
 
         iconEl =
             Element.el
@@ -220,10 +221,10 @@ stepMarkup isCompact (Step opts) =
                 , Font.color
                     (case opts.status of
                         Pending ->
-                            Tokens.colorTextSubtle
+                            Theme.textSubtle theme
 
                         _ ->
-                            Tokens.colorText
+                            Theme.text theme
                     )
                 , Font.bold
                 , Element.centerX
@@ -236,7 +237,7 @@ stepMarkup isCompact (Step opts) =
                     (\d ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.centerX
                             ]
                             (Element.text d)
@@ -253,36 +254,36 @@ stepMarkup isCompact (Step opts) =
         ]
 
 
-connectorLine : StepStatus -> Element msg
-connectorLine status =
+connectorLine : Theme -> StepStatus -> Element msg
+connectorLine theme status =
     Element.el
         [ Element.width Element.fill
         , Element.height (Element.px 2)
         , Bg.color
             (case status of
                 Complete ->
-                    Tokens.colorSuccess
+                    Theme.success theme
 
                 _ ->
-                    Tokens.colorBorderDefault
+                    Theme.borderDefault theme
             )
         , Element.centerY
         ]
         Element.none
 
 
-verticalConnector : StepStatus -> Element msg
-verticalConnector status =
+verticalConnector : Theme -> StepStatus -> Element msg
+verticalConnector theme status =
     Element.el
         [ Element.width (Element.px 2)
         , Element.height (Element.px 24)
         , Bg.color
             (case status of
                 Complete ->
-                    Tokens.colorSuccess
+                    Theme.success theme
 
                 _ ->
-                    Tokens.colorBorderDefault
+                    Theme.borderDefault theme
             )
         , Element.centerX
         ]
@@ -291,8 +292,8 @@ verticalConnector status =
 
 {-| Render the ProgressStepper as an `Element msg`
 -}
-toMarkup : ProgressStepper msg -> Element msg
-toMarkup (ProgressStepper opts) =
+toMarkup : Theme -> ProgressStepper msg -> Element msg
+toMarkup theme (ProgressStepper opts) =
     if opts.vertical then
         Element.column
             [ Element.spacing 0
@@ -305,9 +306,9 @@ toMarkup (ProgressStepper opts) =
                             s
                     in
                     Element.column [ Element.width Element.fill ]
-                        ([ stepMarkup opts.compact s ]
+                        ([ stepMarkup theme opts.compact s ]
                             ++ (if i < List.length opts.steps - 1 then
-                                    [ verticalConnector stepOpts.status ]
+                                    [ verticalConnector theme stepOpts.status ]
 
                                 else
                                     []
@@ -332,12 +333,12 @@ toMarkup (ProgressStepper opts) =
                             i == List.length opts.steps - 1
                     in
                     Element.row [ Element.width Element.fill ]
-                        [ stepMarkup opts.compact s
+                        [ stepMarkup theme opts.compact s
                         , if isLast then
                             Element.none
 
                           else
-                            connectorLine stepOpts.status
+                            connectorLine theme stepOpts.status
                         ]
                 )
                 opts.steps

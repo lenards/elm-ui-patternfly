@@ -41,7 +41,7 @@ See: <https://www.patternfly.org/components/avatar>
 
 import Element exposing (Element)
 import Element.Border as Border
-import PF6.Tokens as Tokens
+import PF6.Theme as Theme exposing (Theme)
 
 
 {-| Opaque Avatar type
@@ -132,8 +132,8 @@ sizePx size =
 
 {-| Render the Avatar as an `Element msg`
 -}
-toMarkup : Avatar -> Element msg
-toMarkup (Avatar opts) =
+toMarkup : Theme -> Avatar -> Element msg
+toMarkup theme (Avatar opts) =
     let
         px =
             sizePx opts.size
@@ -143,7 +143,7 @@ toMarkup (Avatar opts) =
                 [ Border.rounded (px // 2)
                 , Border.solid
                 , Border.width 2
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
 
             else

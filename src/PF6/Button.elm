@@ -50,6 +50,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -243,67 +244,67 @@ withDisabled (Button opts) =
     Button { opts | isDisabled = True, onPress = Nothing }
 
 
-variantAttrs : Variant -> List (Element.Attribute msg)
-variantAttrs variant =
+variantAttrs : Theme -> Variant -> List (Element.Attribute msg)
+variantAttrs theme variant =
     case variant of
         Primary ->
-            [ Bg.color Tokens.colorPrimary
-            , Font.color Tokens.colorTextOnDark
+            [ Bg.color (Theme.primary theme)
+            , Font.color (Theme.textOnDark theme)
             , Border.rounded Tokens.radiusMd
             , Border.width 0
             ]
 
         Secondary ->
-            [ Bg.color Tokens.colorBackgroundDefault
-            , Font.color Tokens.colorPrimary
+            [ Bg.color (Theme.backgroundDefault theme)
+            , Font.color (Theme.primary theme)
             , Border.rounded Tokens.radiusMd
             , Border.solid
             , Border.width 1
-            , Border.color Tokens.colorPrimary
+            , Border.color (Theme.primary theme)
             ]
 
         Tertiary ->
-            [ Bg.color Tokens.colorBackgroundDefault
-            , Font.color Tokens.colorText
+            [ Bg.color (Theme.backgroundDefault theme)
+            , Font.color (Theme.text theme)
             , Border.rounded Tokens.radiusMd
             , Border.solid
             , Border.width 1
-            , Border.color Tokens.colorText
+            , Border.color (Theme.text theme)
             ]
 
         Danger ->
-            [ Bg.color Tokens.colorDanger
-            , Font.color Tokens.colorTextOnDark
+            [ Bg.color (Theme.danger theme)
+            , Font.color (Theme.textOnDark theme)
             , Border.rounded Tokens.radiusMd
             , Border.width 0
             ]
 
         Warning ->
-            [ Bg.color Tokens.colorWarning
-            , Font.color Tokens.colorText
+            [ Bg.color (Theme.warning theme)
+            , Font.color (Theme.text theme)
             , Border.rounded Tokens.radiusMd
             , Border.width 0
             ]
 
         Plain ->
-            [ Bg.color Tokens.colorBackgroundDefault
-            , Font.color Tokens.colorText
+            [ Bg.color (Theme.backgroundDefault theme)
+            , Font.color (Theme.text theme)
             , Border.rounded Tokens.radiusMd
             , Border.width 0
             ]
 
         Link ->
-            [ Font.color Tokens.colorPrimary
+            [ Font.color (Theme.primary theme)
             , Font.underline
             , Border.width 0
             ]
 
         Control ->
-            [ Bg.color Tokens.colorBackgroundDefault
-            , Font.color Tokens.colorText
+            [ Bg.color (Theme.backgroundDefault theme)
+            , Font.color (Theme.text theme)
             , Border.solid
             , Border.width 1
-            , Border.color Tokens.colorBorderDefault
+            , Border.color (Theme.borderDefault theme)
             ]
 
 
@@ -349,11 +350,11 @@ labelEl opts =
 
 {-| Render the Button as an `Element msg`
 -}
-toMarkup : Button msg -> Element msg
-toMarkup (Button opts) =
+toMarkup : Theme -> Button msg -> Element msg
+toMarkup theme (Button opts) =
     let
         attrs =
-            variantAttrs opts.variant ++ sizeAttrs opts.size
+            variantAttrs theme opts.variant ++ sizeAttrs opts.size
     in
     Input.button attrs
         { label = labelEl opts

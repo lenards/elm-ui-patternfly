@@ -38,6 +38,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -104,15 +105,15 @@ withStacked (Tile opts) =
 
 {-| Render the Tile as an `Element msg`
 -}
-toMarkup : Tile msg -> Element msg
-toMarkup (Tile opts) =
+toMarkup : Theme -> Tile msg -> Element msg
+toMarkup theme (Tile opts) =
     let
         borderColor =
             if opts.isSelected then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorBorderDefault
+                Theme.borderDefault theme
 
         borderWidth =
             if opts.isSelected then
@@ -123,20 +124,20 @@ toMarkup (Tile opts) =
 
         bgColor =
             if opts.isDisabled then
-                Tokens.colorBackgroundSecondary
+                Theme.backgroundSecondary theme
 
             else if opts.isSelected then
                 Element.rgb255 215 235 255
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         textColor =
             if opts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         onPress =
             if opts.isDisabled then
@@ -153,10 +154,10 @@ toMarkup (Tile opts) =
                             [ Font.size Tokens.fontSizeXl
                             , Font.color
                                 (if opts.isSelected then
-                                    Tokens.colorPrimary
+                                    Theme.primary theme
 
                                  else
-                                    Tokens.colorTextSubtle
+                                    Theme.textSubtle theme
                                 )
                             ]
                             i

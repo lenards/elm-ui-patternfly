@@ -55,6 +55,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -189,23 +190,23 @@ withNone (Progress opts) =
     Progress { opts | measureLocation = NoMeasure }
 
 
-barColor : Status -> Element.Color
-barColor status =
+barColor : Theme -> Status -> Element.Color
+barColor theme status =
     case status of
         StatusDefault ->
-            Tokens.colorPrimary
+            Theme.primary theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
         Info ->
-            Tokens.colorInfo
+            Theme.info theme
 
 
 barHeight : Size -> Int
@@ -223,8 +224,8 @@ barHeight size =
 
 {-| Render the Progress as an `Element msg`
 -}
-toMarkup : Progress -> Element msg
-toMarkup (Progress opts) =
+toMarkup : Theme -> Progress -> Element msg
+toMarkup theme (Progress opts) =
     let
         pct =
             String.fromInt (round opts.value) ++ "%"
@@ -235,7 +236,7 @@ toMarkup (Progress opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text t)
@@ -247,7 +248,7 @@ toMarkup (Progress opts) =
                 Outside ->
                     Element.el
                         [ Font.size Tokens.fontSizeSm
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         ]
                         (Element.text pct)
 
@@ -258,13 +259,13 @@ toMarkup (Progress opts) =
             barHeight opts.barSize
 
         fillColor =
-            barColor opts.status
+            barColor theme opts.status
 
         trackEl =
             Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px heightPx)
-                , Bg.color Tokens.colorNeutral
+                , Bg.color (Theme.neutral theme)
                 , Border.rounded (heightPx // 2)
                 ]
                 (Element.el
@@ -296,7 +297,7 @@ toMarkup (Progress opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                             ]
                             (Element.text t)

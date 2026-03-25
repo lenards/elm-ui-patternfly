@@ -34,6 +34,7 @@ See: <https://www.patternfly.org/layouts/level>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -65,8 +66,8 @@ withGutter (Level opts) =
 
 {-| Render the Level as an Element msg
 -}
-toMarkup : Level msg -> Element msg
-toMarkup (Level opts) =
+toMarkup : Theme -> Level msg -> Element msg
+toMarkup _ (Level opts) =
     let
         spacingAttr =
             if opts.hasGutter then

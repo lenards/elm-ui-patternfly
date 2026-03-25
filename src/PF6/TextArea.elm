@@ -51,6 +51,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -186,36 +187,36 @@ withResizeBoth (TextArea opts) =
     TextArea { opts | resize = Both }
 
 
-validationBorderColor : ValidationStatus -> Element.Color
-validationBorderColor status =
+validationBorderColor : Theme -> ValidationStatus -> Element.Color
+validationBorderColor theme status =
     case status of
         None ->
-            Tokens.colorBorderDefault
+            Theme.borderDefault theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
 
-validationHelperColor : ValidationStatus -> Element.Color
-validationHelperColor status =
+validationHelperColor : Theme -> ValidationStatus -> Element.Color
+validationHelperColor theme status =
     case status of
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         _ ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
 
 {-| Render the TextArea as an `Element msg`
 -}
-toMarkup : TextArea msg -> Element msg
-toMarkup (TextArea opts) =
+toMarkup : Theme -> TextArea msg -> Element msg
+toMarkup theme (TextArea opts) =
     let
         borderColor =
-            validationBorderColor opts.validation
+            validationBorderColor theme opts.validation
 
         labelEl =
             opts.label
@@ -223,13 +224,13 @@ toMarkup (TextArea opts) =
                     (\l ->
                         Element.row
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             , Element.spacing Tokens.spacerXs
                             ]
                             [ Element.text l
                             , if opts.isRequired then
-                                Element.el [ Font.color Tokens.colorDanger ] (Element.text "*")
+                                Element.el [ Font.color (Theme.danger theme) ] (Element.text "*")
 
                               else
                                 Element.none
@@ -242,7 +243,7 @@ toMarkup (TextArea opts) =
                 |> Maybe.map
                     (\p ->
                         Input.placeholder
-                            [ Font.color Tokens.colorTextSubtle ]
+                            [ Font.color (Theme.textSubtle theme) ]
                             (Element.text p)
                     )
 
@@ -261,10 +262,10 @@ toMarkup (TextArea opts) =
                 , Font.size Tokens.fontSizeMd
                 , Bg.color
                     (if opts.isDisabled then
-                        Tokens.colorBackgroundSecondary
+                        Theme.backgroundSecondary theme
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
                 , Element.htmlAttribute
                     (Html.Attributes.style "resize"
@@ -293,7 +294,7 @@ toMarkup (TextArea opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color (validationHelperColor opts.validation)
+                            , Font.color (validationHelperColor theme opts.validation)
                             , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                             ]
                             (Element.text t)

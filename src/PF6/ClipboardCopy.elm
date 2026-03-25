@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -111,15 +112,15 @@ withOnCopy msg (ClipboardCopy opts) =
     ClipboardCopy { opts | onCopy = Just msg }
 
 
-copyBtn : Options msg -> Element msg
-copyBtn opts =
+copyBtn : Theme -> Options msg -> Element msg
+copyBtn theme opts =
     Input.button
         [ Element.paddingXY Tokens.spacerSm Tokens.spacerXs
-        , Bg.color Tokens.colorBackgroundSecondary
+        , Bg.color (Theme.backgroundSecondary theme)
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         , Font.size Tokens.fontSizeSm
-        , Font.color Tokens.colorText
+        , Font.color (Theme.text theme)
         ]
         { onPress = opts.onCopy
         , label = Element.text "Copy"
@@ -128,16 +129,16 @@ copyBtn opts =
 
 {-| Render the ClipboardCopy as an `Element msg`
 -}
-toMarkup : ClipboardCopy msg -> Element msg
-toMarkup (ClipboardCopy opts) =
+toMarkup : Theme -> ClipboardCopy msg -> Element msg
+toMarkup theme (ClipboardCopy opts) =
     case opts.variant of
         Inline ->
             Element.row
                 [ Border.rounded Tokens.radiusMd
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
-                , Bg.color Tokens.colorBackgroundDefault
+                , Border.color (Theme.borderDefault theme)
+                , Bg.color (Theme.backgroundDefault theme)
                 ]
                 [ Element.el
                     [ Font.family [ Font.monospace ]
@@ -145,7 +146,7 @@ toMarkup (ClipboardCopy opts) =
                     , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
                     ]
                     (Element.text opts.content)
-                , copyBtn opts
+                , copyBtn theme opts
                 ]
 
         Block ->
@@ -154,7 +155,7 @@ toMarkup (ClipboardCopy opts) =
                 , Border.rounded Tokens.radiusMd
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Bg.color (Element.rgb255 250 250 250)
                 ]
                 [ Element.el
@@ -165,7 +166,7 @@ toMarkup (ClipboardCopy opts) =
                     , Element.scrollbarX
                     ]
                     (Element.text opts.content)
-                , copyBtn opts
+                , copyBtn theme opts
                 ]
 
         Default ->
@@ -190,9 +191,9 @@ toMarkup (ClipboardCopy opts) =
                         Just onToggle ->
                             Input.button
                                 [ Element.paddingXY Tokens.spacerXs Tokens.spacerXs
-                                , Bg.color Tokens.colorBackgroundDefault
+                                , Bg.color (Theme.backgroundDefault theme)
                                 , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-                                , Border.color Tokens.colorBorderDefault
+                                , Border.color (Theme.borderDefault theme)
                                 , Font.size Tokens.fontSizeSm
                                 ]
                                 { onPress = Just (onToggle (not opts.isExpanded))
@@ -214,16 +215,16 @@ toMarkup (ClipboardCopy opts) =
                 , Border.rounded Tokens.radiusMd
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
                 [ expandBtn
                 , Element.el
                     [ Element.width Element.fill
                     , Element.padding Tokens.spacerSm
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
-                    , Bg.color Tokens.colorBackgroundDefault
+                    , Font.color (Theme.text theme)
+                    , Bg.color (Theme.backgroundDefault theme)
                     ]
                     (Element.text displayText)
-                , copyBtn opts
+                , copyBtn theme opts
                 ]

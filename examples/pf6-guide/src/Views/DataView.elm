@@ -6,11 +6,13 @@ import Element.Border as Border
 import Element.Font as Font
 import PF6.Button as Button
 import PF6.DataList as DataList
+import PF6.DualListSelector as DualListSelector
 import PF6.Label as Label
 import PF6.Table as Table
 import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 import PF6.Toolbar as Toolbar
+import PF6.TreeView as TreeView
 import Types exposing (Model, Msg(..))
 
 
@@ -49,13 +51,13 @@ sampleUsers =
     ]
 
 
-statusLabel : String -> Element Msg
-statusLabel status =
+statusLabel : Theme -> String -> Element Msg
+statusLabel theme status =
     if status == "Active" then
-        Label.label status |> Label.withGreenColor |> Label.toMarkup
+        Label.label status |> Label.withGreenColor |> Label.toMarkup theme
 
     else
-        Label.label status |> Label.toMarkup
+        Label.label status |> Label.toMarkup theme
 
 
 view : Model -> Element Msg
@@ -78,30 +80,30 @@ view model =
                 [ Toolbar.toolbarItem
                     (Button.secondary { label = "Filter", onPress = Nothing }
                         |> Button.withSmallSize
-                        |> Button.toMarkup
+                        |> Button.toMarkup theme
                     )
                 , Toolbar.toolbarItem
                     (Button.secondary { label = "Sort", onPress = Nothing }
                         |> Button.withSmallSize
-                        |> Button.toMarkup
+                        |> Button.toMarkup theme
                     )
                 , Toolbar.toolbarSeparator
                 , Toolbar.toolbarGroup
                     [ Toolbar.toolbarItem
                         (Button.primary { label = "Create", onPress = Nothing }
                             |> Button.withSmallSize
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                         )
                     , Toolbar.toolbarItem
                         (Button.secondary { label = "Export", onPress = Nothing }
                             |> Button.withSmallSize
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                         )
                     ]
                 ]
                 |> Toolbar.withItemCount "4 items"
                 |> Toolbar.withClearAll NoOp
-                |> Toolbar.toMarkup
+                |> Toolbar.toMarkup theme
             ]
 
         -- TABLE
@@ -125,7 +127,7 @@ view model =
                                 , Table.column
                                     { key = "status"
                                     , label = "Status"
-                                    , view = \u -> statusLabel u.status
+                                    , view = \u -> statusLabel theme u.status
                                     }
                                 , Table.column
                                     { key = "lastSeen"
@@ -155,7 +157,7 @@ view model =
                             Nothing ->
                                 baseTable
                   in
-                  sortedTable |> Table.toMarkup
+                  sortedTable |> Table.toMarkup theme
                 , Table.table
                     { columns =
                         [ Table.column
@@ -174,7 +176,7 @@ view model =
                     |> Table.withCompact
                     |> Table.withStriped
                     |> Table.withCaption "Compact striped"
-                    |> Table.toMarkup
+                    |> Table.toMarkup theme
                 ]
             ]
 
@@ -187,13 +189,51 @@ view model =
                         DataList.item
                             [ DataList.cell (Element.el [ Font.bold, Font.color (Theme.text theme) ] (Element.text u.name))
                             , DataList.cell (Element.el [ Font.color (Theme.textSubtle theme) ] (Element.text u.role))
-                            , DataList.cell (statusLabel u.status)
+                            , DataList.cell (statusLabel theme u.status)
                             ]
                             |> DataList.withCheckable (\_ -> DataListCheckToggled i)
                             |> DataList.withChecked (List.member i model.dataListChecked)
                     )
                     sampleUsers
                 )
-                |> DataList.toMarkup
+                |> DataList.toMarkup theme
+            ]
+
+        -- TREE VIEW
+        , section theme
+            "TreeView"
+            [ TreeView.treeView
+                [ TreeView.node "root1" "Root Node 1"
+                    |> (if List.member "root1" model.treeExpanded then TreeView.withExpanded else identity)
+                    |> TreeView.withOnToggle TreeToggle
+                    |> TreeView.withOnSelect TreeSelect
+                    |> TreeView.withChildren
+                        [ TreeView.node "child1" "Child 1"
+                            |> (if model.treeSelected == Just "child1" then TreeView.withSelected else identity)
+                            |> TreeView.withOnSelect TreeSelect
+                        , TreeView.node "child2" "Child 2"
+                            |> (if model.treeSelected == Just "child2" then TreeView.withSelected else identity)
+                            |> TreeView.withOnSelect TreeSelect
+                        ]
+                , TreeView.node "root2" "Root Node 2"
+                    |> (if List.member "root2" model.treeExpanded then TreeView.withExpanded else identity)
+                    |> TreeView.withOnToggle TreeToggle
+                    |> TreeView.withOnSelect TreeSelect
+                    |> (if model.treeSelected == Just "root2" then TreeView.withSelected else identity)
+                ]
+                |> TreeView.toMarkup theme
+            ]
+
+        -- DUAL LIST SELECTOR
+        , section theme
+            "DualListSelector"
+            [ DualListSelector.dualListSelector
+                |> DualListSelector.withAvailableItems model.dualAvailable
+                |> DualListSelector.withChosenItems model.dualChosen
+                |> DualListSelector.withOnAdd DualAdd
+                |> DualListSelector.withOnRemove DualRemove
+                |> DualListSelector.withOnAddAll DualAddAll
+                |> DualListSelector.withOnRemoveAll DualRemoveAll
+                |> DualListSelector.toMarkup theme
             ]
         ]

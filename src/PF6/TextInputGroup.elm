@@ -38,6 +38,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -113,8 +114,8 @@ withDisabled (TextInputGroup opts) =
 
 {-| Render the TextInputGroup as an `Element msg`
 -}
-toMarkup : TextInputGroup msg -> Element msg
-toMarkup (TextInputGroup opts) =
+toMarkup : Theme -> TextInputGroup msg -> Element msg
+toMarkup theme (TextInputGroup opts) =
     let
         labelEl =
             opts.label
@@ -122,7 +123,7 @@ toMarkup (TextInputGroup opts) =
                     (\l ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text l)
@@ -131,10 +132,10 @@ toMarkup (TextInputGroup opts) =
 
         bgColor =
             if opts.isDisabled then
-                Tokens.colorBackgroundSecondary
+                Theme.backgroundSecondary theme
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         prefixEl =
             opts.prefix
@@ -143,7 +144,7 @@ toMarkup (TextInputGroup opts) =
                         Element.el
                             [ Element.paddingXY Tokens.spacerSm 0
                             , Element.centerY
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Bg.color bgColor
                             ]
                             el
@@ -157,7 +158,7 @@ toMarkup (TextInputGroup opts) =
                         Element.el
                             [ Element.paddingXY Tokens.spacerSm 0
                             , Element.centerY
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Bg.color bgColor
                             ]
                             el
@@ -169,7 +170,7 @@ toMarkup (TextInputGroup opts) =
                 |> Maybe.map
                     (\p ->
                         Input.placeholder
-                            [ Font.color Tokens.colorTextSubtle ]
+                            [ Font.color (Theme.textSubtle theme) ]
                             (Element.text p)
                     )
 
@@ -193,7 +194,7 @@ toMarkup (TextInputGroup opts) =
                 , Border.rounded Tokens.radiusMd
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Bg.color bgColor
                 , Element.clip
                 ]

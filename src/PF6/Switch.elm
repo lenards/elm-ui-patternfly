@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -124,15 +125,15 @@ withReversed (Switch opts) =
     Switch { opts | isReversed = True }
 
 
-toggleEl : Options msg -> Element msg
-toggleEl opts =
+toggleEl : Theme -> Options msg -> Element msg
+toggleEl theme opts =
     let
         trackColor =
             if opts.isChecked then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorBorderDefault
+                Theme.borderDefault theme
 
         knobLeft =
             if opts.isChecked then
@@ -152,7 +153,7 @@ toggleEl opts =
                 (Element.el
                     [ Element.width (Element.px 16)
                     , Element.height (Element.px 16)
-                    , Bg.color Tokens.colorBackgroundDefault
+                    , Bg.color (Theme.backgroundDefault theme)
                     , Border.rounded 8
                     , knobLeft
                     ]
@@ -185,15 +186,15 @@ labelText opts =
 
 {-| Render the Switch as an `Element msg`
 -}
-toMarkup : Switch msg -> Element msg
-toMarkup (Switch opts) =
+toMarkup : Theme -> Switch msg -> Element msg
+toMarkup theme (Switch opts) =
     let
         textColor =
             if opts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         labelEl =
             if String.isEmpty opts.labelOn then
@@ -207,7 +208,7 @@ toMarkup (Switch opts) =
                     (Element.text (labelText opts))
 
         toggle =
-            toggleEl opts
+            toggleEl theme opts
     in
     Element.row
         [ Element.spacing Tokens.spacerSm ]

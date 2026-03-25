@@ -37,6 +37,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -110,14 +111,14 @@ withScrollable (Panel opts) =
 
 {-| Render the Panel as an `Element msg`
 -}
-toMarkup : Panel msg -> Element msg
-toMarkup (Panel opts) =
+toMarkup : Theme -> Panel msg -> Element msg
+toMarkup theme (Panel opts) =
     let
         borderAttrs =
             if opts.bordered then
                 [ Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
 
             else
@@ -151,7 +152,7 @@ toMarkup (Panel opts) =
                             [ Element.width Element.fill
                             , Element.padding Tokens.spacerMd
                             , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             el
                     )
@@ -174,7 +175,7 @@ toMarkup (Panel opts) =
                             [ Element.width Element.fill
                             , Element.padding Tokens.spacerMd
                             , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             el
                     )
@@ -182,7 +183,7 @@ toMarkup (Panel opts) =
     in
     Element.column
         ([ Element.width Element.fill
-         , Bg.color Tokens.colorBackgroundDefault
+         , Bg.color (Theme.backgroundDefault theme)
          , Border.rounded Tokens.radiusMd
          ]
             ++ borderAttrs

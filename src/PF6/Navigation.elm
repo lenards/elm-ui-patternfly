@@ -49,6 +49,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -130,22 +131,18 @@ withDark (Navigation opts) =
     Navigation { opts | isDark = True }
 
 
-renderNavItem : Options msg -> NavItem msg -> Element msg
-renderNavItem opts navItem_ =
+renderNavItem : Theme -> Options msg -> NavItem msg -> Element msg
+renderNavItem theme opts navItem_ =
     let
         textColor =
             if opts.isDark then
-                Tokens.colorTextOnDark
+                Theme.textOnDark theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         activeColor =
-            if opts.isDark then
-                Tokens.colorPrimary
-
-            else
-                Tokens.colorPrimary
+            Theme.primary theme
 
         isHorizontal =
             opts.orientation /= Vertical
@@ -186,30 +183,30 @@ renderNavItem opts navItem_ =
                 [ Element.el
                     [ Font.size Tokens.fontSizeSm
                     , Font.bold
-                    , Font.color Tokens.colorTextSubtle
+                    , Font.color (Theme.textSubtle theme)
                     , Element.paddingXY Tokens.spacerMd Tokens.spacerXs
                     ]
                     (Element.text (String.toUpper title))
                 , Element.column
                     [ Element.width Element.fill ]
-                    (List.map (renderNavItem opts) items)
+                    (List.map (renderNavItem theme opts) items)
                 ]
 
 
 {-| Render the Navigation as an `Element msg`
 -}
-toMarkup : Navigation msg -> Element msg
-toMarkup (Navigation opts) =
+toMarkup : Theme -> Navigation msg -> Element msg
+toMarkup theme (Navigation opts) =
     let
         bg =
             if opts.isDark then
                 Element.rgb255 21 21 21
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         itemEls =
-            List.map (renderNavItem opts) opts.items
+            List.map (renderNavItem theme opts) opts.items
     in
     case opts.orientation of
         Vertical ->
@@ -224,7 +221,7 @@ toMarkup (Navigation opts) =
                 [ Element.width Element.fill
                 , Bg.color bg
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
                 itemEls
 
@@ -234,6 +231,6 @@ toMarkup (Navigation opts) =
                 , Bg.color bg
                 , Element.scrollbarX
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
                 itemEls

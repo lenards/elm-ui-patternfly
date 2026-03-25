@@ -47,6 +47,7 @@ See: <https://www.patternfly.org/components/description-list>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -138,8 +139,8 @@ withTermWidth px (DescriptionList opts) =
     DescriptionList { opts | termWidth = Just px }
 
 
-renderGroup : Options msg -> DescriptionGroup msg -> Element msg
-renderGroup opts (DescriptionGroup g) =
+renderGroup : Theme -> Options msg -> DescriptionGroup msg -> Element msg
+renderGroup theme opts (DescriptionGroup g) =
     let
         spacing =
             if opts.isCompact then
@@ -152,7 +153,7 @@ renderGroup opts (DescriptionGroup g) =
             Element.el
                 [ Font.bold
                 , Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , case opts.termWidth of
                     Just w ->
                         Element.width (Element.px w)
@@ -171,7 +172,7 @@ renderGroup opts (DescriptionGroup g) =
                     (\d ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             ]
                             d
                     )
@@ -194,8 +195,8 @@ renderGroup opts (DescriptionGroup g) =
 
 {-| Render the DescriptionList as an `Element msg`
 -}
-toMarkup : DescriptionList msg -> Element msg
-toMarkup (DescriptionList opts) =
+toMarkup : Theme -> DescriptionList msg -> Element msg
+toMarkup theme (DescriptionList opts) =
     let
         outerSpacing =
             if opts.isCompact then
@@ -205,7 +206,7 @@ toMarkup (DescriptionList opts) =
                 Tokens.spacerMd
 
         groupEls =
-            List.map (renderGroup opts) opts.groups
+            List.map (renderGroup theme opts) opts.groups
     in
     case opts.columnCount of
         Just 2 ->

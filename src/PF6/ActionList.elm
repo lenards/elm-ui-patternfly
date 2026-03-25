@@ -40,6 +40,7 @@ See: <https://www.patternfly.org/components/action-list>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -110,8 +111,8 @@ withIcons15em (ActionList opts) =
 
 {-| Render the ActionList as an `Element msg`
 -}
-toMarkup : ActionList msg -> Element msg
-toMarkup (ActionList opts) =
+toMarkup : Theme -> ActionList msg -> Element msg
+toMarkup _ (ActionList opts) =
     let
         spacing =
             if opts.isIcons || opts.isIcons15em then

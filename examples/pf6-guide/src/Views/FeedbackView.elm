@@ -15,6 +15,7 @@ import PF6.ProgressStepper as ProgressStepper
 import PF6.Skeleton as Skeleton
 import PF6.Spinner as Spinner
 import PF6.Theme as Theme exposing (Theme)
+import PF6.Toast as Toast
 import PF6.Tokens as Tokens
 import Types exposing (Model, Msg(..))
 
@@ -50,30 +51,47 @@ view model =
         [ Element.el [ Font.size Tokens.fontSize2xl, Font.bold, Font.color (Theme.text theme) ]
             (Element.text "Feedback & Status")
 
+        -- TOAST
+        , section theme
+            "Toast"
+            [ Element.column [ Element.spacing Tokens.spacerSm ]
+                [ Button.primary { label = "Show toast", onPress = Just ToastShow } |> Button.toMarkup theme
+                , if model.toastVisible then
+                    Toast.toast "Your action completed successfully."
+                        |> Toast.withTitle "Success"
+                        |> Toast.withSuccess
+                        |> Toast.withCloseMsg ToastDismiss
+                        |> Toast.toMarkup theme
+
+                  else
+                    Element.none
+                ]
+            ]
+
         -- ALERT
         , section theme
             "Alert"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Alert.alert "Default alert — informational message."
                     |> Alert.withTitle "Default alert title"
-                    |> Alert.toMarkup
+                    |> Alert.toMarkup theme
                 , Alert.alert "You successfully completed the action."
                     |> Alert.withTitle "Success alert"
                     |> Alert.withSuccess
                     |> Alert.withCloseMsg AlertDismiss
-                    |> Alert.toMarkup
+                    |> Alert.toMarkup theme
                 , Alert.alert "Danger alert — something went wrong."
                     |> Alert.withTitle "Danger alert"
                     |> Alert.withDanger
-                    |> Alert.toMarkup
+                    |> Alert.toMarkup theme
                 , Alert.alert "Warning alert — proceed with caution."
                     |> Alert.withTitle "Warning alert"
                     |> Alert.withWarning
-                    |> Alert.toMarkup
+                    |> Alert.toMarkup theme
                 , Alert.alert "Info alert — additional context."
                     |> Alert.withTitle "Info alert"
                     |> Alert.withInfo
-                    |> Alert.toMarkup
+                    |> Alert.toMarkup theme
                 ]
             ]
 
@@ -82,20 +100,20 @@ view model =
             "Banner"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Banner.banner "Default banner — site-wide information."
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
                 , Banner.banner "Info banner — new features available."
                     |> Banner.withInfo
                     |> Banner.withLink { label = "Read more", href = "#" }
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
                 , Banner.banner "Success banner — deployment complete."
                     |> Banner.withSuccess
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
                 , Banner.banner "Warning banner — maintenance window approaching."
                     |> Banner.withWarning
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
                 , Banner.banner "Danger banner — critical system error."
                     |> Banner.withDanger
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
                 ]
             ]
 
@@ -105,19 +123,19 @@ view model =
             [ Element.wrappedRow [ Element.spacing Tokens.spacerLg ]
                 [ Element.column [ Element.spacing Tokens.spacerXs ]
                     [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Small")
-                    , Spinner.spinner |> Spinner.withSmallSize |> Spinner.toMarkup
+                    , Spinner.spinner |> Spinner.withSmallSize |> Spinner.toMarkup theme
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
                     [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Medium")
-                    , Spinner.spinner |> Spinner.toMarkup
+                    , Spinner.spinner |> Spinner.toMarkup theme
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
                     [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Large")
-                    , Spinner.spinner |> Spinner.withLargeSize |> Spinner.toMarkup
+                    , Spinner.spinner |> Spinner.withLargeSize |> Spinner.toMarkup theme
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs ]
                     [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "XL")
-                    , Spinner.spinner |> Spinner.withXLargeSize |> Spinner.toMarkup
+                    , Spinner.spinner |> Spinner.withXLargeSize |> Spinner.toMarkup theme
                     ]
                 ]
             ]
@@ -126,13 +144,13 @@ view model =
         , section theme
             "Skeleton"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
-                [ Skeleton.skeleton |> Skeleton.withWidth 100 |> Skeleton.toMarkup
-                , Skeleton.skeleton |> Skeleton.withWidth 75 |> Skeleton.toMarkup
-                , Skeleton.skeleton |> Skeleton.withWidth 50 |> Skeleton.toMarkup
-                , Skeleton.skeleton |> Skeleton.withWidth 25 |> Skeleton.toMarkup
+                [ Skeleton.skeleton |> Skeleton.withWidth 100 |> Skeleton.toMarkup theme
+                , Skeleton.skeleton |> Skeleton.withWidth 75 |> Skeleton.toMarkup theme
+                , Skeleton.skeleton |> Skeleton.withWidth 50 |> Skeleton.toMarkup theme
+                , Skeleton.skeleton |> Skeleton.withWidth 25 |> Skeleton.toMarkup theme
                 , Element.wrappedRow [ Element.spacing Tokens.spacerMd ]
-                    [ Skeleton.circleSkeleton |> Skeleton.toMarkup
-                    , Skeleton.skeleton |> Skeleton.withSquare |> Skeleton.withHeight 64 |> Skeleton.toMarkup
+                    [ Skeleton.circleSkeleton |> Skeleton.toMarkup theme
+                    , Skeleton.skeleton |> Skeleton.withSquare |> Skeleton.withHeight 64 |> Skeleton.toMarkup theme
                     ]
                 ]
             ]
@@ -143,23 +161,23 @@ view model =
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Progress.progress model.progressValue
                     |> Progress.withTitle "Default"
-                    |> Progress.toMarkup
+                    |> Progress.toMarkup theme
                 , Progress.progress 33
                     |> Progress.withTitle "Danger"
                     |> Progress.withDanger
-                    |> Progress.toMarkup
+                    |> Progress.toMarkup theme
                 , Progress.progress 66
                     |> Progress.withTitle "Warning"
                     |> Progress.withWarning
-                    |> Progress.toMarkup
+                    |> Progress.toMarkup theme
                 , Progress.progress 100
                     |> Progress.withTitle "Success"
                     |> Progress.withSuccess
-                    |> Progress.toMarkup
+                    |> Progress.toMarkup theme
                 , Progress.progress 50
                     |> Progress.withTitle "Small bar"
                     |> Progress.withSmallSize
-                    |> Progress.toMarkup
+                    |> Progress.toMarkup theme
                 ]
             ]
 
@@ -170,18 +188,18 @@ view model =
                 |> EmptyState.withIcon (Element.text "📭")
                 |> EmptyState.withTitleH2 "No results found"
                 |> EmptyState.withBody "Try adjusting your search or filter criteria to find what you are looking for."
-                |> EmptyState.toMarkup
+                |> EmptyState.toMarkup theme
             ]
 
         -- HELPER TEXT
         , section theme
             "HelperText"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
-                [ HelperText.helperText "This is default helper text." |> HelperText.toMarkup
-                , HelperText.helperText "This field is required." |> HelperText.withError |> HelperText.toMarkup
-                , HelperText.helperText "Check your input." |> HelperText.withWarning |> HelperText.toMarkup
-                , HelperText.helperText "Username is available." |> HelperText.withSuccess |> HelperText.toMarkup
-                , HelperText.helperText "Checking availability..." |> HelperText.withIndeterminate |> HelperText.toMarkup
+                [ HelperText.helperText "This is default helper text." |> HelperText.toMarkup theme
+                , HelperText.helperText "This field is required." |> HelperText.withError |> HelperText.toMarkup theme
+                , HelperText.helperText "Check your input." |> HelperText.withWarning |> HelperText.toMarkup theme
+                , HelperText.helperText "Username is available." |> HelperText.withSuccess |> HelperText.toMarkup theme
+                , HelperText.helperText "Checking availability..." |> HelperText.withIndeterminate |> HelperText.toMarkup theme
                 ]
             ]
 
@@ -190,19 +208,19 @@ view model =
             "Hint"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Hint.hint "Try searching for items by name or description to quickly find what you need."
-                    |> Hint.toMarkup
+                    |> Hint.toMarkup theme
                 , Hint.hint "You can filter results by selecting categories from the sidebar."
                     |> Hint.withTitle "Pro tip"
                     |> Hint.withActions
-                        (Button.link { label = "Learn more", onPress = Nothing } |> Button.toMarkup)
-                    |> Hint.toMarkup
+                        (Button.link { label = "Learn more", onPress = Nothing } |> Button.toMarkup theme)
+                    |> Hint.toMarkup theme
                 , Hint.hint "Your changes will be saved automatically as you edit."
                     |> Hint.withTitle "Auto-save enabled"
                     |> Hint.withFooter
                         (Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                             (Element.text "Last saved 2 minutes ago")
                         )
-                    |> Hint.toMarkup
+                    |> Hint.toMarkup theme
                 ]
             ]
 
@@ -216,7 +234,7 @@ view model =
                     , ProgressStepper.step "Review" |> ProgressStepper.withStepCurrent
                     , ProgressStepper.step "Deploy"
                     ]
-                    |> ProgressStepper.toMarkup
+                    |> ProgressStepper.toMarkup theme
                 , ProgressStepper.progressStepper
                     [ ProgressStepper.step "Create account"
                         |> ProgressStepper.withStepComplete
@@ -228,7 +246,7 @@ view model =
                         |> ProgressStepper.withStepDescription "Not started"
                     ]
                     |> ProgressStepper.withCompact
-                    |> ProgressStepper.toMarkup
+                    |> ProgressStepper.toMarkup theme
                 ]
             ]
         ]

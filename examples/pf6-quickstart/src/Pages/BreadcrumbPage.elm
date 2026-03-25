@@ -4,25 +4,26 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Breadcrumb as Breadcrumb
 import PF6.Card as Card
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : Element msg
-view =
+view : Theme -> Element msg
+view theme =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Breadcrumb" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Breadcrumb" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Breadcrumbs provide users with a sense of location within a hierarchy." ]
-        , exampleSection "Basic breadcrumb"
+        , exampleSection theme "Basic breadcrumb"
             (Breadcrumb.breadcrumb
                 [ Breadcrumb.item { label = "Home", href = "#" }
                 , Breadcrumb.item { label = "Components", href = "#" }
                 , Breadcrumb.currentItem "Breadcrumb"
                 ]
-                |> Breadcrumb.toMarkup
+                |> Breadcrumb.toMarkup theme
             )
-        , exampleSection "Long breadcrumb"
+        , exampleSection theme "Long breadcrumb"
             (Breadcrumb.breadcrumb
                 [ Breadcrumb.item { label = "Home", href = "#" }
                 , Breadcrumb.item { label = "Section", href = "#" }
@@ -30,13 +31,13 @@ view =
                 , Breadcrumb.item { label = "Category", href = "#" }
                 , Breadcrumb.currentItem "Current page"
                 ]
-                |> Breadcrumb.toMarkup
+                |> Breadcrumb.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

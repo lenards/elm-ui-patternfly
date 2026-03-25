@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -134,8 +135,8 @@ withFixed (Accordion opts) =
     Accordion { opts | isFixed = True }
 
 
-renderItem : Options msg -> AccordionItem msg -> Element msg
-renderItem opts (AccordionItem itemOpts) =
+renderItem : Theme -> Options msg -> AccordionItem msg -> Element msg
+renderItem theme opts (AccordionItem itemOpts) =
     let
         chevron =
             if itemOpts.isExpanded then
@@ -157,10 +158,10 @@ renderItem opts (AccordionItem itemOpts) =
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
                 , Bg.color
                     (if itemOpts.isExpanded then
-                        Tokens.colorBackgroundSecondary
+                        Theme.backgroundSecondary theme
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
                 ]
                 { onPress = Just (itemOpts.onToggle (not itemOpts.isExpanded))
@@ -170,13 +171,13 @@ renderItem opts (AccordionItem itemOpts) =
                         [ Element.el
                             [ Font.size titleSize
                             , Font.bold
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.width Element.fill
                             ]
                             (Element.text itemOpts.title)
                         , Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             (Element.text chevron)
                         ]
@@ -188,7 +189,7 @@ renderItem opts (AccordionItem itemOpts) =
                     [ Element.width Element.fill
                     , Element.padding Tokens.spacerMd
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     ]
                     itemOpts.body
 
@@ -199,13 +200,13 @@ renderItem opts (AccordionItem itemOpts) =
             if opts.isBordered then
                 [ Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Border.rounded Tokens.radiusMd
                 ]
 
             else
                 [ Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
     in
     Element.column
@@ -217,8 +218,8 @@ renderItem opts (AccordionItem itemOpts) =
 
 {-| Render the Accordion as an `Element msg`
 -}
-toMarkup : Accordion msg -> Element msg
-toMarkup (Accordion opts) =
+toMarkup : Theme -> Accordion msg -> Element msg
+toMarkup theme (Accordion opts) =
     let
         heightAttr =
             if opts.isFixed then
@@ -241,4 +242,4 @@ toMarkup (Accordion opts) =
          ]
             ++ heightAttr
         )
-        (List.map (renderItem opts) opts.items)
+        (List.map (renderItem theme opts) opts.items)

@@ -43,6 +43,7 @@ See: <https://www.patternfly.org/components/skeleton>
 import Element exposing (Element)
 import Html
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 
 
 {-| Opaque Skeleton type
@@ -136,8 +137,8 @@ withCircle (Skeleton opts) =
 
 {-| Render the Skeleton as an `Element msg`
 -}
-toMarkup : Skeleton -> Element msg
-toMarkup (Skeleton opts) =
+toMarkup : Theme -> Skeleton -> Element msg
+toMarkup _ (Skeleton opts) =
     let
         widthStyle =
             case opts.widthPx of

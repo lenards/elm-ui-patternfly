@@ -51,6 +51,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -88,13 +89,13 @@ type alias ColorPair =
     }
 
 
-colorPairFor : Color -> ColorPair
-colorPairFor color =
+colorPairFor : Theme -> Color -> ColorPair
+colorPairFor theme color =
     case color of
         Grey ->
-            { bg = Tokens.colorNeutral
-            , fg = Tokens.colorText
-            , border = Tokens.colorBorderDefault
+            { bg = Theme.neutral theme
+            , fg = Theme.text theme
+            , border = Theme.borderDefault theme
             }
 
         Blue ->
@@ -272,11 +273,11 @@ closeButton msg fg =
 
 {-| Render the Label as an `Element msg`
 -}
-toMarkup : Label msg -> Element msg
-toMarkup (Label opts) =
+toMarkup : Theme -> Label msg -> Element msg
+toMarkup theme (Label opts) =
     let
         colors =
-            colorPairFor opts.color
+            colorPairFor theme opts.color
 
         ( padding, fontSize ) =
             case opts.variant of

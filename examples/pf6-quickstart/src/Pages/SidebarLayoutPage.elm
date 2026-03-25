@@ -6,17 +6,18 @@ import Element.Border as Border
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.Sidebar as SidebarLayout
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : Element msg
-view =
+view : Theme -> Element msg
+view theme =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Sidebar" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Sidebar" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "The Sidebar layout creates a content area with a side panel, useful for navigation or filtering." ]
-        , exampleSection "Basic sidebar layout"
+        , exampleSection theme "Basic sidebar layout"
             (SidebarLayout.sidebar
                 { content =
                     Element.el
@@ -37,9 +38,9 @@ view =
                         ]
                         (Element.text "Side panel")
                 }
-                |> SidebarLayout.toMarkup
+                |> SidebarLayout.toMarkup theme
             )
-        , exampleSection "Panel on right with gutter"
+        , exampleSection theme "Panel on right with gutter"
             (SidebarLayout.sidebar
                 { content =
                     Element.el
@@ -62,13 +63,13 @@ view =
                 }
                 |> SidebarLayout.withPanelRight
                 |> SidebarLayout.withGutter
-                |> SidebarLayout.toMarkup
+                |> SidebarLayout.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

@@ -6,12 +6,13 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
-import PF6.Tokens as Tokens
+import PF6.Theme as Theme exposing (Theme)
 import Route exposing (Route(..))
 
 
 type alias Config msg =
     { route : Route
+    , theme : Theme
     , componentsExpanded : Bool
     , layoutsExpanded : Bool
     , onToggleComponents : msg
@@ -107,24 +108,24 @@ view config =
     Element.column
         [ Element.width (Element.px 250)
         , Element.height Element.fill
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault config.theme)
         , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault config.theme)
         , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
         , Element.scrollbarY
         ]
         [ homeItem config
-        , sectionHeader "Components" config.componentsExpanded config.onToggleComponents
+        , sectionHeader config.theme "Components" config.componentsExpanded config.onToggleComponents
         , if config.componentsExpanded then
             Element.column [ Element.width Element.fill ]
-                (List.map (navItem config.route config.onNavigate) componentRoutes)
+                (List.map (navItem config.theme config.route config.onNavigate) componentRoutes)
 
           else
             Element.none
-        , sectionHeader "Layouts" config.layoutsExpanded config.onToggleLayouts
+        , sectionHeader config.theme "Layouts" config.layoutsExpanded config.onToggleLayouts
         , if config.layoutsExpanded then
             Element.column [ Element.width Element.fill ]
-                (List.map (navItem config.route config.onNavigate) layoutRoutes)
+                (List.map (navItem config.theme config.route config.onNavigate) layoutRoutes)
 
           else
             Element.none
@@ -144,22 +145,22 @@ homeItem config =
         , Font.bold
         , Font.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary config.theme
 
              else
-                Tokens.colorText
+                Theme.text config.theme
             )
         , Bg.color
             (if isActive then
                 Element.rgb255 215 235 255
 
              else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault config.theme
             )
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
         , Border.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary config.theme
 
              else
                 Element.rgba 0 0 0 0
@@ -170,17 +171,17 @@ homeItem config =
         }
 
 
-sectionHeader : String -> Bool -> msg -> Element msg
-sectionHeader label isExpanded onToggle =
+sectionHeader : Theme -> String -> Bool -> msg -> Element msg
+sectionHeader theme label isExpanded onToggle =
     Input.button
         [ Element.width Element.fill
         , Element.paddingXY 16 10
         , Font.size 13
         , Font.bold
-        , Font.color Tokens.colorTextSubtle
-        , Bg.color (Element.rgb255 245 245 245)
+        , Font.color (Theme.textSubtle theme)
+        , Bg.color (Theme.backgroundSecondary theme)
         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         { onPress = Just onToggle
         , label =
@@ -197,8 +198,8 @@ sectionHeader label isExpanded onToggle =
         }
 
 
-navItem : Route -> (Route -> msg) -> ( Route, String ) -> Element msg
-navItem currentRoute onNavigate ( route, label ) =
+navItem : Theme -> Route -> (Route -> msg) -> ( Route, String ) -> Element msg
+navItem theme currentRoute onNavigate ( route, label ) =
     let
         isActive =
             currentRoute == route
@@ -209,22 +210,22 @@ navItem currentRoute onNavigate ( route, label ) =
         , Font.size 14
         , Font.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
-                Tokens.colorText
+                Theme.text theme
             )
         , Bg.color
             (if isActive then
                 Element.rgb255 215 235 255
 
              else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
             )
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
         , Border.color
             (if isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
                 Element.rgba 0 0 0 0

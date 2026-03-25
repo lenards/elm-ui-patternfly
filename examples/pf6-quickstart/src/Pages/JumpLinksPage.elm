@@ -4,26 +4,27 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.JumpLinks as JumpLinks
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : Element msg
-view =
+view : Theme -> Element msg
+view theme =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Jump Links" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Jump Links" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Jump links provide anchor navigation within a page, typically displayed as a table of contents." ]
-        , exampleSection "Horizontal jump links"
+        , exampleSection theme "Horizontal jump links"
             (JumpLinks.jumpLinks
                 [ JumpLinks.link "Overview" "#overview"
                 , JumpLinks.link "Getting started" "#getting-started"
                 , JumpLinks.link "Configuration" "#configuration"
                 , JumpLinks.link "Examples" "#examples"
                 ]
-                |> JumpLinks.toMarkup
+                |> JumpLinks.toMarkup theme
             )
-        , exampleSection "Vertical with label"
+        , exampleSection theme "Vertical with label"
             (JumpLinks.jumpLinks
                 [ JumpLinks.link "Section 1" "#section-1"
                 , JumpLinks.link "Section 2" "#section-2"
@@ -31,13 +32,13 @@ view =
                 ]
                 |> JumpLinks.withVertical
                 |> JumpLinks.withLabel "Table of contents"
-                |> JumpLinks.toMarkup
+                |> JumpLinks.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

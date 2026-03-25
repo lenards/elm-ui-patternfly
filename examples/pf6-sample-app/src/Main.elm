@@ -34,6 +34,7 @@ import PF6.Tile as Tile
 import PF6.Timestamp as Timestamp
 import PF6.Title as Title
 import PF6.ToggleGroup as ToggleGroup
+import PF6.Theme as Theme exposing (Mode(..), Theme)
 import PF6.Tokens as Tokens
 import PF6.Truncate as Truncate
 
@@ -68,6 +69,7 @@ type alias Model =
     , activeTab : String
     , settingsDescription : String
     , selectedTier : Maybe String
+    , themeMode : Mode
     }
 
 
@@ -94,6 +96,7 @@ init _ =
       , activeTab = "overview"
       , settingsDescription = ""
       , selectedTier = Nothing
+      , themeMode = Light
       }
     , Cmd.none
     )
@@ -115,6 +118,7 @@ type Msg
     | TabSelected String
     | DescriptionChanged String
     | TierSelected String
+    | ToggleTheme
 
 
 
@@ -157,17 +161,39 @@ update msg model =
         TierSelected tier ->
             ( { model | selectedTier = Just tier }, Cmd.none )
 
+        ToggleTheme ->
+            ( { model
+                | themeMode =
+                    case model.themeMode of
+                        Light ->
+                            Dark
+
+                        Dark ->
+                            Light
+              }
+            , Cmd.none
+            )
+
 
 
 -- VIEW
 
 
-mastheadView : Model -> Element Msg
-mastheadView model =
+mastheadView : Theme -> Model -> Element Msg
+mastheadView theme model =
+    let
+        toggleLabel =
+            case model.themeMode of
+                Light ->
+                    "Dark mode"
+
+                Dark ->
+                    "Light mode"
+    in
     Masthead.masthead
         |> Masthead.withBrand
             (Element.row [ Element.spacing Tokens.spacerSm ]
-                [ Element.el [ Font.bold, Font.size Tokens.fontSizeXl, Font.color Tokens.colorTextOnDark ]
+                [ Element.el [ Font.bold, Font.size Tokens.fontSizeXl, Font.color (Theme.textOnDark theme) ]
                     (Element.text "UserHub")
                 , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Element.rgb255 160 160 160) ]
                     (Element.text "Management Console")
@@ -175,21 +201,24 @@ mastheadView model =
             )
         |> Masthead.withToolbar
             (Element.row [ Element.spacing Tokens.spacerMd ]
-                [ NotificationBadge.notificationBadge { count = 3, onClick = ToggleNotifications }
+                [ Button.secondary { label = toggleLabel, onPress = Just ToggleTheme }
+                    |> Button.withSmallSize
+                    |> Button.toMarkup theme
+                , NotificationBadge.notificationBadge { count = 3, onClick = ToggleNotifications }
                     |> NotificationBadge.withExpanded model.notificationsExpanded
-                    |> NotificationBadge.toMarkup
+                    |> NotificationBadge.toMarkup theme
                 , Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = "User" }
                     |> Avatar.withSmallSize
                     |> Avatar.withBorder
-                    |> Avatar.toMarkup
+                    |> Avatar.toMarkup theme
                 ]
             )
         |> Masthead.withInset
-        |> Masthead.toMarkup
+        |> Masthead.toMarkup theme
 
 
-sidebarNav : Model -> Element Msg
-sidebarNav model =
+sidebarNav : Theme -> Model -> Element Msg
+sidebarNav theme model =
     let
         navItem page label =
             let
@@ -202,22 +231,22 @@ sidebarNav model =
                 , Font.size 14
                 , Font.color
                     (if isActive then
-                        Tokens.colorPrimary
+                        Theme.primary theme
 
                      else
-                        Tokens.colorText
+                        Theme.text theme
                     )
                 , Bg.color
                     (if isActive then
                         Element.rgb255 215 235 255
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
                 , Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
                 , Border.color
                     (if isActive then
-                        Tokens.colorPrimary
+                        Theme.primary theme
 
                      else
                         Element.rgba 0 0 0 0
@@ -230,11 +259,11 @@ sidebarNav model =
     Element.column
         [ Element.width (Element.px 200)
         , Element.height Element.fill
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        [ Element.el [ Element.padding Tokens.spacerMd, Font.bold, Font.size Tokens.fontSizeMd, Font.color Tokens.colorTextSubtle ]
+        [ Element.el [ Element.padding Tokens.spacerMd, Font.bold, Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
             (Element.text "NAVIGATION")
         , navItem Dashboard "Dashboard"
         , navItem Users "Users"
@@ -242,8 +271,8 @@ sidebarNav model =
         ]
 
 
-dashboardView : Model -> Element Msg
-dashboardView model =
+dashboardView : Theme -> Model -> Element Msg
+dashboardView theme model =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
@@ -253,17 +282,17 @@ dashboardView model =
             [ Breadcrumb.item { label = "Home", href = "#" }
             , Breadcrumb.currentItem "Dashboard"
             ]
-            |> Breadcrumb.toMarkup
+            |> Breadcrumb.toMarkup theme
 
         -- Title
-        , Title.title "Dashboard" |> Title.withH2 |> Title.toMarkup
+        , Title.title "Dashboard" |> Title.withH2 |> Title.toMarkup theme
 
         -- Stats cards
         , Element.wrappedRow [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
-            [ statCard "Total Users" "6" "Active accounts" Tokens.colorPrimary
-            , statCard "Active" "5" "Currently active" Tokens.colorSuccess
-            , statCard "Pending" "1" "Awaiting approval" Tokens.colorWarning
-            , statCard "Storage" "72%" "Used capacity" Tokens.colorInfo
+            [ statCard theme "Total Users" "6" "Active accounts" (Theme.primary theme)
+            , statCard theme "Active" "5" "Currently active" (Theme.success theme)
+            , statCard theme "Pending" "1" "Awaiting approval" (Theme.warning theme)
+            , statCard theme "Storage" "72%" "Used capacity" (Theme.info theme)
             ]
 
         -- Onboarding progress
@@ -281,56 +310,56 @@ dashboardView model =
                 , ProgressStepper.step "Go live"
                     |> ProgressStepper.withStepDescription "Not started"
                 ]
-                |> ProgressStepper.toMarkup
+                |> ProgressStepper.toMarkup theme
             ]
             |> Card.withTitle "Onboarding Progress"
-            |> Card.toMarkup
+            |> Card.toMarkup theme
 
         -- Hint
         , Hint.hint "You have 1 pending user invitation. Review and approve new users from the Users page."
             |> Hint.withTitle "Action needed"
             |> Hint.withActions
-                (Button.link { label = "Go to Users", onPress = Just (NavigateTo Users) } |> Button.toMarkup)
-            |> Hint.toMarkup
+                (Button.link { label = "Go to Users", onPress = Just (NavigateTo Users) } |> Button.toMarkup theme)
+            |> Hint.toMarkup theme
 
         -- Activity feed
         , Card.card
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
-                [ activityItem "Jane Smith" "updated user role to Admin" "2 hours ago"
-                , Divider.divider |> Divider.toMarkup
-                , activityItem "John Doe" "logged in" "5 hours ago"
-                , Divider.divider |> Divider.toMarkup
-                , activityItem "Carol Davis" "created new project" "1 day ago"
-                , Divider.divider |> Divider.toMarkup
-                , activityItem "David Brown" "account created (pending)" "2 days ago"
+                [ activityItem theme "Jane Smith" "updated user role to Admin" "2 hours ago"
+                , Divider.divider |> Divider.toMarkup theme
+                , activityItem theme "John Doe" "logged in" "5 hours ago"
+                , Divider.divider |> Divider.toMarkup theme
+                , activityItem theme "Carol Davis" "created new project" "1 day ago"
+                , Divider.divider |> Divider.toMarkup theme
+                , activityItem theme "David Brown" "account created (pending)" "2 days ago"
                 ]
             ]
             |> Card.withTitle "Recent Activity"
-            |> Card.toMarkup
+            |> Card.toMarkup theme
         ]
 
 
-statCard : String -> String -> String -> Element.Color -> Element Msg
-statCard title value subtitle color =
+statCard : Theme -> String -> String -> String -> Element.Color -> Element Msg
+statCard theme title value subtitle color =
     Card.card
         [ Element.column [ Element.spacing Tokens.spacerXs ]
             [ Element.el [ Font.size Tokens.fontSize3xl, Font.bold, Font.color color ]
                 (Element.text value)
-            , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ]
+            , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                 (Element.text subtitle)
             ]
         ]
         |> Card.withTitle title
         |> Card.withCompact
-        |> Card.toMarkup
+        |> Card.toMarkup theme
 
 
-activityItem : String -> String -> String -> Element Msg
-activityItem user action time =
+activityItem : Theme -> String -> String -> String -> Element Msg
+activityItem theme user action time =
     Element.row [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
         [ Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = user }
             |> Avatar.withSmallSize
-            |> Avatar.toMarkup
+            |> Avatar.toMarkup theme
         , Element.column [ Element.spacing 2, Element.width Element.fill ]
             [ Element.paragraph [ Font.size Tokens.fontSizeMd ]
                 [ Element.el [ Font.bold ] (Element.text user)
@@ -338,13 +367,13 @@ activityItem user action time =
                 ]
             , Timestamp.timestamp time
                 |> Timestamp.withIcon
-                |> Timestamp.toMarkup
+                |> Timestamp.toMarkup theme
             ]
         ]
 
 
-usersView : Model -> Element Msg
-usersView model =
+usersView : Theme -> Model -> Element Msg
+usersView theme model =
     let
         filteredUsers =
             if String.isEmpty model.searchValue then
@@ -364,13 +393,13 @@ usersView model =
             [ Breadcrumb.item { label = "Home", href = "#" }
             , Breadcrumb.currentItem "Users"
             ]
-            |> Breadcrumb.toMarkup
+            |> Breadcrumb.toMarkup theme
 
         -- Title + actions
         , Element.row [ Element.width Element.fill ]
-            [ Title.title "Users" |> Title.withH2 |> Title.toMarkup
+            [ Title.title "Users" |> Title.withH2 |> Title.toMarkup theme
             , Element.el [ Element.alignRight ]
-                (Button.primary { label = "+ Add User", onPress = Nothing } |> Button.toMarkup)
+                (Button.primary { label = "+ Add User", onPress = Nothing } |> Button.toMarkup theme)
             ]
 
         -- Toolbar
@@ -379,7 +408,7 @@ usersView model =
                 (SearchInput.searchInput { value = model.searchValue, onChange = SearchChanged }
                     |> SearchInput.withPlaceholder "Search users..."
                     |> SearchInput.withClearMsg (SearchChanged "")
-                    |> SearchInput.toMarkup
+                    |> SearchInput.toMarkup theme
                 )
             , ToggleGroup.toggleGroup
                 { items =
@@ -387,15 +416,15 @@ usersView model =
                     , ToggleGroup.toggleItem { label = "Cards", isSelected = model.viewMode == "cards", onToggle = ViewModeChanged "cards" }
                     ]
                 }
-                |> ToggleGroup.toMarkup
+                |> ToggleGroup.toMarkup theme
             ]
 
         -- User list
         , if model.viewMode == "cards" then
-            userCardsView filteredUsers model
+            userCardsView theme filteredUsers model
 
           else
-            userTableView filteredUsers model
+            userTableView theme filteredUsers model
 
         -- Pagination
         , Pagination.pagination
@@ -404,52 +433,52 @@ usersView model =
             }
             |> Pagination.withTotalItems (List.length sampleUsers)
             |> Pagination.withPerPage 10
-            |> Pagination.toMarkup
+            |> Pagination.toMarkup theme
         ]
 
 
-roleLabel : String -> Element Msg
-roleLabel role =
+roleLabel : Theme -> String -> Element Msg
+roleLabel theme role =
     case role of
         "Admin" ->
-            Label.label role |> Label.withRedColor |> Label.toMarkup
+            Label.label role |> Label.withRedColor |> Label.toMarkup theme
 
         "Editor" ->
-            Label.label role |> Label.withBlueColor |> Label.toMarkup
+            Label.label role |> Label.withBlueColor |> Label.toMarkup theme
 
         _ ->
-            Label.label role |> Label.toMarkup
+            Label.label role |> Label.toMarkup theme
 
 
-statusLabel : String -> Element Msg
-statusLabel status =
+statusLabel : Theme -> String -> Element Msg
+statusLabel theme status =
     case status of
         "Active" ->
-            Label.label status |> Label.withGreenColor |> Label.toMarkup
+            Label.label status |> Label.withGreenColor |> Label.toMarkup theme
 
         "Inactive" ->
-            Label.label status |> Label.toMarkup
+            Label.label status |> Label.toMarkup theme
 
         "Pending" ->
-            Label.label status |> Label.withGoldColor |> Label.toMarkup
+            Label.label status |> Label.withGoldColor |> Label.toMarkup theme
 
         _ ->
-            Label.label status |> Label.toMarkup
+            Label.label status |> Label.toMarkup theme
 
 
-userTableView : List User -> Model -> Element Msg
-userTableView users model =
+userTableView : Theme -> List User -> Model -> Element Msg
+userTableView theme users model =
     let
         headerRow =
             Element.row
                 [ Element.width Element.fill
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
-                , Bg.color Tokens.colorBackgroundSecondary
+                , Bg.color (Theme.backgroundSecondary theme)
                 , Font.bold
                 , Font.size Tokens.fontSizeSm
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 ]
                 [ Element.el [ Element.width (Element.fillPortion 3) ] (Element.text "NAME")
                 , Element.el [ Element.width (Element.fillPortion 2) ] (Element.text "ROLE")
@@ -470,10 +499,10 @@ userTableView users model =
                         Element.rgb255 215 235 255
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 , Font.size Tokens.fontSizeMd
                 ]
                 { onPress = Just (SelectUser user.name)
@@ -482,18 +511,18 @@ userTableView users model =
                         [ Element.row [ Element.width (Element.fillPortion 3), Element.spacing Tokens.spacerSm ]
                             [ Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = user.name }
                                 |> Avatar.withSmallSize
-                                |> Avatar.toMarkup
+                                |> Avatar.toMarkup theme
                             , Element.column [ Element.spacing 2 ]
                                 [ Element.el [ Font.bold ] (Element.text user.name)
                                 , Truncate.truncate user.email
                                     |> Truncate.withMaxChars 25
-                                    |> Truncate.toMarkup
+                                    |> Truncate.toMarkup theme
                                 ]
                             ]
-                        , Element.el [ Element.width (Element.fillPortion 2) ] (roleLabel user.role)
-                        , Element.el [ Element.width (Element.fillPortion 2) ] (statusLabel user.status)
+                        , Element.el [ Element.width (Element.fillPortion 2) ] (roleLabel theme user.role)
+                        , Element.el [ Element.width (Element.fillPortion 2) ] (statusLabel theme user.status)
                         , Element.el [ Element.width (Element.fillPortion 3) ]
-                            (Timestamp.timestamp user.lastLogin |> Timestamp.toMarkup)
+                            (Timestamp.timestamp user.lastLogin |> Timestamp.toMarkup theme)
                         ]
                 }
     in
@@ -502,11 +531,11 @@ userTableView users model =
             (headerRow :: List.map userRow users)
         )
         |> Panel.withBordered
-        |> Panel.toMarkup
+        |> Panel.toMarkup theme
 
 
-userCardsView : List User -> Model -> Element Msg
-userCardsView users model =
+userCardsView : Theme -> List User -> Model -> Element Msg
+userCardsView theme users model =
     Element.wrappedRow [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
         (List.map
             (\user ->
@@ -518,19 +547,19 @@ userCardsView users model =
                     [ Element.column [ Element.spacing Tokens.spacerSm ]
                         [ Element.row [ Element.spacing Tokens.spacerSm ]
                             [ Avatar.avatar { src = "https://www.patternfly.org/images/avatarImg.svg", alt = user.name }
-                                |> Avatar.toMarkup
+                                |> Avatar.toMarkup theme
                             , Element.column [ Element.spacing 2 ]
                                 [ Element.el [ Font.bold, Font.size Tokens.fontSizeMd ] (Element.text user.name)
-                                , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text user.email)
+                                , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text user.email)
                                 ]
                             ]
                         , Element.row [ Element.spacing Tokens.spacerSm ]
-                            [ roleLabel user.role
-                            , statusLabel user.status
+                            [ roleLabel theme user.role
+                            , statusLabel theme user.status
                             ]
                         , Timestamp.timestamp user.lastLogin
                             |> Timestamp.withIcon
-                            |> Timestamp.toMarkup
+                            |> Timestamp.toMarkup theme
                         ]
                     ]
                     |> Card.withCompact
@@ -541,14 +570,14 @@ userCardsView users model =
                             identity
                        )
                     |> Card.withSelectable
-                    |> Card.toMarkup
+                    |> Card.toMarkup theme
             )
             users
         )
 
 
-settingsView : Model -> Element Msg
-settingsView model =
+settingsView : Theme -> Model -> Element Msg
+settingsView theme model =
     Element.column
         [ Element.width Element.fill
         , Element.spacing Tokens.spacerLg
@@ -558,10 +587,10 @@ settingsView model =
             [ Breadcrumb.item { label = "Home", href = "#" }
             , Breadcrumb.currentItem "Settings"
             ]
-            |> Breadcrumb.toMarkup
+            |> Breadcrumb.toMarkup theme
 
         -- Title
-        , Title.title "Settings" |> Title.withH2 |> Title.toMarkup
+        , Title.title "Settings" |> Title.withH2 |> Title.toMarkup theme
 
         -- Tabs
         , Tabs.tabs
@@ -573,49 +602,49 @@ settingsView model =
                 , Tabs.tab "plan" "Plan"
                 ]
             }
-            |> Tabs.toMarkup
+            |> Tabs.toMarkup theme
 
         -- Tab content
         , case model.activeTab of
             "profile" ->
-                profileTabView model
+                profileTabView theme model
 
             "plan" ->
-                planTabView model
+                planTabView theme model
 
             _ ->
-                overviewTabView
+                overviewTabView theme
         ]
 
 
-overviewTabView : Element Msg
-overviewTabView =
+overviewTabView : Theme -> Element Msg
+overviewTabView theme =
     Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
         [ Card.card
             [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Element.row [ Element.spacing Tokens.spacerMd ]
-                    [ Element.el [ Font.color Tokens.colorTextSubtle ] (Element.text "Organization:")
+                    [ Element.el [ Font.color (Theme.textSubtle theme) ] (Element.text "Organization:")
                     , Element.el [ Font.bold ] (Element.text "Acme Corp")
                     ]
                 , Element.row [ Element.spacing Tokens.spacerMd ]
-                    [ Element.el [ Font.color Tokens.colorTextSubtle ] (Element.text "Plan:")
-                    , Label.label "Professional" |> Label.withBlueColor |> Label.toMarkup
+                    [ Element.el [ Font.color (Theme.textSubtle theme) ] (Element.text "Plan:")
+                    , Label.label "Professional" |> Label.withBlueColor |> Label.toMarkup theme
                     ]
                 , Element.row [ Element.spacing Tokens.spacerMd ]
-                    [ Element.el [ Font.color Tokens.colorTextSubtle ] (Element.text "Users:")
-                    , Badge.badge 6 |> Badge.toMarkup
+                    [ Element.el [ Font.color (Theme.textSubtle theme) ] (Element.text "Users:")
+                    , Badge.badge 6 |> Badge.toMarkup theme
                     , Element.text "of 25 seats"
                     ]
                 , Element.column [ Element.spacing Tokens.spacerXs, Element.width Element.fill ]
-                    [ Element.el [ Font.color Tokens.colorTextSubtle ] (Element.text "Storage usage:")
+                    [ Element.el [ Font.color (Theme.textSubtle theme) ] (Element.text "Storage usage:")
                     , Progress.progress 72
                         |> Progress.withTitle "72% used"
-                        |> Progress.toMarkup
+                        |> Progress.toMarkup theme
                     ]
                 ]
             ]
             |> Card.withTitle "Organization Overview"
-            |> Card.toMarkup
+            |> Card.toMarkup theme
 
         -- Alert
         , Alert.alert "Your trial period ends in 14 days. Upgrade to keep all features."
@@ -624,44 +653,44 @@ overviewTabView =
             |> Alert.withActions
                 (Button.primary { label = "Upgrade now", onPress = Nothing }
                     |> Button.withSmallSize
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 )
-            |> Alert.toMarkup
+            |> Alert.toMarkup theme
         ]
 
 
-profileTabView : Model -> Element Msg
-profileTabView model =
+profileTabView : Theme -> Model -> Element Msg
+profileTabView theme model =
     Card.card
         [ Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
             [ TextInput.textInput { value = "Acme Corp", onChange = \_ -> NoOp }
                 |> TextInput.withLabel "Organization name"
-                |> TextInput.toMarkup
+                |> TextInput.toMarkup theme
             , TextInput.textInput { value = "admin@acme.com", onChange = \_ -> NoOp }
                 |> TextInput.withLabel "Contact email"
                 |> TextInput.withEmailType
-                |> TextInput.toMarkup
+                |> TextInput.toMarkup theme
             , TextArea.textArea { value = model.settingsDescription, onChange = DescriptionChanged }
                 |> TextArea.withLabel "Description"
                 |> TextArea.withPlaceholder "Tell us about your organization..."
                 |> TextArea.withRows 4
-                |> TextArea.toMarkup
+                |> TextArea.toMarkup theme
             , Element.row [ Element.spacing Tokens.spacerSm ]
-                [ Button.primary { label = "Save changes", onPress = Nothing } |> Button.toMarkup
-                , Button.secondary { label = "Cancel", onPress = Nothing } |> Button.toMarkup
+                [ Button.primary { label = "Save changes", onPress = Nothing } |> Button.toMarkup theme
+                , Button.secondary { label = "Cancel", onPress = Nothing } |> Button.toMarkup theme
                 ]
             ]
         ]
         |> Card.withTitle "Organization Profile"
-        |> Card.toMarkup
+        |> Card.toMarkup theme
 
 
-planTabView : Model -> Element Msg
-planTabView model =
+planTabView : Theme -> Model -> Element Msg
+planTabView theme model =
     Element.column [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
         [ Hint.hint "Select a plan that fits your team. You can upgrade or downgrade at any time."
             |> Hint.withTitle "Choose your plan"
-            |> Hint.toMarkup
+            |> Hint.toMarkup theme
         , Element.wrappedRow [ Element.spacing Tokens.spacerMd ]
             [ Tile.tile { title = "Starter", onSelect = TierSelected "starter" }
                 |> (if model.selectedTier == Just "starter" then
@@ -672,7 +701,7 @@ planTabView model =
                    )
                 |> Tile.withIcon (Element.text "\u{1F31F}")
                 |> Tile.withStacked
-                |> Tile.toMarkup
+                |> Tile.toMarkup theme
             , Tile.tile { title = "Professional", onSelect = TierSelected "pro" }
                 |> (if model.selectedTier == Just "pro" || model.selectedTier == Nothing then
                         Tile.withSelected
@@ -682,7 +711,7 @@ planTabView model =
                    )
                 |> Tile.withIcon (Element.text "\u{1F680}")
                 |> Tile.withStacked
-                |> Tile.toMarkup
+                |> Tile.toMarkup theme
             , Tile.tile { title = "Enterprise", onSelect = TierSelected "enterprise" }
                 |> (if model.selectedTier == Just "enterprise" then
                         Tile.withSelected
@@ -692,20 +721,20 @@ planTabView model =
                    )
                 |> Tile.withIcon (Element.text "\u{1F3E2}")
                 |> Tile.withStacked
-                |> Tile.toMarkup
+                |> Tile.toMarkup theme
             ]
-        , Button.primary { label = "Update plan", onPress = Nothing } |> Button.toMarkup
+        , Button.primary { label = "Update plan", onPress = Nothing } |> Button.toMarkup theme
         ]
 
 
-mainContent : Model -> Element Msg
-mainContent model =
+mainContent : Theme -> Model -> Element Msg
+mainContent theme model =
     let
         bannerEl =
             if model.bannerVisible then
                 Banner.banner "Welcome to UserHub! Your account is set up and ready to go."
                     |> Banner.withSuccess
-                    |> Banner.toMarkup
+                    |> Banner.toMarkup theme
 
             else
                 Element.none
@@ -713,13 +742,13 @@ mainContent model =
         pageContent =
             case model.page of
                 Dashboard ->
-                    dashboardView model
+                    dashboardView theme model
 
                 Users ->
-                    usersView model
+                    usersView theme model
 
                 Settings ->
-                    settingsView model
+                    settingsView theme model
     in
     Element.column
         [ Element.width Element.fill
@@ -731,7 +760,7 @@ mainContent model =
             [ Element.width Element.fill
             , Element.height Element.fill
             , Element.scrollbarY
-            , Bg.color Tokens.colorBackgroundSecondary
+            , Bg.color (Theme.backgroundSecondary theme)
             , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
             ]
             (Element.el
@@ -747,6 +776,10 @@ mainContent model =
 
 view : Model -> Browser.Document Msg
 view model =
+    let
+        theme =
+            Theme.fromMode model.themeMode
+    in
     { title = "UserHub — Management Console"
     , body =
         [ Element.layout
@@ -757,14 +790,14 @@ view model =
                 [ Element.width Element.fill
                 , Element.height Element.fill
                 ]
-                [ mastheadView model
+                [ mastheadView theme model
                 , Element.row
                     [ Element.width Element.fill
                     , Element.height Element.fill
                     , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                     ]
-                    [ sidebarNav model
-                    , mainContent model
+                    [ sidebarNav theme model
+                    , mainContent theme model
                     ]
                 ]
             )

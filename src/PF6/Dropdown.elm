@@ -51,6 +51,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -185,23 +186,23 @@ withUp (Dropdown opts) =
     Dropdown { opts | isUp = True }
 
 
-toggleEl : Options msg -> Element msg
-toggleEl opts =
+toggleEl : Theme -> Options msg -> Element msg
+toggleEl theme opts =
     let
         toggleAttrs =
             if opts.isPlain then
-                [ Font.color Tokens.colorText
+                [ Font.color (Theme.text theme)
                 , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
                 ]
 
             else
-                [ Font.color Tokens.colorText
+                [ Font.color (Theme.text theme)
                 , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Border.rounded Tokens.radiusMd
-                , Bg.color Tokens.colorBackgroundDefault
+                , Bg.color (Theme.backgroundDefault theme)
                 ]
 
         chevron =
@@ -238,8 +239,8 @@ toggleEl opts =
         }
 
 
-renderDropdownItem : DropdownItem msg -> Element msg
-renderDropdownItem di =
+renderDropdownItem : Theme -> DropdownItem msg -> Element msg
+renderDropdownItem theme di =
     case di of
         ActionItem { label, icon, onClick, isDisabled } ->
             Input.button
@@ -248,12 +249,12 @@ renderDropdownItem di =
                 , Font.size Tokens.fontSizeMd
                 , Font.color
                     (if isDisabled then
-                        Tokens.colorTextSubtle
+                        Theme.textSubtle theme
 
                      else
-                        Tokens.colorText
+                        Theme.text theme
                     )
-                , Element.mouseOver [ Bg.color Tokens.colorBackgroundSecondary ]
+                , Element.mouseOver [ Bg.color (Theme.backgroundSecondary theme) ]
                 ]
                 { onPress =
                     if isDisabled then
@@ -275,7 +276,7 @@ renderDropdownItem di =
             Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px 1)
-                , Bg.color Tokens.colorBorderDefault
+                , Bg.color (Theme.borderDefault theme)
                 , Element.paddingXY 0 0
                 ]
                 Element.none
@@ -286,30 +287,30 @@ renderDropdownItem di =
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerXs
                 , Font.size Tokens.fontSizeSm
                 , Font.bold
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 (Element.text (String.toUpper label))
 
 
-menuEl : Options msg -> Element msg
-menuEl opts =
+menuEl : Theme -> Options msg -> Element msg
+menuEl theme opts =
     Element.column
         [ Element.width (Element.minimum 180 Element.fill)
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         , Border.rounded Tokens.radiusMd
         , Element.htmlAttribute (Html.Attributes.style "box-shadow" "0 0.25rem 0.5rem rgba(3,3,3,0.12)")
         , Element.htmlAttribute (Html.Attributes.style "z-index" "200")
         ]
-        (List.map renderDropdownItem opts.items)
+        (List.map (renderDropdownItem theme) opts.items)
 
 
 {-| Render the Dropdown as an `Element msg`
 -}
-toMarkup : Dropdown msg -> Element msg
-toMarkup (Dropdown opts) =
+toMarkup : Theme -> Dropdown msg -> Element msg
+toMarkup theme (Dropdown opts) =
     let
         above =
             opts.isUp && opts.isOpen
@@ -319,14 +320,14 @@ toMarkup (Dropdown opts) =
 
         menuAttrs =
             if above then
-                [ Element.above (menuEl opts) ]
+                [ Element.above (menuEl theme opts) ]
 
             else if below then
-                [ Element.below (menuEl opts) ]
+                [ Element.below (menuEl theme opts) ]
 
             else
                 []
     in
     Element.el
         menuAttrs
-        (toggleEl opts)
+        (toggleEl theme opts)

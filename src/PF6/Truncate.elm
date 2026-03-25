@@ -36,6 +36,7 @@ See: <https://www.patternfly.org/components/truncate>
 import Element exposing (Element)
 import Element.Font as Font
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -118,8 +119,8 @@ truncateText opts =
 
 {-| Render the Truncate as an `Element msg`
 -}
-toMarkup : Truncate msg -> Element msg
-toMarkup (Truncate opts) =
+toMarkup : Theme -> Truncate msg -> Element msg
+toMarkup theme (Truncate opts) =
     let
         displayText =
             truncateText opts
@@ -136,7 +137,7 @@ toMarkup (Truncate opts) =
     in
     Element.el
         ([ Font.size Tokens.fontSizeMd
-         , Font.color Tokens.colorText
+         , Font.color (Theme.text theme)
          ]
             ++ tooltipAttr
         )

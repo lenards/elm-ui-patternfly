@@ -51,6 +51,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -185,20 +186,20 @@ withWarning (Select opts) =
     Select { opts | validation = ValidationWarning }
 
 
-borderColor : ValidationStatus -> Element.Color
-borderColor v =
+borderColor : Theme -> ValidationStatus -> Element.Color
+borderColor theme v =
     case v of
         NoValidation ->
-            Tokens.colorBorderDefault
+            Theme.borderDefault theme
 
         ValidationSuccess ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         ValidationDanger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         ValidationWarning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
 
 displayLabel : Options msg -> String
@@ -237,8 +238,8 @@ flattenOptions opt =
             List.concatMap flattenOptions options
 
 
-renderOption : Options msg -> SelectOption msg -> List (Element msg)
-renderOption opts selectOpt =
+renderOption : Theme -> Options msg -> SelectOption msg -> List (Element msg)
+renderOption theme opts selectOpt =
     case selectOpt of
         Option { value, label, isDisabled } ->
             let
@@ -251,19 +252,19 @@ renderOption opts selectOpt =
                 , Font.size Tokens.fontSizeMd
                 , Font.color
                     (if isDisabled then
-                        Tokens.colorTextSubtle
+                        Theme.textSubtle theme
 
                      else
-                        Tokens.colorText
+                        Theme.text theme
                     )
                 , Bg.color
                     (if isSelected then
                         Element.rgb255 215 235 255
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
-                , Element.mouseOver [ Bg.color Tokens.colorBackgroundSecondary ]
+                , Element.mouseOver [ Bg.color (Theme.backgroundSecondary theme) ]
                 ]
                 { onPress =
                     if isDisabled then
@@ -274,7 +275,7 @@ renderOption opts selectOpt =
                 , label =
                     Element.row [ Element.spacing Tokens.spacerSm ]
                         [ if isSelected then
-                            Element.el [ Font.color Tokens.colorPrimary ] (Element.text "✓")
+                            Element.el [ Font.color (Theme.primary theme) ] (Element.text "✓")
 
                           else
                             Element.el [ Element.width (Element.px 16) ] Element.none
@@ -289,19 +290,19 @@ renderOption opts selectOpt =
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerXs
                 , Font.size Tokens.fontSizeSm
                 , Font.bold
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 (Element.text (String.toUpper groupLabel))
-                :: List.concatMap (renderOption opts) options
+                :: List.concatMap (renderOption theme opts) options
 
 
 {-| Render the Select as an `Element msg`
 -}
-toMarkup : Select msg -> Element msg
-toMarkup (Select opts) =
+toMarkup : Theme -> Select msg -> Element msg
+toMarkup theme (Select opts) =
     let
         bc =
-            borderColor opts.validation
+            borderColor theme opts.validation
 
         labelEl =
             opts.label
@@ -310,7 +311,7 @@ toMarkup (Select opts) =
                         Element.el
                             [ Font.size Tokens.fontSizeMd
                             , Font.bold
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text l)
@@ -327,10 +328,10 @@ toMarkup (Select opts) =
                 , Border.color bc
                 , Bg.color
                     (if opts.isDisabled then
-                        Tokens.colorBackgroundSecondary
+                        Theme.backgroundSecondary theme
 
                      else
-                        Tokens.colorBackgroundDefault
+                        Theme.backgroundDefault theme
                     )
                 ]
                 { onPress =
@@ -347,16 +348,16 @@ toMarkup (Select opts) =
                             , Font.size Tokens.fontSizeMd
                             , Font.color
                                 (if opts.selected == Nothing then
-                                    Tokens.colorTextSubtle
+                                    Theme.textSubtle theme
 
                                  else
-                                    Tokens.colorText
+                                    Theme.text theme
                                 )
                             ]
                             (Element.text (displayLabel opts))
                         , Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             (Element.text
                                 (if opts.isOpen then
@@ -373,17 +374,17 @@ toMarkup (Select opts) =
             if opts.isOpen then
                 Element.column
                     [ Element.width Element.fill
-                    , Bg.color Tokens.colorBackgroundDefault
+                    , Bg.color (Theme.backgroundDefault theme)
                     , Border.solid
                     , Border.width 1
-                    , Border.color Tokens.colorBorderDefault
+                    , Border.color (Theme.borderDefault theme)
                     , Border.rounded Tokens.radiusMd
                     , Element.htmlAttribute (Html.Attributes.style "box-shadow" "0 0.25rem 0.5rem rgba(3,3,3,0.12)")
                     , Element.htmlAttribute (Html.Attributes.style "z-index" "200")
                     , Element.htmlAttribute (Html.Attributes.style "max-height" "300px")
                     , Element.htmlAttribute (Html.Attributes.style "overflow-y" "auto")
                     ]
-                    (List.concatMap (renderOption opts) opts.options)
+                    (List.concatMap (renderOption theme opts) opts.options)
 
             else
                 Element.none
@@ -394,7 +395,7 @@ toMarkup (Select opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                             ]
                             (Element.text t)

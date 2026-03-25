@@ -40,6 +40,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -86,11 +87,11 @@ withBottomOffset offset (BackToTop opts) =
 
 {-| Render the BackToTop as an `Element msg`
 -}
-toMarkup : BackToTop msg -> Element msg
-toMarkup (BackToTop opts) =
+toMarkup : Theme -> BackToTop msg -> Element msg
+toMarkup theme (BackToTop opts) =
     Input.button
-        [ Bg.color Tokens.colorPrimary
-        , Font.color Tokens.colorTextOnDark
+        [ Bg.color (Theme.primary theme)
+        , Font.color (Theme.textOnDark theme)
         , Font.size Tokens.fontSizeMd
         , Element.padding Tokens.spacerSm
         , Border.rounded Tokens.radiusPill

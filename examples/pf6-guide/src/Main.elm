@@ -52,6 +52,27 @@ init _ =
       , textInputGroupValue = ""
       , backdropVisible = False
       , themeMode = Light
+      , toastVisible = False
+      , datePickerYear = 2026
+      , datePickerMonth = 3
+      , datePickerSelected = Nothing
+      , treeExpanded = []
+      , treeSelected = Nothing
+      , dualAvailable =
+            [ { id = "a", label = "Option Alpha" }
+            , { id = "b", label = "Option Beta" }
+            , { id = "c", label = "Option Gamma" }
+            , { id = "d", label = "Option Delta" }
+            , { id = "e", label = "Option Epsilon" }
+            ]
+      , dualChosen = []
+      , uploadFileName = Nothing
+      , uploadDragOver = False
+      , inlineValue = "Click the pencil to edit this text"
+      , inlineEditing = False
+      , loginUsername = ""
+      , loginPassword = ""
+      , loginShowPassword = False
       }
     , Cmd.none
     )
@@ -233,6 +254,122 @@ update msg model =
               }
             , Cmd.none
             )
+
+        ToastShow ->
+            ( { model | toastVisible = True }, Cmd.none )
+
+        ToastDismiss ->
+            ( { model | toastVisible = False }, Cmd.none )
+
+        DatePickerPrev ->
+            let
+                ( newYear, newMonth ) =
+                    if model.datePickerMonth == 1 then
+                        ( model.datePickerYear - 1, 12 )
+
+                    else
+                        ( model.datePickerYear, model.datePickerMonth - 1 )
+            in
+            ( { model | datePickerYear = newYear, datePickerMonth = newMonth }, Cmd.none )
+
+        DatePickerNext ->
+            let
+                ( newYear, newMonth ) =
+                    if model.datePickerMonth == 12 then
+                        ( model.datePickerYear + 1, 1 )
+
+                    else
+                        ( model.datePickerYear, model.datePickerMonth + 1 )
+            in
+            ( { model | datePickerYear = newYear, datePickerMonth = newMonth }, Cmd.none )
+
+        DatePickerSelect date ->
+            ( { model | datePickerSelected = Just date }, Cmd.none )
+
+        TreeToggle id ->
+            ( { model
+                | treeExpanded =
+                    if List.member id model.treeExpanded then
+                        List.filter (\x -> x /= id) model.treeExpanded
+
+                    else
+                        id :: model.treeExpanded
+              }
+            , Cmd.none
+            )
+
+        TreeSelect id ->
+            ( { model | treeSelected = Just id }, Cmd.none )
+
+        DualAdd id ->
+            let
+                item =
+                    List.filter (\i -> i.id == id) model.dualAvailable
+            in
+            ( { model
+                | dualAvailable = List.filter (\i -> i.id /= id) model.dualAvailable
+                , dualChosen = model.dualChosen ++ item
+              }
+            , Cmd.none
+            )
+
+        DualRemove id ->
+            let
+                item =
+                    List.filter (\i -> i.id == id) model.dualChosen
+            in
+            ( { model
+                | dualChosen = List.filter (\i -> i.id /= id) model.dualChosen
+                , dualAvailable = model.dualAvailable ++ item
+              }
+            , Cmd.none
+            )
+
+        DualAddAll ->
+            ( { model
+                | dualChosen = model.dualChosen ++ model.dualAvailable
+                , dualAvailable = []
+              }
+            , Cmd.none
+            )
+
+        DualRemoveAll ->
+            ( { model
+                | dualAvailable = model.dualAvailable ++ model.dualChosen
+                , dualChosen = []
+              }
+            , Cmd.none
+            )
+
+        UploadDragOver dragging ->
+            ( { model | uploadDragOver = dragging }, Cmd.none )
+
+        UploadClear ->
+            ( { model | uploadFileName = Nothing }, Cmd.none )
+
+        InlineEditStart ->
+            ( { model | inlineEditing = True }, Cmd.none )
+
+        InlineEditChange val ->
+            ( { model | inlineValue = val }, Cmd.none )
+
+        InlineEditSave ->
+            ( { model | inlineEditing = False }, Cmd.none )
+
+        InlineEditCancel ->
+            ( { model | inlineEditing = False }, Cmd.none )
+
+        LoginUsernameChanged val ->
+            ( { model | loginUsername = val }, Cmd.none )
+
+        LoginPasswordChanged val ->
+            ( { model | loginPassword = val }, Cmd.none )
+
+        LoginShowPasswordToggled ->
+            ( { model | loginShowPassword = not model.loginShowPassword }, Cmd.none )
+
+        LoginSubmit ->
+            ( model, Cmd.none )
 
 
 view : Model -> Browser.Document Msg

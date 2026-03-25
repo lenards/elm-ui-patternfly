@@ -41,6 +41,7 @@ See: <https://www.patternfly.org/components/helper-text>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -152,30 +153,30 @@ withDynamic =
     applyToLast (\(HelperItem i) -> HelperItem { i | isDynamic = True })
 
 
-variantColor : Variant -> Element.Color
-variantColor variant =
+variantColor : Theme -> Variant -> Element.Color
+variantColor theme variant =
     case variant of
         Default ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
         Error ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Indeterminate ->
-            Tokens.colorInfo
+            Theme.info theme
 
 
-renderItem : HelperItem msg -> Element msg
-renderItem (HelperItem i) =
+renderItem : Theme -> HelperItem msg -> Element msg
+renderItem theme (HelperItem i) =
     let
         color =
-            variantColor i.variant
+            variantColor theme i.variant
 
         iconEl =
             i.icon
@@ -201,8 +202,8 @@ renderItem (HelperItem i) =
 
 {-| Render the HelperText as an `Element msg`
 -}
-toMarkup : HelperText msg -> Element msg
-toMarkup (HelperText opts) =
+toMarkup : Theme -> HelperText msg -> Element msg
+toMarkup theme (HelperText opts) =
     Element.column
         [ Element.spacing Tokens.spacerXs ]
-        (List.map renderItem opts.items)
+        (List.map (renderItem theme) opts.items)

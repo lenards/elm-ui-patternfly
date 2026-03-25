@@ -4,21 +4,24 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.ExpandableSection as ExpandableSection
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
 view :
-    { expanded : Bool
-    , onToggle : Bool -> msg
-    }
+    Theme
+    ->
+        { expanded : Bool
+        , onToggle : Bool -> msg
+        }
     -> Element msg
-view config =
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Expandable Section" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Expandable Section" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Expandable sections toggle the visibility of content." ]
-        , exampleSection "Basic expandable section"
+        , exampleSection theme "Basic expandable section"
             (ExpandableSection.expandableSection
                 { isExpanded = config.expanded
                 , onToggle = config.onToggle
@@ -28,17 +31,17 @@ view config =
                 }
                 |> ExpandableSection.withToggleText "Show more"
                 |> ExpandableSection.withToggleTextCollapsed "Show less"
-                |> ExpandableSection.toMarkup
+                |> ExpandableSection.toMarkup theme
             )
-        , exampleSection "Usage note"
-            (Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        , exampleSection theme "Usage note"
+            (Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
                 [ Element.text "Expandable sections are useful for progressive disclosure of content, keeping the interface clean while allowing access to additional details." ]
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

@@ -52,7 +52,7 @@ view model =
                 , Breadcrumb.item { label = "Subsection", href = "#" }
                 , Breadcrumb.currentItem "Current page"
                 ]
-                |> Breadcrumb.toMarkup
+                |> Breadcrumb.toMarkup theme
             ]
 
         -- TABS
@@ -68,7 +68,7 @@ view model =
                         , Tabs.tab "tab3" "Database"
                         ]
                     }
-                    |> Tabs.toMarkup
+                    |> Tabs.toMarkup theme
                 , Tabs.tabs
                     { activeKey = model.activeBoxTab
                     , onSelect = BoxTabSelected
@@ -79,7 +79,7 @@ view model =
                         ]
                     }
                     |> Tabs.withBox
-                    |> Tabs.toMarkup
+                    |> Tabs.toMarkup theme
                 ]
             ]
 
@@ -92,21 +92,21 @@ view model =
                     , onPageChange = \_ -> NoOp
                     }
                     |> Pagination.withTotalItems 100
-                    |> Pagination.toMarkup
+                    |> Pagination.toMarkup theme
                 , Pagination.pagination
                     { page = 5
                     , onPageChange = \_ -> NoOp
                     }
                     |> Pagination.withTotalItems 200
                     |> Pagination.withPerPage 10
-                    |> Pagination.toMarkup
+                    |> Pagination.toMarkup theme
                 , Pagination.pagination
                     { page = 10
                     , onPageChange = \_ -> NoOp
                     }
                     |> Pagination.withTotalItems 100
                     |> Pagination.withCompact
-                    |> Pagination.toMarkup
+                    |> Pagination.toMarkup theme
                 ]
             ]
         ]

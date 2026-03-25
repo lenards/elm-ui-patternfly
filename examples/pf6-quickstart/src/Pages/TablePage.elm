@@ -4,6 +4,7 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.Table as Table
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
@@ -25,13 +26,13 @@ sampleData =
     ]
 
 
-view : Element msg
-view =
+view : Theme -> Element msg
+view theme =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Table" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Table" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Tables organize and display data efficiently in rows and columns." ]
-        , exampleSection "Basic table"
+        , exampleSection theme "Basic table"
             (Table.table
                 { columns =
                     [ Table.column { key = "name", label = "Name", view = \p -> Element.text p.name }
@@ -40,9 +41,9 @@ view =
                     ]
                 , rows = sampleData
                 }
-                |> Table.toMarkup
+                |> Table.toMarkup theme
             )
-        , exampleSection "Striped table"
+        , exampleSection theme "Striped table"
             (Table.table
                 { columns =
                     [ Table.column { key = "name", label = "Name", view = \p -> Element.text p.name }
@@ -52,9 +53,9 @@ view =
                 , rows = sampleData
                 }
                 |> Table.withStriped
-                |> Table.toMarkup
+                |> Table.toMarkup theme
             )
-        , exampleSection "Compact bordered table"
+        , exampleSection theme "Compact bordered table"
             (Table.table
                 { columns =
                     [ Table.column { key = "name", label = "Name", view = \p -> Element.text p.name }
@@ -65,13 +66,13 @@ view =
                 }
                 |> Table.withCompact
                 |> Table.withBordered
-                |> Table.toMarkup
+                |> Table.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

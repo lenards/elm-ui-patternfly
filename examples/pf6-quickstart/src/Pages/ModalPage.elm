@@ -5,19 +5,20 @@ import Element.Font as Font
 import PF6.Button as Button
 import PF6.Card as Card
 import PF6.Modal as Modal
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : { modalOpen : Bool, onOpen : msg, onClose : msg } -> Element msg
-view config =
+view : Theme -> { modalOpen : Bool, onOpen : msg, onClose : msg } -> Element msg
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Modal" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Modal" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Modals present information in an overlay above the main page content." ]
-        , exampleSection "Basic modal"
+        , exampleSection theme "Basic modal"
             (Element.column [ Element.spacing 16 ]
-                [ Button.primary { label = "Open modal", onPress = Just config.onOpen } |> Button.toMarkup
+                [ Button.primary { label = "Open modal", onPress = Just config.onOpen } |> Button.toMarkup theme
                 , if config.modalOpen then
                     Modal.modal
                         |> Modal.withTitle "Example modal"
@@ -27,26 +28,26 @@ view config =
                             )
                         |> Modal.withFooter
                             (Element.row [ Element.spacing 8 ]
-                                [ Button.primary { label = "Confirm", onPress = Just config.onClose } |> Button.toMarkup
-                                , Button.link { label = "Cancel", onPress = Just config.onClose } |> Button.toMarkup
+                                [ Button.primary { label = "Confirm", onPress = Just config.onClose } |> Button.toMarkup theme
+                                , Button.link { label = "Cancel", onPress = Just config.onClose } |> Button.toMarkup theme
                                 ]
                             )
                         |> Modal.withCloseMsg config.onClose
-                        |> Modal.toMarkup
+                        |> Modal.toMarkup theme
 
                   else
                     Element.none
                 ]
             )
-        , exampleSection "Modal sizes"
-            (Element.paragraph [ Font.size 14, Font.color Tokens.colorTextSubtle ]
+        , exampleSection theme "Modal sizes"
+            (Element.paragraph [ Font.size 14, Font.color (Theme.textSubtle theme) ]
                 [ Element.text "Modals support small, medium, and large sizes via withSmallSize, withMediumSize, and withLargeSize." ]
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

@@ -45,6 +45,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Html
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -124,8 +125,8 @@ withMaxWidth px (Tooltip opts) =
     Tooltip { opts | maxWidth = px }
 
 
-tooltipBubble : Options msg -> Element msg
-tooltipBubble opts =
+tooltipBubble : Theme -> Options msg -> Element msg
+tooltipBubble theme opts =
     let
         spacing =
             case opts.position of
@@ -143,7 +144,7 @@ tooltipBubble opts =
     in
     Element.el
         [ Bg.color (Element.rgb255 21 21 21)
-        , Font.color Tokens.colorTextOnDark
+        , Font.color (Theme.textOnDark theme)
         , Font.size Tokens.fontSizeSm
         , Border.rounded Tokens.radiusMd
         , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
@@ -181,11 +182,11 @@ via an injected CSS rule. The bubble is positioned using elm-ui's
 `above`/`below`/`onLeft`/`onRight` attributes with an 8px gap.
 
 -}
-toMarkup : Tooltip msg -> Element msg
-toMarkup (Tooltip opts) =
+toMarkup : Theme -> Tooltip msg -> Element msg
+toMarkup theme (Tooltip opts) =
     let
         bubble =
-            tooltipBubble opts
+            tooltipBubble theme opts
 
         positionAttr =
             case opts.position of

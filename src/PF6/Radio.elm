@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/radio>
 import Element exposing (Element)
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -120,8 +121,8 @@ withDisabled (Radio opts) =
 
 {-| Render the Radio as an `Element msg`
 -}
-toMarkup : Radio msg -> Element msg
-toMarkup (Radio opts) =
+toMarkup : Theme -> Radio msg -> Element msg
+toMarkup theme (Radio opts) =
     let
         descriptionEl =
             opts.description
@@ -129,7 +130,7 @@ toMarkup (Radio opts) =
                     (\d ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = 0, left = 24 }
                             ]
                             (Element.text d)
@@ -167,10 +168,10 @@ toMarkup (Radio opts) =
                             [ Font.size Tokens.fontSizeMd
                             , Font.color
                                 (if opts.isDisabled then
-                                    Tokens.colorTextSubtle
+                                    Theme.textSubtle theme
 
                                  else
-                                    Tokens.colorText
+                                    Theme.text theme
                                 )
                             ]
                             (Element.text opts.label)

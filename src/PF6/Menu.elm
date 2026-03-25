@@ -51,6 +51,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -207,23 +208,23 @@ withMaxHeight h (Menu opts) =
     Menu { opts | maxHeight = Just h }
 
 
-renderActionItem : ActionOptions msg -> Element msg
-renderActionItem opts =
+renderActionItem : Theme -> ActionOptions msg -> Element msg
+renderActionItem theme opts =
     let
         textColor =
             if opts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else if opts.isDanger then
-                Tokens.colorDanger
+                Theme.danger theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         checkEl =
             if opts.isSelected then
                 Element.el
-                    [ Font.color Tokens.colorPrimary
+                    [ Font.color (Theme.primary theme)
                     , Element.width (Element.px 20)
                     ]
                     (Element.text "\u{2713}")
@@ -251,7 +252,7 @@ renderActionItem opts =
                         (\d ->
                             Element.el
                                 [ Font.size Tokens.fontSizeSm
-                                , Font.color Tokens.colorTextSubtle
+                                , Font.color (Theme.textSubtle theme)
                                 ]
                                 (Element.text d)
                         )
@@ -263,7 +264,7 @@ renderActionItem opts =
                 []
 
             else
-                [ Element.mouseOver [ Bg.color Tokens.colorBackgroundSecondary ] ]
+                [ Element.mouseOver [ Bg.color (Theme.backgroundSecondary theme) ] ]
     in
     Input.button
         ([ Element.width Element.fill
@@ -283,17 +284,17 @@ renderActionItem opts =
         }
 
 
-renderItem : MenuItem msg -> Element msg
-renderItem item =
+renderItem : Theme -> MenuItem msg -> Element msg
+renderItem theme item =
     case item of
         ActionItem opts ->
-            renderActionItem opts
+            renderActionItem theme opts
 
         DividerItem ->
             Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px 1)
-                , Bg.color Tokens.colorBorderDefault
+                , Bg.color (Theme.borderDefault theme)
                 ]
                 Element.none
 
@@ -303,15 +304,15 @@ renderItem item =
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerXs
                 , Font.size Tokens.fontSizeSm
                 , Font.bold
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 (Element.text (String.toUpper label))
 
 
 {-| Render the Menu as an `Element msg`
 -}
-toMarkup : Menu msg -> Element msg
-toMarkup (Menu opts) =
+toMarkup : Theme -> Menu msg -> Element msg
+toMarkup theme (Menu opts) =
     let
         searchEl =
             opts.search
@@ -321,14 +322,14 @@ toMarkup (Menu opts) =
                             [ Element.width Element.fill
                             , Element.paddingXY Tokens.spacerSm Tokens.spacerSm
                             , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             (Input.text
                                 [ Element.width Element.fill
                                 , Border.rounded Tokens.radiusMd
                                 , Border.solid
                                 , Border.width 1
-                                , Border.color Tokens.colorBorderDefault
+                                , Border.color (Theme.borderDefault theme)
                                 , Element.padding Tokens.spacerSm
                                 , Font.size Tokens.fontSizeMd
                                 ]
@@ -337,7 +338,7 @@ toMarkup (Menu opts) =
                                 , placeholder =
                                     Just
                                         (Input.placeholder
-                                            [ Font.color Tokens.colorTextSubtle ]
+                                            [ Font.color (Theme.textSubtle theme) ]
                                             (Element.text s.placeholder)
                                         )
                                 , label = Input.labelHidden "Search"
@@ -349,7 +350,7 @@ toMarkup (Menu opts) =
         itemsEl =
             Element.column
                 [ Element.width Element.fill ]
-                (List.map renderItem opts.items)
+                (List.map (renderItem theme) opts.items)
 
         maxHeightAttr =
             opts.maxHeight
@@ -363,10 +364,10 @@ toMarkup (Menu opts) =
     in
     Element.column
         ([ Element.width (Element.minimum 200 Element.fill)
-         , Bg.color Tokens.colorBackgroundDefault
+         , Bg.color (Theme.backgroundDefault theme)
          , Border.solid
          , Border.width 1
-         , Border.color Tokens.colorBorderDefault
+         , Border.color (Theme.borderDefault theme)
          , Border.rounded Tokens.radiusMd
          , Element.htmlAttribute (Html.Attributes.style "box-shadow" "0 0.25rem 0.5rem rgba(3,3,3,0.12)")
          , Element.paddingXY 0 Tokens.spacerXs

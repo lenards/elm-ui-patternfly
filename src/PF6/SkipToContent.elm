@@ -31,6 +31,7 @@ See: <https://www.patternfly.org/components/skip-to-content>
 import Element exposing (Element)
 import Html
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -66,8 +67,8 @@ When the user focuses it via keyboard navigation, it becomes visible
 at the top of the viewport.
 
 -}
-toMarkup : SkipToContent -> Element msg
-toMarkup (SkipToContent opts) =
+toMarkup : Theme -> SkipToContent -> Element msg
+toMarkup _ (SkipToContent opts) =
     Element.html
         (Html.a
             [ Html.Attributes.href opts.href

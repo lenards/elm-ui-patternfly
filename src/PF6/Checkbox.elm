@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/checkbox>
 import Element exposing (Element)
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -129,8 +130,8 @@ withDisabled (Checkbox opts) =
 
 {-| Render the Checkbox as an `Element msg`
 -}
-toMarkup : Checkbox msg -> Element msg
-toMarkup (Checkbox opts) =
+toMarkup : Theme -> Checkbox msg -> Element msg
+toMarkup theme (Checkbox opts) =
     let
         descriptionEl =
             opts.description
@@ -138,7 +139,7 @@ toMarkup (Checkbox opts) =
                     (\d ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             (Element.text d)
                     )
@@ -162,10 +163,10 @@ toMarkup (Checkbox opts) =
                         [ Font.size Tokens.fontSizeMd
                         , Font.color
                             (if opts.isDisabled then
-                                Tokens.colorTextSubtle
+                                Theme.textSubtle theme
 
                              else
-                                Tokens.colorText
+                                Theme.text theme
                             )
                         ]
                         (Element.text opts.label)

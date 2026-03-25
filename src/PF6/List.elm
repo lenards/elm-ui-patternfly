@@ -41,6 +41,7 @@ See: <https://www.patternfly.org/components/list>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -119,17 +120,17 @@ withLarge (PFList opts) =
     PFList { opts | isLarge = True }
 
 
-bullet : String -> Element msg
-bullet b =
+bullet : Theme -> String -> Element msg
+bullet theme b =
     Element.el
-        [ Font.color Tokens.colorTextSubtle
+        [ Font.color (Theme.textSubtle theme)
         , Element.paddingEach { top = 0, right = Tokens.spacerXs, bottom = 0, left = 0 }
         ]
         (Element.text b)
 
 
-renderBulletItem : Bool -> Int -> Element msg -> Element msg
-renderBulletItem isLarge _ content =
+renderBulletItem : Theme -> Bool -> Int -> Element msg -> Element msg
+renderBulletItem theme isLarge _ content =
     Element.row
         [ Element.spacing Tokens.spacerXs
         , Font.size
@@ -140,13 +141,13 @@ renderBulletItem isLarge _ content =
                 Tokens.fontSizeMd
             )
         ]
-        [ bullet "•"
+        [ bullet theme "•"
         , content
         ]
 
 
-renderOrderedItem : Bool -> Int -> Element msg -> Element msg
-renderOrderedItem isLarge index content =
+renderOrderedItem : Theme -> Bool -> Int -> Element msg -> Element msg
+renderOrderedItem theme isLarge index content =
     Element.row
         [ Element.spacing Tokens.spacerXs
         , Font.size
@@ -157,13 +158,13 @@ renderOrderedItem isLarge index content =
                 Tokens.fontSizeMd
             )
         ]
-        [ bullet (String.fromInt (index + 1) ++ ".")
+        [ bullet theme (String.fromInt (index + 1) ++ ".")
         , content
         ]
 
 
-renderPlainItem : Bool -> Element msg -> Element msg
-renderPlainItem isLarge content =
+renderPlainItem : Theme -> Bool -> Element msg -> Element msg
+renderPlainItem theme isLarge content =
     Element.el
         [ Font.size
             (if isLarge then
@@ -172,37 +173,37 @@ renderPlainItem isLarge content =
              else
                 Tokens.fontSizeMd
             )
-        , Font.color Tokens.colorText
+        , Font.color (Theme.text theme)
         ]
         content
 
 
 {-| Render the PFList as an `Element msg`
 -}
-toMarkup : PFList msg -> Element msg
-toMarkup (PFList opts) =
+toMarkup : Theme -> PFList msg -> Element msg
+toMarkup theme (PFList opts) =
     case opts.variant of
         Bulleted ->
             Element.column
                 [ Element.spacing Tokens.spacerXs ]
-                (List.indexedMap (renderBulletItem opts.isLarge) opts.items)
+                (List.indexedMap (renderBulletItem theme opts.isLarge) opts.items)
 
         Ordered ->
             Element.column
                 [ Element.spacing Tokens.spacerXs ]
-                (List.indexedMap (renderOrderedItem opts.isLarge) opts.items)
+                (List.indexedMap (renderOrderedItem theme opts.isLarge) opts.items)
 
         Plain ->
             Element.column
                 [ Element.spacing Tokens.spacerXs ]
-                (List.map (renderPlainItem opts.isLarge) opts.items)
+                (List.map (renderPlainItem theme opts.isLarge) opts.items)
 
         Inlined ->
             Element.wrappedRow
                 [ Element.spacing Tokens.spacerMd ]
-                (List.map (renderPlainItem opts.isLarge) opts.items)
+                (List.map (renderPlainItem theme opts.isLarge) opts.items)
 
         Iconed ->
             Element.column
                 [ Element.spacing Tokens.spacerXs ]
-                (List.map (renderPlainItem opts.isLarge) opts.items)
+                (List.map (renderPlainItem theme opts.isLarge) opts.items)

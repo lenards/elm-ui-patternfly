@@ -4,17 +4,18 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.Tabs as Tabs
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
-view : { activeTab : String, onTabSelect : String -> msg } -> Element msg
-view config =
+view : Theme -> { activeTab : String, onTabSelect : String -> msg } -> Element msg
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Tabs" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Tabs" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Tabs allow users to navigate between views within the same context." ]
-        , exampleSection "Default tabs"
+        , exampleSection theme "Default tabs"
             (Element.column [ Element.width Element.fill, Element.spacing 16 ]
                 [ Tabs.tabs
                     { activeKey = config.activeTab
@@ -25,12 +26,12 @@ view config =
                         , Tabs.tab "tab3" "Database"
                         ]
                     }
-                    |> Tabs.toMarkup
+                    |> Tabs.toMarkup theme
                 , Element.paragraph [ Font.size 14 ]
                     [ Element.text ("Active tab: " ++ config.activeTab) ]
                 ]
             )
-        , exampleSection "Box tabs"
+        , exampleSection theme "Box tabs"
             (Tabs.tabs
                 { activeKey = config.activeTab
                 , onSelect = config.onTabSelect
@@ -41,9 +42,9 @@ view config =
                     ]
                 }
                 |> Tabs.withBox
-                |> Tabs.toMarkup
+                |> Tabs.toMarkup theme
             )
-        , exampleSection "Filled tabs"
+        , exampleSection theme "Filled tabs"
             (Tabs.tabs
                 { activeKey = config.activeTab
                 , onSelect = config.onTabSelect
@@ -54,13 +55,13 @@ view config =
                     ]
                 }
                 |> Tabs.withFilled
-                |> Tabs.toMarkup
+                |> Tabs.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

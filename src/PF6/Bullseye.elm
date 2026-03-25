@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/layouts/bullseye>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 
 
 {-| Opaque Bullseye type
@@ -81,8 +82,8 @@ withMinHeight h (Bullseye opts) =
 
 {-| Render the Bullseye as an Element msg
 -}
-toMarkup : Bullseye msg -> Element msg
-toMarkup (Bullseye opts) =
+toMarkup : Theme -> Bullseye msg -> Element msg
+toMarkup _ (Bullseye opts) =
     let
         heightAttr =
             case opts.minHeight of

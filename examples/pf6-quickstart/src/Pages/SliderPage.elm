@@ -4,21 +4,24 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.Slider as Slider
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
 view :
-    { sliderValue : Float
-    , onSliderChange : Float -> msg
-    }
+    Theme
+    ->
+        { sliderValue : Float
+        , onSliderChange : Float -> msg
+        }
     -> Element msg
-view config =
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Slider" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Slider" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Sliders allow users to select a value from a continuous range." ]
-        , exampleSection "Basic slider"
+        , exampleSection theme "Basic slider"
             (Slider.slider
                 { value = config.sliderValue
                 , onChange = config.onSliderChange
@@ -27,9 +30,9 @@ view config =
                 }
                 |> Slider.withLabel "Volume"
                 |> Slider.withShowValue
-                |> Slider.toMarkup
+                |> Slider.toMarkup theme
             )
-        , exampleSection "With step"
+        , exampleSection theme "With step"
             (Slider.slider
                 { value = config.sliderValue
                 , onChange = config.onSliderChange
@@ -39,9 +42,9 @@ view config =
                 |> Slider.withLabel "Percentage"
                 |> Slider.withStep 10
                 |> Slider.withShowValue
-                |> Slider.toMarkup
+                |> Slider.toMarkup theme
             )
-        , exampleSection "Disabled"
+        , exampleSection theme "Disabled"
             (Slider.slider
                 { value = 50
                 , onChange = config.onSliderChange
@@ -51,13 +54,13 @@ view config =
                 |> Slider.withLabel "Disabled slider"
                 |> Slider.withDisabled
                 |> Slider.withShowValue
-                |> Slider.toMarkup
+                |> Slider.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

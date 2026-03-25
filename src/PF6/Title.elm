@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/title>
 import Element exposing (Element)
 import Element.Font as Font
 import Element.Region as Region
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -169,12 +170,12 @@ levelAttrs level =
 
 {-| Render the Title as an `Element msg`
 -}
-toMarkup : Title msg -> Element msg
-toMarkup (Title opts) =
+toMarkup : Theme -> Title msg -> Element msg
+toMarkup theme (Title opts) =
     let
         attrs =
             levelAttrs opts.level
-                ++ [ Font.color Tokens.colorText ]
+                ++ [ Font.color (Theme.text theme) ]
                 ++ opts.extraAttrs
     in
     Element.el attrs (Element.text opts.text)

@@ -49,6 +49,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -169,8 +170,8 @@ withResizable (Drawer opts) =
     Drawer { opts | isResizable = True }
 
 
-panelEl : Options msg -> Element msg
-panelEl opts =
+panelEl : Theme -> Options msg -> Element msg
+panelEl theme opts =
     let
         headEl =
             opts.panelHead
@@ -180,7 +181,7 @@ panelEl opts =
                             [ Element.width Element.fill
                             , Element.padding Tokens.spacerMd
                             , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                            , Border.color Tokens.colorBorderDefault
+                            , Border.color (Theme.borderDefault theme)
                             ]
                             el
                     )
@@ -207,7 +208,7 @@ panelEl opts =
                             [ Element.width Element.fill
                             , Element.padding Tokens.spacerMd
                             , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                            , Border.color Tokens.colorBorderDefault
+                            , Border.color (Theme.borderDefault theme)
                             ]
                             el
                     )
@@ -228,10 +229,10 @@ panelEl opts =
              else
                 Element.fill
             )
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         , Element.htmlAttribute (Html.Attributes.style "overflow-y" "auto")
         ]
         [ headEl, bodyEl, footerEl ]
@@ -239,8 +240,8 @@ panelEl opts =
 
 {-| Render the Drawer as an `Element msg`
 -}
-toMarkup : Drawer msg -> Element msg
-toMarkup (Drawer opts) =
+toMarkup : Theme -> Drawer msg -> Element msg
+toMarkup theme (Drawer opts) =
     if not opts.isExpanded then
         opts.mainContent
 
@@ -256,7 +257,7 @@ toMarkup (Drawer opts) =
                         , Element.height Element.fill
                         ]
                         opts.mainContent
-                    , panelEl opts
+                    , panelEl theme opts
                     ]
 
             Left ->
@@ -264,7 +265,7 @@ toMarkup (Drawer opts) =
                     [ Element.width Element.fill
                     , Element.height Element.fill
                     ]
-                    [ panelEl opts
+                    [ panelEl theme opts
                     , Element.el
                         [ Element.width Element.fill
                         , Element.height Element.fill
@@ -282,5 +283,5 @@ toMarkup (Drawer opts) =
                         , Element.height Element.fill
                         ]
                         opts.mainContent
-                    , panelEl opts
+                    , panelEl theme opts
                     ]

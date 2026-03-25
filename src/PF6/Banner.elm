@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/banner>
 import Element exposing (Element)
 import Element.Background as Bg
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -75,32 +76,32 @@ type alias BannerColors =
     }
 
 
-colorsFor : Variant -> BannerColors
-colorsFor variant =
+colorsFor : Theme -> Variant -> BannerColors
+colorsFor theme variant =
     case variant of
         Default ->
             { bg = Element.rgb255 240 240 240
-            , fg = Tokens.colorText
+            , fg = Theme.text theme
             }
 
         Info ->
-            { bg = Tokens.colorInfo
-            , fg = Tokens.colorTextOnDark
+            { bg = Theme.info theme
+            , fg = Theme.textOnDark theme
             }
 
         Success ->
-            { bg = Tokens.colorSuccess
-            , fg = Tokens.colorTextOnDark
+            { bg = Theme.success theme
+            , fg = Theme.textOnDark theme
             }
 
         Warning ->
-            { bg = Tokens.colorWarning
-            , fg = Tokens.colorText
+            { bg = Theme.warning theme
+            , fg = Theme.text theme
             }
 
         Danger ->
-            { bg = Tokens.colorDanger
-            , fg = Tokens.colorTextOnDark
+            { bg = Theme.danger theme
+            , fg = Theme.textOnDark theme
             }
 
 
@@ -167,11 +168,11 @@ withLink l (Banner opts) =
 
 {-| Render the Banner as an `Element msg`
 -}
-toMarkup : Banner msg -> Element msg
-toMarkup (Banner opts) =
+toMarkup : Theme -> Banner msg -> Element msg
+toMarkup theme (Banner opts) =
     let
         colors =
-            colorsFor opts.variant
+            colorsFor theme opts.variant
 
         iconEl =
             opts.icon

@@ -51,6 +51,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -187,8 +188,8 @@ The modal renders as a full-viewport overlay with a centered dialog box.
 Wrap your application in a `Element.inFront (Modal.toMarkup myModal)` pattern.
 
 -}
-toMarkup : Modal msg -> Element msg
-toMarkup (Modal opts) =
+toMarkup : Theme -> Modal msg -> Element msg
+toMarkup theme (Modal opts) =
     let
         px =
             widthPx opts.size
@@ -198,7 +199,7 @@ toMarkup (Modal opts) =
                 case opts.onClose of
                     Just msg ->
                         Input.button
-                            [ Font.color Tokens.colorTextSubtle
+                            [ Font.color (Theme.textSubtle theme)
                             , Font.size Tokens.fontSizeXl
                             , Element.alignRight
                             , Element.alignTop
@@ -220,7 +221,7 @@ toMarkup (Modal opts) =
                         Element.el
                             [ Font.bold
                             , Font.size Tokens.fontSizeXl
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.width Element.fill
                             ]
                             (Element.text t)
@@ -233,7 +234,7 @@ toMarkup (Modal opts) =
                     (\d ->
                         Element.paragraph
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             [ Element.text d ]
                     )
@@ -244,7 +245,7 @@ toMarkup (Modal opts) =
                 [ Element.width Element.fill
                 , Element.paddingXY Tokens.spacerXl Tokens.spacerMd
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
                 [ Element.column [ Element.width Element.fill, Element.spacing Tokens.spacerXs ]
                     [ titleEl, descEl ]
@@ -271,7 +272,7 @@ toMarkup (Modal opts) =
                             [ Element.width Element.fill
                             , Element.paddingXY Tokens.spacerXl Tokens.spacerMd
                             , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             el
                     )
@@ -282,11 +283,11 @@ toMarkup (Modal opts) =
                 [ Element.width (Element.px px)
                 , Element.centerX
                 , Element.centerY
-                , Bg.color Tokens.colorBackgroundDefault
+                , Bg.color (Theme.backgroundDefault theme)
                 , Border.rounded Tokens.radiusLg
                 , Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Element.htmlAttribute (Html.Attributes.style "z-index" "1001")
                 , Element.htmlAttribute (Html.Attributes.style "max-height" "80vh")
                 , Element.htmlAttribute (Html.Attributes.style "overflow-y" "auto")

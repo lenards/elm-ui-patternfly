@@ -53,6 +53,7 @@ import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -176,11 +177,11 @@ withOnClose msg (Popover opts) =
     Popover { opts | onClose = Just msg }
 
 
-popoverPanel : Options msg -> Element msg
-popoverPanel opts =
+popoverPanel : Theme -> Options msg -> Element msg
+popoverPanel theme opts =
     Element.column
         [ Element.width (Element.maximum opts.maxWidth Element.fill)
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Border.rounded Tokens.radiusMd
         , Border.shadow
             { offset = ( 0, 4 )
@@ -190,7 +191,7 @@ popoverPanel opts =
             }
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         , Element.htmlAttribute (Html.Attributes.style "z-index" "9999")
         ]
         [ -- Header
@@ -199,16 +200,16 @@ popoverPanel opts =
                 Element.row
                     [ Element.width Element.fill
                     , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
-                    , Bg.color Tokens.colorBackgroundSecondary
+                    , Bg.color (Theme.backgroundSecondary theme)
                     , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                    , Border.color Tokens.colorBorderDefault
+                    , Border.color (Theme.borderDefault theme)
                     ]
-                    [ Element.el [ Font.bold, Font.size Tokens.fontSizeMd, Font.color Tokens.colorText, Element.width Element.fill ]
+                    [ Element.el [ Font.bold, Font.size Tokens.fontSizeMd, Font.color (Theme.text theme), Element.width Element.fill ]
                         (Element.text t)
                     , case opts.onClose of
                         Just closeMsg ->
                             Input.button
-                                [ Font.color Tokens.colorTextSubtle
+                                [ Font.color (Theme.textSubtle theme)
                                 , Element.padding Tokens.spacerXs
                                 ]
                                 { onPress = Just closeMsg
@@ -229,7 +230,7 @@ popoverPanel opts =
                     [ Element.width Element.fill
                     , Element.padding Tokens.spacerMd
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     ]
                     bodyEl
 
@@ -242,9 +243,9 @@ popoverPanel opts =
                 Element.el
                     [ Element.width Element.fill
                     , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
-                    , Bg.color Tokens.colorBackgroundSecondary
+                    , Bg.color (Theme.backgroundSecondary theme)
                     , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                    , Border.color Tokens.colorBorderDefault
+                    , Border.color (Theme.borderDefault theme)
                     ]
                     footerEl
 
@@ -260,12 +261,12 @@ attributes on the trigger to position the panel. The trigger element is
 always rendered; the panel is only shown when `isOpen = True`.
 
 -}
-toMarkup : Popover msg -> Element msg
-toMarkup (Popover opts) =
+toMarkup : Theme -> Popover msg -> Element msg
+toMarkup theme (Popover opts) =
     let
         panel =
             if opts.isOpen then
-                popoverPanel opts
+                popoverPanel theme opts
 
             else
                 Element.none

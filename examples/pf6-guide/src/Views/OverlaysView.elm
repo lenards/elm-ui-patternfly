@@ -55,18 +55,18 @@ view model =
                     |> Modal.withFooter
                         (Element.row [ Element.spacing Tokens.spacerSm ]
                             [ Button.primary { label = "Confirm", onPress = Just ModalClose }
-                                |> Button.toMarkup
+                                |> Button.toMarkup theme
                             , Button.secondary { label = "Cancel", onPress = Just ModalClose }
-                                |> Button.toMarkup
+                                |> Button.toMarkup theme
                             ]
                         )
                     |> Modal.withCloseMsg ModalClose
-                    |> Modal.toMarkup
+                    |> Modal.toMarkup theme
 
              else if model.backdropVisible then
                 Backdrop.backdrop (BackdropToggled False)
                     |> Backdrop.withOpacity 0.3
-                    |> Backdrop.toMarkup
+                    |> Backdrop.toMarkup theme
 
              else
                 Element.none
@@ -80,7 +80,7 @@ view model =
             "Modal"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Button.primary { label = "Open modal", onPress = Just ModalOpen }
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                     (Element.text
                         (if model.modalOpen then
@@ -100,35 +100,35 @@ view model =
                 [ Tooltip.tooltip
                     { trigger =
                         Button.secondary { label = "Hover me (top)", onPress = Nothing }
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                     , content = "This tooltip appears above the trigger"
                     }
                     |> Tooltip.withTop
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
                     { trigger =
                         Button.secondary { label = "Hover me (bottom)", onPress = Nothing }
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                     , content = "This tooltip appears below the trigger"
                     }
                     |> Tooltip.withBottom
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
                     { trigger =
                         Button.secondary { label = "Hover me (left)", onPress = Nothing }
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                     , content = "This tooltip appears to the left"
                     }
                     |> Tooltip.withLeft
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 , Tooltip.tooltip
                     { trigger =
                         Button.secondary { label = "Hover me (right)", onPress = Nothing }
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                     , content = "This tooltip appears to the right"
                     }
                     |> Tooltip.withRight
-                    |> Tooltip.toMarkup
+                    |> Tooltip.toMarkup theme
                 ]
             ]
 
@@ -146,7 +146,7 @@ view model =
                     , Dropdown.dropdownItem "Delete" NoOp
                     ]
                 }
-                |> Dropdown.toMarkup
+                |> Dropdown.toMarkup theme
             ]
 
         -- ACCORDION
@@ -178,7 +178,7 @@ view model =
                     , onToggle = AccordionToggled "acc3"
                     }
                 ]
-                |> Accordion.toMarkup
+                |> Accordion.toMarkup theme
             ]
 
         -- MENU
@@ -204,7 +204,7 @@ view model =
                             |> Menu.withItemIcon (Element.text "\u{2717}")
                         ]
                         |> Menu.withMaxHeight 300
-                        |> Menu.toMarkup
+                        |> Menu.toMarkup theme
                     )
                 ]
             ]
@@ -216,7 +216,7 @@ view model =
                 [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                     [ Element.text "The Backdrop component provides a semi-transparent overlay. It is used internally by Modal. Click the button below to toggle a demo backdrop." ]
                 , Button.secondary { label = "Toggle backdrop", onPress = Just (BackdropToggled (not model.backdropVisible)) }
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 ]
             ]
 
@@ -237,6 +237,6 @@ view model =
                 }
                 |> ExpandableSection.withToggleText "Hide advanced options"
                 |> ExpandableSection.withToggleTextCollapsed "Show advanced options"
-                |> ExpandableSection.toMarkup
+                |> ExpandableSection.toMarkup theme
             ]
         ]

@@ -44,6 +44,7 @@ import Element exposing (Element)
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -120,8 +121,8 @@ withItemCount count (Toolbar opts) =
     Toolbar { opts | itemCount = Just count }
 
 
-renderItem : ToolbarItem msg -> Element msg
-renderItem item =
+renderItem : Theme -> ToolbarItem msg -> Element msg
+renderItem theme item =
     case item of
         ToolbarEl el ->
             Element.el [ Element.paddingXY Tokens.spacerXs 0 ] el
@@ -132,7 +133,7 @@ renderItem item =
                 , Element.height (Element.px 24)
                 , Element.alignLeft
                 , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Element.paddingXY 0 0
                 ]
                 Element.none
@@ -140,16 +141,16 @@ renderItem item =
         ToolbarGrp (ToolbarGroup items) ->
             Element.row
                 [ Element.spacing Tokens.spacerXs ]
-                (List.map renderItem items)
+                (List.map (renderItem theme) items)
 
 
 {-| Render the Toolbar as an `Element msg`
 -}
-toMarkup : Toolbar msg -> Element msg
-toMarkup (Toolbar opts) =
+toMarkup : Theme -> Toolbar msg -> Element msg
+toMarkup theme (Toolbar opts) =
     let
         itemEls =
-            List.map renderItem opts.items
+            List.map (renderItem theme) opts.items
 
         countEl =
             opts.itemCount
@@ -157,7 +158,7 @@ toMarkup (Toolbar opts) =
                     (\count ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingXY Tokens.spacerSm 0
                             ]
                             (Element.text count)
@@ -170,7 +171,7 @@ toMarkup (Toolbar opts) =
                     (\msg ->
                         Input.button
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorPrimary
+                            , Font.color (Theme.primary theme)
                             ]
                             { onPress = Just msg
                             , label = Element.text "Clear all filters"

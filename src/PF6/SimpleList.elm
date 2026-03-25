@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -123,25 +124,25 @@ withGrouped (SimpleList opts) =
     SimpleList { opts | grouped = True }
 
 
-itemMarkup : SimpleListItem msg -> Element msg
-itemMarkup (SimpleListItem opts) =
+itemMarkup : Theme -> SimpleListItem msg -> Element msg
+itemMarkup theme (SimpleListItem opts) =
     let
         bgColor =
             if opts.isActive then
                 Element.rgb255 215 235 255
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         textColor =
             if opts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else if opts.isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorText
+                Theme.text theme
 
         onPress =
             if opts.isDisabled then
@@ -159,7 +160,7 @@ itemMarkup (SimpleListItem opts) =
 
         borderColor =
             if opts.isActive then
-                Border.color Tokens.colorPrimary
+                Border.color (Theme.primary theme)
 
             else
                 Border.color (Element.rgba 0 0 0 0)
@@ -180,14 +181,14 @@ itemMarkup (SimpleListItem opts) =
 
 {-| Render the SimpleList as an `Element msg`
 -}
-toMarkup : SimpleList msg -> Element msg
-toMarkup (SimpleList opts) =
+toMarkup : Theme -> SimpleList msg -> Element msg
+toMarkup theme (SimpleList opts) =
     let
         borderAttrs =
             if opts.grouped then
                 [ Border.solid
                 , Border.width 1
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Border.rounded Tokens.radiusMd
                 ]
 
@@ -199,4 +200,4 @@ toMarkup (SimpleList opts) =
          ]
             ++ borderAttrs
         )
-        (List.map itemMarkup opts.items)
+        (List.map (itemMarkup theme) opts.items)

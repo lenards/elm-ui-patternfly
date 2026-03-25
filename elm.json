@@ -79,7 +79,15 @@
         "PF6.Level",
         "PF6.Gallery",
         "PF6.Grid",
-        "PF6.Flex"
+        "PF6.Flex",
+        "PF6.Toast",
+        "PF6.Content",
+        "PF6.DatePicker",
+        "PF6.TreeView",
+        "PF6.DualListSelector",
+        "PF6.FileUpload",
+        "PF6.InlineEdit",
+        "PF6.LoginPage"
     ],
     "elm-version": "0.19.1 <= v < 0.20.0",
     "dependencies": {

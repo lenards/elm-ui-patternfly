@@ -51,6 +51,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -175,8 +176,8 @@ withBodySpacing s (Card opts) =
     Card { opts | bodySpacing = Element.spacing s }
 
 
-headerMarkup : Options msg -> Element msg
-headerMarkup opts =
+headerMarkup : Theme -> Options msg -> Element msg
+headerMarkup theme opts =
     case ( opts.title, opts.actions ) of
         ( Nothing, Nothing ) ->
             Element.none
@@ -190,7 +191,7 @@ headerMarkup opts =
                                 Element.el
                                     [ Font.bold
                                     , Font.size Tokens.fontSizeLg
-                                    , Font.color Tokens.colorText
+                                    , Font.color (Theme.text theme)
                                     ]
                                     (Element.text t)
                             )
@@ -209,15 +210,15 @@ headerMarkup opts =
                         Tokens.spacerMd
                     )
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
                 [ Element.el [ Element.width Element.fill ] titleEl
                 , actionsEl
                 ]
 
 
-footerMarkup : Options msg -> Element msg
-footerMarkup opts =
+footerMarkup : Theme -> Options msg -> Element msg
+footerMarkup theme opts =
     case opts.footer of
         Nothing ->
             Element.none
@@ -233,15 +234,15 @@ footerMarkup opts =
                         Tokens.spacerMd
                     )
                 , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
                 el
 
 
 {-| Render the Card as an `Element msg`
 -}
-toMarkup : Card msg -> Element msg
-toMarkup (Card opts) =
+toMarkup : Theme -> Card msg -> Element msg
+toMarkup theme (Card opts) =
     let
         radius =
             if opts.isRounded then
@@ -252,10 +253,10 @@ toMarkup (Card opts) =
 
         borderColor =
             if opts.isSelected then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorBorderDefault
+                Theme.borderDefault theme
 
         borderWidth =
             if opts.isSelected then
@@ -282,7 +283,7 @@ toMarkup (Card opts) =
     in
     Element.column
         ([ Element.width Element.fill
-         , Bg.color Tokens.colorBackgroundDefault
+         , Bg.color (Theme.backgroundDefault theme)
          , Border.rounded radius
          , Border.solid
          , Border.width borderWidth
@@ -291,12 +292,12 @@ toMarkup (Card opts) =
          ]
             ++ shadowAttr
         )
-        [ headerMarkup opts
+        [ headerMarkup theme opts
         , Element.column
             [ Element.width Element.fill
             , bodyPad
             , opts.bodySpacing
             ]
             opts.body
-        , footerMarkup opts
+        , footerMarkup theme opts
         ]

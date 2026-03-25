@@ -50,6 +50,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -198,8 +199,8 @@ renderCell (DataListCell cellOpts) =
         cellOpts.content
 
 
-renderItem : Options msg -> Int -> DataListItem msg -> Element msg
-renderItem opts index (DataListItem itemOpts) =
+renderItem : Theme -> Options msg -> Int -> DataListItem msg -> Element msg
+renderItem theme opts index (DataListItem itemOpts) =
     let
         padding =
             if opts.isCompact then
@@ -210,10 +211,10 @@ renderItem opts index (DataListItem itemOpts) =
 
         bg =
             if opts.isStriped && modBy 2 index == 1 then
-                Tokens.colorBackgroundSecondary
+                Theme.backgroundSecondary theme
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
         checkEl =
             if itemOpts.isCheckable then
@@ -266,7 +267,7 @@ renderItem opts index (DataListItem itemOpts) =
                 , Element.spacing Tokens.spacerSm
                 , Bg.color bg
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
                 ([ checkEl, expandBtn ]
                     ++ List.map renderCell itemOpts.cells
@@ -282,7 +283,7 @@ renderItem opts index (DataListItem itemOpts) =
                             , Element.padding padding
                             , Bg.color bg
                             , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             content
 
@@ -299,13 +300,13 @@ renderItem opts index (DataListItem itemOpts) =
 
 {-| Render the DataList as an `Element msg`
 -}
-toMarkup : DataList msg -> Element msg
-toMarkup (DataList opts) =
+toMarkup : Theme -> DataList msg -> Element msg
+toMarkup theme (DataList opts) =
     Element.column
         [ Element.width Element.fill
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
-        (List.indexedMap (renderItem opts) opts.items)
+        (List.indexedMap (renderItem theme opts) opts.items)

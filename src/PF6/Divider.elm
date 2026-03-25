@@ -41,6 +41,7 @@ See: <https://www.patternfly.org/components/divider>
 
 import Element exposing (Element)
 import Element.Background as Bg
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -117,14 +118,14 @@ withInsetXl (Divider opts) =
 
 {-| Render the Divider as an `Element msg`
 -}
-toMarkup : Divider -> Element msg
-toMarkup (Divider opts) =
+toMarkup : Theme -> Divider -> Element msg
+toMarkup theme (Divider opts) =
     case opts.orientation of
         Horizontal ->
             Element.el
                 [ Element.width Element.fill
                 , Element.height (Element.px 1)
-                , Bg.color Tokens.colorBorderDefault
+                , Bg.color (Theme.borderDefault theme)
                 , Element.paddingXY opts.inset 0
                 ]
                 Element.none
@@ -133,7 +134,7 @@ toMarkup (Divider opts) =
             Element.el
                 [ Element.width (Element.px 1)
                 , Element.height Element.fill
-                , Bg.color Tokens.colorBorderDefault
+                , Bg.color (Theme.borderDefault theme)
                 , Element.paddingXY 0 opts.inset
                 ]
                 Element.none

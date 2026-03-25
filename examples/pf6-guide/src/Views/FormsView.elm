@@ -6,7 +6,10 @@ import Element.Border as Border
 import Element.Font as Font
 import PF6.Button as Button
 import PF6.Checkbox as Checkbox
+import PF6.DatePicker as DatePicker
+import PF6.FileUpload as FileUpload
 import PF6.Form as Form
+import PF6.InlineEdit as InlineEdit
 import PF6.InputGroup as InputGroup
 import PF6.NumberInput as NumberInput
 import PF6.Radio as Radio
@@ -64,21 +67,21 @@ view model =
                 [ TextInput.textInput { value = model.textValue, onChange = TextChanged }
                     |> TextInput.withLabel "Default"
                     |> TextInput.withPlaceholder "Enter text..."
-                    |> TextInput.toMarkup
+                    |> TextInput.toMarkup theme
                 , TextInput.textInput { value = model.successValue, onChange = SuccessTextChanged }
                     |> TextInput.withLabel "Success validation"
                     |> TextInput.withSuccess
                     |> TextInput.withHelperText "Looks good!"
-                    |> TextInput.toMarkup
+                    |> TextInput.toMarkup theme
                 , TextInput.textInput { value = model.errorValue, onChange = ErrorTextChanged }
                     |> TextInput.withLabel "Error validation"
                     |> TextInput.withDanger
                     |> TextInput.withHelperText "This field is required."
-                    |> TextInput.toMarkup
+                    |> TextInput.toMarkup theme
                 , TextInput.textInput { value = "disabled", onChange = TextChanged }
                     |> TextInput.withLabel "Disabled"
                     |> TextInput.withDisabled
-                    |> TextInput.toMarkup
+                    |> TextInput.toMarkup theme
                 ]
             ]
 
@@ -97,7 +100,7 @@ view model =
                         [ "Button", "Badge", "Banner" ]
                             |> List.filter (String.contains model.searchValue)
                     )
-                |> SearchInput.toMarkup
+                |> SearchInput.toMarkup theme
             ]
 
         -- NUMBER INPUT
@@ -108,14 +111,14 @@ view model =
                     |> NumberInput.withLabel "Quantity"
                     |> NumberInput.withMin 0
                     |> NumberInput.withMax 100
-                    |> NumberInput.toMarkup
+                    |> NumberInput.toMarkup theme
                 , NumberInput.numberInput { value = 50, onChange = NumberChanged }
                     |> NumberInput.withLabel "Percentage"
                     |> NumberInput.withMin 0
                     |> NumberInput.withMax 100
                     |> NumberInput.withStep 5
                     |> NumberInput.withUnit "%"
-                    |> NumberInput.toMarkup
+                    |> NumberInput.toMarkup theme
                 ]
             ]
 
@@ -126,16 +129,16 @@ view model =
                 [ Checkbox.checkbox { id = "cb1", onChange = CheckboxToggled }
                     |> Checkbox.withLabel "Default checkbox"
                     |> Checkbox.withChecked model.checkboxChecked
-                    |> Checkbox.toMarkup
+                    |> Checkbox.toMarkup theme
                 , Checkbox.checkbox { id = "cb2", onChange = \_ -> NoOp }
                     |> Checkbox.withLabel "Checked by default"
                     |> Checkbox.withChecked True
                     |> Checkbox.withDescription "This is the description text"
-                    |> Checkbox.toMarkup
+                    |> Checkbox.toMarkup theme
                 , Checkbox.checkbox { id = "cb3", onChange = \_ -> NoOp }
                     |> Checkbox.withLabel "Disabled"
                     |> Checkbox.withDisabled
-                    |> Checkbox.toMarkup
+                    |> Checkbox.toMarkup theme
                 ]
             ]
 
@@ -146,16 +149,16 @@ view model =
                 [ Radio.radio { id = "r1", onChange = \_ -> RadioSelected "option1" }
                     |> Radio.withLabel "Option 1"
                     |> Radio.withChecked (model.radioSelected == Just "option1")
-                    |> Radio.toMarkup
+                    |> Radio.toMarkup theme
                 , Radio.radio { id = "r2", onChange = \_ -> RadioSelected "option2" }
                     |> Radio.withLabel "Option 2"
                     |> Radio.withChecked (model.radioSelected == Just "option2")
                     |> Radio.withDescription "With a description"
-                    |> Radio.toMarkup
+                    |> Radio.toMarkup theme
                 , Radio.radio { id = "r3", onChange = \_ -> NoOp }
                     |> Radio.withLabel "Disabled"
                     |> Radio.withDisabled
-                    |> Radio.toMarkup
+                    |> Radio.toMarkup theme
                 ]
             ]
 
@@ -167,15 +170,15 @@ view model =
                     |> Switch.withLabel "Feature enabled"
                     |> Switch.withLabelOff "Feature disabled"
                     |> Switch.withChecked model.switchOn
-                    |> Switch.toMarkup
+                    |> Switch.toMarkup theme
                 , Switch.switch { onChange = \_ -> NoOp }
                     |> Switch.withLabel "No label switch"
                     |> Switch.withChecked True
-                    |> Switch.toMarkup
+                    |> Switch.toMarkup theme
                 , Switch.switch { onChange = \_ -> NoOp }
                     |> Switch.withLabel "Disabled"
                     |> Switch.withDisabled
-                    |> Switch.toMarkup
+                    |> Switch.toMarkup theme
                 ]
             ]
 
@@ -200,7 +203,7 @@ view model =
                 |> Select.withLabel "Framework"
                 |> Select.withPlaceholder "Select a framework..."
                 |> Select.withHelperText "Choose your frontend framework"
-                |> Select.toMarkup
+                |> Select.toMarkup theme
             ]
 
         -- TEXT AREA
@@ -211,18 +214,18 @@ view model =
                     |> TextArea.withLabel "Description"
                     |> TextArea.withPlaceholder "Enter a description..."
                     |> TextArea.withRows 4
-                    |> TextArea.toMarkup
+                    |> TextArea.toMarkup theme
                 , TextArea.textArea { value = "", onChange = TextAreaChanged }
                     |> TextArea.withLabel "Required field"
                     |> TextArea.withRequired
                     |> TextArea.withDanger
                     |> TextArea.withHelperText "This field is required."
                     |> TextArea.withRows 3
-                    |> TextArea.toMarkup
+                    |> TextArea.toMarkup theme
                 , TextArea.textArea { value = "Read-only content", onChange = TextAreaChanged }
                     |> TextArea.withLabel "Disabled"
                     |> TextArea.withDisabled
-                    |> TextArea.toMarkup
+                    |> TextArea.toMarkup theme
                 ]
             ]
 
@@ -238,7 +241,7 @@ view model =
                             identity
                        )
                     |> Tile.withIcon (Element.text "\u{2601}")
-                    |> Tile.toMarkup
+                    |> Tile.toMarkup theme
                 , Tile.tile { title = "Option B", onSelect = TileSelected "b" }
                     |> (if model.selectedTile == Just "b" then
                             Tile.withSelected
@@ -247,7 +250,7 @@ view model =
                             identity
                        )
                     |> Tile.withIcon (Element.text "\u{26A1}")
-                    |> Tile.toMarkup
+                    |> Tile.toMarkup theme
                 , Tile.tile { title = "Stacked", onSelect = TileSelected "c" }
                     |> (if model.selectedTile == Just "c" then
                             Tile.withSelected
@@ -257,10 +260,10 @@ view model =
                        )
                     |> Tile.withIcon (Element.text "\u{2699}")
                     |> Tile.withStacked
-                    |> Tile.toMarkup
+                    |> Tile.toMarkup theme
                 , Tile.tile { title = "Disabled", onSelect = NoOp }
                     |> Tile.withDisabled
-                    |> Tile.toMarkup
+                    |> Tile.toMarkup theme
                 ]
             ]
 
@@ -275,7 +278,7 @@ view model =
                         , ToggleGroup.toggleItem { label = "Table", isSelected = model.toggleViewMode == "table", onToggle = ToggleViewMode "table" }
                         ]
                     }
-                    |> ToggleGroup.toMarkup
+                    |> ToggleGroup.toMarkup theme
                 , ToggleGroup.toggleGroup
                     { items =
                         [ ToggleGroup.toggleItem { label = "Day", isSelected = False, onToggle = NoOp }
@@ -287,7 +290,7 @@ view model =
                         ]
                     }
                     |> ToggleGroup.withCompact
-                    |> ToggleGroup.toMarkup
+                    |> ToggleGroup.toMarkup theme
                 ]
             ]
 
@@ -320,14 +323,14 @@ view model =
                     , SimpleList.simpleListItem "Disabled" NoOp
                         |> SimpleList.withItemDisabled
                     ]
-                    |> SimpleList.toMarkup
+                    |> SimpleList.toMarkup theme
                 , SimpleList.simpleList
                     [ SimpleList.simpleListItem "Item A" NoOp |> SimpleList.withItemActive
                     , SimpleList.simpleListItem "Item B" NoOp
                     , SimpleList.simpleListItem "Item C" NoOp
                     ]
                     |> SimpleList.withGrouped
-                    |> SimpleList.toMarkup
+                    |> SimpleList.toMarkup theme
                 ]
             ]
 
@@ -339,17 +342,17 @@ view model =
                     |> Slider.withLabel "Volume"
                     |> Slider.withShowValue
                     |> Slider.withShowTicks
-                    |> Slider.toMarkup
+                    |> Slider.toMarkup theme
                 , Slider.slider { value = model.sliderValue, onChange = SliderChanged, min = 0, max = 100 }
                     |> Slider.withLabel "With step (10)"
                     |> Slider.withStep 10
                     |> Slider.withShowValue
-                    |> Slider.toMarkup
+                    |> Slider.toMarkup theme
                 , Slider.slider { value = 30, onChange = \_ -> NoOp, min = 0, max = 100 }
                     |> Slider.withLabel "Disabled"
                     |> Slider.withDisabled
                     |> Slider.withShowValue
-                    |> Slider.toMarkup
+                    |> Slider.toMarkup theme
                 ]
             ]
 
@@ -362,12 +365,12 @@ view model =
                     |> TextInputGroup.withPrefix (Element.text "$")
                     |> TextInputGroup.withSuffix (Element.text ".00")
                     |> TextInputGroup.withPlaceholder "0"
-                    |> TextInputGroup.toMarkup
+                    |> TextInputGroup.toMarkup theme
                 , TextInputGroup.textInputGroup { value = "", onChange = TextInputGroupChanged }
                     |> TextInputGroup.withLabel "Search"
                     |> TextInputGroup.withPrefix (Element.text "\u{1F50D}")
                     |> TextInputGroup.withPlaceholder "Search items..."
-                    |> TextInputGroup.toMarkup
+                    |> TextInputGroup.toMarkup theme
                 ]
             ]
 
@@ -379,11 +382,11 @@ view model =
                 , InputGroup.inputGroupItem
                     (TextInput.textInput { value = model.textInputGroupValue, onChange = TextInputGroupChanged }
                         |> TextInput.withPlaceholder "Amount"
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                 , InputGroup.inputGroupText ".00"
                 ]
-                |> InputGroup.toMarkup
+                |> InputGroup.toMarkup theme
             ]
 
         -- WIZARD
@@ -427,7 +430,7 @@ view model =
                     |> Wizard.withOnBack WizardBack
                     |> Wizard.withOnCancel WizardCancel
                     |> Wizard.withOnFinish WizardFinish
-                    |> Wizard.toMarkup
+                    |> Wizard.toMarkup theme
                 )
             ]
 
@@ -438,29 +441,68 @@ view model =
                 [ Form.formGroup
                     (TextInput.textInput { value = "", onChange = TextChanged }
                         |> TextInput.withPlaceholder "Jane Doe"
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                     |> Form.withLabel "Full name"
                     |> Form.withRequired
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 , Form.formGroup
                     (TextInput.textInput { value = "", onChange = TextChanged }
                         |> TextInput.withEmailType
                         |> TextInput.withPlaceholder "jane@example.com"
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                     |> Form.withLabel "Email"
                     |> Form.withRequired
                     |> Form.withHelperText "We'll never share your email."
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 , Form.formGroup
                     (Checkbox.checkbox { id = "terms", onChange = CheckboxToggled }
                         |> Checkbox.withLabel "I agree to the terms and conditions"
                         |> Checkbox.withChecked model.checkboxChecked
-                        |> Checkbox.toMarkup
+                        |> Checkbox.toMarkup theme
                     )
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 ]
-                |> Form.toMarkup
+                |> Form.toMarkup theme
+            ]
+
+        -- DATE PICKER
+        , section theme
+            "DatePicker"
+            [ DatePicker.datePicker { year = model.datePickerYear, month = model.datePickerMonth }
+                |> DatePicker.withSelectedDate model.datePickerSelected
+                |> DatePicker.withOnPrevMonth DatePickerPrev
+                |> DatePicker.withOnNextMonth DatePickerNext
+                |> DatePicker.withOnSelect DatePickerSelect
+                |> DatePicker.toMarkup theme
+            ]
+
+        -- FILE UPLOAD
+        , section theme
+            "FileUpload"
+            [ (case model.uploadFileName of
+                    Just name ->
+                        FileUpload.fileUpload |> FileUpload.withFileName name
+
+                    Nothing ->
+                        FileUpload.fileUpload
+              )
+                |> FileUpload.withIsDragOver model.uploadDragOver
+                |> FileUpload.withOnClear UploadClear
+                |> FileUpload.withHelperText "Accepted file types: .jpg, .png, .pdf"
+                |> FileUpload.toMarkup theme
+            ]
+
+        -- INLINE EDIT
+        , section theme
+            "InlineEdit"
+            [ InlineEdit.inlineEdit model.inlineValue
+                |> InlineEdit.withEditing model.inlineEditing
+                |> InlineEdit.withOnEdit InlineEditStart
+                |> InlineEdit.withOnChange InlineEditChange
+                |> InlineEdit.withOnSave InlineEditSave
+                |> InlineEdit.withOnCancel InlineEditCancel
+                |> InlineEdit.toMarkup theme
             ]
         ]

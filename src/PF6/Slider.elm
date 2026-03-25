@@ -38,6 +38,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -124,27 +125,27 @@ withCustomThumb thumb (Slider opts) =
     Slider { opts | customThumb = Just thumb }
 
 
-defaultThumb : Input.Thumb
-defaultThumb =
+defaultThumb : Theme -> Input.Thumb
+defaultThumb theme =
     Input.thumb
         [ Element.width (Element.px 20)
         , Element.height (Element.px 20)
         , Border.rounded 10
-        , Bg.color Tokens.colorPrimary
+        , Bg.color (Theme.primary theme)
         , Border.width 2
-        , Border.color Tokens.colorBackgroundDefault
+        , Border.color (Theme.backgroundDefault theme)
         ]
 
 
-disabledThumb : Input.Thumb
-disabledThumb =
+disabledThumb : Theme -> Input.Thumb
+disabledThumb theme =
     Input.thumb
         [ Element.width (Element.px 20)
         , Element.height (Element.px 20)
         , Border.rounded 10
-        , Bg.color Tokens.colorTextSubtle
+        , Bg.color (Theme.textSubtle theme)
         , Border.width 2
-        , Border.color Tokens.colorBackgroundDefault
+        , Border.color (Theme.backgroundDefault theme)
         ]
 
 
@@ -159,8 +160,8 @@ formatValue v =
 
 {-| Render the Slider as an `Element msg`
 -}
-toMarkup : Slider msg -> Element msg
-toMarkup (Slider opts) =
+toMarkup : Theme -> Slider msg -> Element msg
+toMarkup theme (Slider opts) =
     let
         labelEl =
             opts.label
@@ -168,7 +169,7 @@ toMarkup (Slider opts) =
                     (\l ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text l)
@@ -177,10 +178,10 @@ toMarkup (Slider opts) =
 
         thumb =
             if opts.isDisabled then
-                disabledThumb
+                disabledThumb theme
 
             else
-                opts.customThumb |> Maybe.withDefault defaultThumb
+                opts.customThumb |> Maybe.withDefault (defaultThumb theme)
 
         sliderEl =
             Input.slider
@@ -193,10 +194,10 @@ toMarkup (Slider opts) =
                         , Element.centerY
                         , Bg.color
                             (if opts.isDisabled then
-                                Tokens.colorBorderDefault
+                                Theme.borderDefault theme
 
                              else
-                                Tokens.colorBorderDefault
+                                Theme.borderDefault theme
                             )
                         , Border.rounded 2
                         ]
@@ -221,7 +222,7 @@ toMarkup (Slider opts) =
             if opts.showValue then
                 Element.el
                     [ Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     , Element.paddingXY Tokens.spacerSm 0
                     , Element.width (Element.px 60)
                     , Font.alignRight
@@ -245,8 +246,8 @@ toMarkup (Slider opts) =
                     , Element.spaceEvenly
                     , Element.paddingEach { top = 0, right = 0, bottom = 0, left = 0 }
                     ]
-                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text (formatValue opts.min))
-                    , Element.el [ Font.size Tokens.fontSizeSm, Font.color Tokens.colorTextSubtle ] (Element.text (formatValue opts.max))
+                    [ Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text (formatValue opts.min))
+                    , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text (formatValue opts.max))
                     ]
 
             else

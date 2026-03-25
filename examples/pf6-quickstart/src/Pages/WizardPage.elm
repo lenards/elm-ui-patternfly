@@ -3,24 +3,27 @@ module Pages.WizardPage exposing (view)
 import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 import PF6.Wizard as Wizard
 
 
 view :
-    { wizardStep : Int
-    , onWizardStepChange : Int -> msg
-    , onNext : msg
-    , onBack : msg
-    }
+    Theme
+    ->
+        { wizardStep : Int
+        , onWizardStepChange : Int -> msg
+        , onNext : msg
+        , onBack : msg
+        }
     -> Element msg
-view config =
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Wizard" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Wizard" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Wizards guide users through a multi-step workflow, one step at a time." ]
-        , exampleSection "Basic wizard"
+        , exampleSection theme "Basic wizard"
             (Wizard.wizard
                 { steps =
                     [ Wizard.wizardStep { title = "General", content = Element.paragraph [ Font.size 14 ] [ Element.text "Step 1: Enter general information about the resource." ] }
@@ -32,13 +35,13 @@ view config =
                 |> Wizard.withOnStepChange config.onWizardStepChange
                 |> Wizard.withOnNext config.onNext
                 |> Wizard.withOnBack config.onBack
-                |> Wizard.toMarkup
+                |> Wizard.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

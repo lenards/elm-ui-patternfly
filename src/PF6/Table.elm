@@ -49,6 +49,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -182,8 +183,8 @@ withSortedBy { key, direction } (Table opts) =
     Table { opts | sortState = Just { key = key, direction = direction } }
 
 
-headerCell : Options row msg -> Column row msg -> Element msg
-headerCell opts (Column col) =
+headerCell : Theme -> Options row msg -> Column row msg -> Element msg
+headerCell theme opts (Column col) =
     let
         sortIndicator =
             case opts.sortState of
@@ -220,17 +221,17 @@ headerCell opts (Column col) =
         [ cellPad
         , Font.bold
         , Font.size Tokens.fontSizeSm
-        , Font.color Tokens.colorText
-        , Bg.color Tokens.colorBackgroundSecondary
+        , Font.color (Theme.text theme)
+        , Bg.color (Theme.backgroundSecondary theme)
         , Element.width Element.fill
         , Border.widthEach { top = 0, right = 0, bottom = 2, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         (Element.text label)
 
 
-bodyCell : Options row msg -> Column row msg -> row -> Element msg
-bodyCell opts (Column col) row =
+bodyCell : Theme -> Options row msg -> Column row msg -> row -> Element msg
+bodyCell theme opts (Column col) row =
     let
         cellPad =
             if opts.isCompact then
@@ -242,18 +243,18 @@ bodyCell opts (Column col) row =
         borderAttrs =
             if opts.isBordered then
                 [ Border.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
 
             else
                 [ Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderSubtle
+                , Border.color (Theme.borderSubtle theme)
                 ]
     in
     Element.el
         ([ cellPad
          , Font.size Tokens.fontSizeMd
-         , Font.color Tokens.colorText
+         , Font.color (Theme.text theme)
          , Element.width Element.fill
          ]
             ++ borderAttrs
@@ -261,27 +262,27 @@ bodyCell opts (Column col) row =
         (col.view row)
 
 
-bodyRow : Options row msg -> Int -> row -> Element msg
-bodyRow opts index row =
+bodyRow : Theme -> Options row msg -> Int -> row -> Element msg
+bodyRow theme opts index row =
     let
         bg =
             if opts.isStriped && modBy 2 index == 1 then
-                Tokens.colorBackgroundSecondary
+                Theme.backgroundSecondary theme
 
             else
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
     in
     Element.row
         [ Element.width Element.fill
         , Bg.color bg
         ]
-        (List.map (\col -> bodyCell opts col row) opts.columns)
+        (List.map (\col -> bodyCell theme opts col row) opts.columns)
 
 
 {-| Render the Table as an `Element msg`
 -}
-toMarkup : Table row msg -> Element msg
-toMarkup (Table opts) =
+toMarkup : Theme -> Table row msg -> Element msg
+toMarkup theme (Table opts) =
     let
         captionEl =
             opts.caption
@@ -289,7 +290,7 @@ toMarkup (Table opts) =
                     (\cap ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text cap)
@@ -299,16 +300,16 @@ toMarkup (Table opts) =
         headerRow =
             Element.row
                 [ Element.width Element.fill ]
-                (List.map (headerCell opts) opts.columns)
+                (List.map (headerCell theme opts) opts.columns)
 
         bodyRows =
-            List.indexedMap (bodyRow opts) opts.rows
+            List.indexedMap (bodyRow theme opts) opts.rows
     in
     Element.column
         [ Element.width Element.fill
         , Border.rounded Tokens.radiusMd
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         (captionEl :: headerRow :: bodyRows)

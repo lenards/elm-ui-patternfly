@@ -3,6 +3,7 @@ port module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Element
+import PF6.Theme as Theme exposing (Mode(..), Theme)
 import Pages.AccordionPage as AccordionPage
 import Pages.ActionListPage as ActionListPage
 import Pages.AlertPage as AlertPage
@@ -84,6 +85,7 @@ import Url exposing (Url)
 type alias Model =
     { route : Route
     , key : Nav.Key
+    , themeMode : Mode
     , componentsExpanded : Bool
     , layoutsExpanded : Bool
     , modalOpen : Bool
@@ -121,6 +123,7 @@ type Msg
     | UrlRequested Browser.UrlRequest
     | UrlChanged Url
     | NavigateTo Route
+    | ToggleTheme
     | ToggleComponents
     | ToggleLayouts
     | ModalOpen
@@ -156,6 +159,7 @@ init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { route = Route.routeFromUrl url
       , key = key
+      , themeMode = Light
       , componentsExpanded = True
       , layoutsExpanded = False
       , modalOpen = False
@@ -209,6 +213,19 @@ update msg model =
         NavigateTo route ->
             ( model
             , Nav.pushUrl model.key ("#" ++ Route.routeToFragment route)
+            )
+
+        ToggleTheme ->
+            ( { model
+                | themeMode =
+                    case model.themeMode of
+                        Light ->
+                            Dark
+
+                        Dark ->
+                            Light
+              }
+            , Cmd.none
             )
 
         ToggleComponents ->
@@ -311,95 +328,98 @@ update msg model =
 view : Model -> Browser.Document Msg
 view model =
     let
+        theme =
+            Theme.fromMode model.themeMode
+
         pageContent =
             case model.route of
                 Home ->
-                    Home.view
+                    Home.view theme
 
                 AccordionRoute ->
-                    AccordionPage.view
+                    AccordionPage.view theme
                         { expanded = model.accordionExpanded
                         , onToggle = AccordionToggled
                         }
 
                 ActionListRoute ->
-                    ActionListPage.view NoOp
+                    ActionListPage.view theme NoOp
 
                 AlertRoute ->
-                    AlertPage.view NoOp
+                    AlertPage.view theme NoOp
 
                 AvatarRoute ->
-                    AvatarPage.view
+                    AvatarPage.view theme
 
                 BackdropRoute ->
-                    BackdropPage.view
+                    BackdropPage.view theme
 
                 BackToTopRoute ->
-                    BackToTopPage.view NoOp
+                    BackToTopPage.view theme NoOp
 
                 BadgeRoute ->
-                    BadgePage.view
+                    BadgePage.view theme
 
                 BannerRoute ->
-                    BannerPage.view
+                    BannerPage.view theme
 
                 BrandRoute ->
-                    BrandPage.view
+                    BrandPage.view theme
 
                 BreadcrumbRoute ->
-                    BreadcrumbPage.view
+                    BreadcrumbPage.view theme
 
                 ButtonRoute ->
-                    ButtonPage.view NoOp
+                    ButtonPage.view theme NoOp
 
                 CardRoute ->
-                    CardPage.view
+                    CardPage.view theme
 
                 CheckboxRoute ->
-                    CheckboxPage.view
+                    CheckboxPage.view theme
                         { checkboxChecked = model.checkboxChecked
                         , onCheckboxToggle = CheckboxToggled
                         }
 
                 ClipboardCopyRoute ->
-                    ClipboardCopyPage.view CopyText
+                    ClipboardCopyPage.view theme CopyText
 
                 CodeBlockRoute ->
-                    CodeBlockPage.view
+                    CodeBlockPage.view theme
 
                 DataListRoute ->
-                    DataListPage.view
+                    DataListPage.view theme
 
                 DescriptionListRoute ->
-                    DescriptionListPage.view
+                    DescriptionListPage.view theme
 
                 DividerRoute ->
-                    DividerPage.view
+                    DividerPage.view theme
 
                 DrawerRoute ->
-                    DrawerPage.view
+                    DrawerPage.view theme
                         { drawerExpanded = model.drawerExpanded
                         , onToggle = DrawerToggled
                         }
 
                 DropdownRoute ->
-                    DropdownPage.view
+                    DropdownPage.view theme
                         { dropdownOpen = model.dropdownOpen
                         , onToggle = DropdownToggled
                         , noOp = NoOp
                         }
 
                 EmptyStateRoute ->
-                    EmptyStatePage.view NoOp
+                    EmptyStatePage.view theme NoOp
 
                 ExpandableSectionRoute ->
-                    ExpandableSectionPage.view
+                    ExpandableSectionPage.view theme
                         { expanded = model.expandableSectionExpanded
                         , onToggle = ExpandableSectionToggled
                         }
 
                 FormRoute ->
-                    FormPage.view
+                    FormPage.view theme
                         { formText = model.formText
                         , onTextChange = FormTextChanged
                         , checkboxChecked = model.checkboxChecked
@@ -407,91 +427,91 @@ view model =
                         }
 
                 HelperTextRoute ->
-                    HelperTextPage.view
+                    HelperTextPage.view theme
 
                 HintRoute ->
-                    HintPage.view
+                    HintPage.view theme
 
                 IconRoute ->
-                    IconPage.view
+                    IconPage.view theme
 
                 InputGroupRoute ->
-                    InputGroupPage.view
+                    InputGroupPage.view theme
 
                 JumpLinksRoute ->
-                    JumpLinksPage.view
+                    JumpLinksPage.view theme
 
                 LabelRoute ->
-                    LabelPage.view
+                    LabelPage.view theme
 
                 ListRoute ->
-                    ListPage.view
+                    ListPage.view theme
 
                 MastheadRoute ->
-                    MastheadPage.view
+                    MastheadPage.view theme
 
                 MenuRoute ->
-                    MenuPage.view NoOp
+                    MenuPage.view theme NoOp
 
                 ModalRoute ->
-                    ModalPage.view
+                    ModalPage.view theme
                         { modalOpen = model.modalOpen
                         , onOpen = ModalOpen
                         , onClose = ModalClose
                         }
 
                 NotificationBadgeRoute ->
-                    NotificationBadgePage.view NoOp
+                    NotificationBadgePage.view theme NoOp
 
                 NotificationDrawerRoute ->
-                    NotificationDrawerPage.view NoOp
+                    NotificationDrawerPage.view theme NoOp
 
                 NumberInputRoute ->
-                    NumberInputPage.view
+                    NumberInputPage.view theme
                         { numberValue = model.numberValue
                         , onNumberChange = NumberValueChanged
                         }
 
                 PageRoute ->
-                    PageLayoutPage.view
+                    PageLayoutPage.view theme
 
                 PaginationRoute ->
-                    PaginationPage.view
+                    PaginationPage.view theme
                         { page = model.paginationPage
                         , onPageChange = PaginationPageChanged
                         }
 
                 PanelRoute ->
-                    PanelPage.view
+                    PanelPage.view theme
 
                 PopoverRoute ->
-                    PopoverPage.view
+                    PopoverPage.view theme
                         { popoverVisible = model.popoverVisible
                         , onToggle = \_ -> PopoverToggled
                         , onClose = PopoverClosed
                         }
 
                 ProgressRoute ->
-                    ProgressPage.view model.progressValue
+                    ProgressPage.view theme model.progressValue
 
                 ProgressStepperRoute ->
-                    ProgressStepperPage.view
+                    ProgressStepperPage.view theme
 
                 RadioRoute ->
-                    RadioPage.view
+                    RadioPage.view theme
                         { selectedRadio = model.selectedRadio
                         , onRadioChange = RadioSelected
                         }
 
                 SearchInputRoute ->
-                    SearchInputPage.view
+                    SearchInputPage.view theme
                         { searchValue = model.searchValue
                         , onSearchChange = SearchValueChanged
                         , onSearchClear = SearchCleared
                         }
 
                 SelectRoute ->
-                    SelectPage.view
+                    SelectPage.view theme
                         { selectOpen = model.selectOpen
                         , selectValue = model.selectValue
                         , onSelectToggle = SelectToggled
@@ -499,82 +519,82 @@ view model =
                         }
 
                 SimpleListRoute ->
-                    SimpleListPage.view NoOp
+                    SimpleListPage.view theme NoOp
 
                 SkeletonRoute ->
-                    SkeletonPage.view
+                    SkeletonPage.view theme
 
                 SkipToContentRoute ->
-                    SkipToContentPage.view
+                    SkipToContentPage.view theme
 
                 SliderRoute ->
-                    SliderPage.view
+                    SliderPage.view theme
                         { sliderValue = model.sliderValue
                         , onSliderChange = SliderChanged
                         }
 
                 SpinnerRoute ->
-                    SpinnerPage.view
+                    SpinnerPage.view theme
 
                 SwitchRoute ->
-                    SwitchPage.view
+                    SwitchPage.view theme
                         { switchChecked = model.switchChecked
                         , onSwitchToggle = SwitchToggled
                         }
 
                 TableRoute ->
-                    TablePage.view
+                    TablePage.view theme
 
                 TabsRoute ->
-                    TabsPage.view
+                    TabsPage.view theme
                         { activeTab = model.tabsActive
                         , onTabSelect = TabSelected
                         }
 
                 TextAreaRoute ->
-                    TextAreaPage.view
+                    TextAreaPage.view theme
                         { textAreaValue = model.textAreaValue
                         , onTextAreaChange = TextAreaChanged
                         }
 
                 TextInputRoute ->
-                    TextInputPage.view
+                    TextInputPage.view theme
                         { textInputValue = model.textInputValue
                         , onTextInputChange = TextInputChanged
                         }
 
                 TextInputGroupRoute ->
-                    TextInputGroupPage.view
+                    TextInputGroupPage.view theme
                         { value = model.textInputGroupValue
                         , onChange = TextInputGroupChanged
                         }
 
                 TileRoute ->
-                    TilePage.view NoOp
+                    TilePage.view theme NoOp
 
                 TimestampRoute ->
-                    TimestampPage.view
+                    TimestampPage.view theme
 
                 TitleRoute ->
-                    TitlePage.view
+                    TitlePage.view theme
 
                 ToggleGroupRoute ->
-                    ToggleGroupPage.view
+                    ToggleGroupPage.view theme
                         { selected = model.toggleGroupSelected
                         , onSelect = ToggleGroupSelected
                         }
 
                 ToolbarRoute ->
-                    ToolbarPage.view NoOp
+                    ToolbarPage.view theme NoOp
 
                 TooltipRoute ->
-                    TooltipPage.view NoOp
+                    TooltipPage.view theme NoOp
 
                 TruncateRoute ->
-                    TruncatePage.view
+                    TruncatePage.view theme
 
                 WizardRoute ->
-                    WizardPage.view
+                    WizardPage.view theme
                         { wizardStep = model.wizardStep
                         , onWizardStepChange = WizardStepChanged
                         , onNext = WizardNext
@@ -582,28 +602,28 @@ view model =
                         }
 
                 BullseyeRoute ->
-                    BullseyePage.view
+                    BullseyePage.view theme
 
                 FlexRoute ->
-                    FlexPage.view
+                    FlexPage.view theme
 
                 GalleryRoute ->
-                    GalleryPage.view
+                    GalleryPage.view theme
 
                 GridRoute ->
-                    GridPage.view
+                    GridPage.view theme
 
                 LevelRoute ->
-                    LevelPage.view
+                    LevelPage.view theme
 
                 SidebarLayoutRoute ->
-                    SidebarLayoutPage.view
+                    SidebarLayoutPage.view theme
 
                 SplitRoute ->
-                    SplitPage.view
+                    SplitPage.view theme
 
                 StackRoute ->
-                    StackPage.view
+                    StackPage.view theme
 
                 NotFound ->
                     Element.text "Page not found"
@@ -616,11 +636,14 @@ view model =
             ]
             (Shell.view
                 { route = model.route
+                , theme = theme
                 , componentsExpanded = model.componentsExpanded
                 , layoutsExpanded = model.layoutsExpanded
                 , onToggleComponents = ToggleComponents
                 , onToggleLayouts = ToggleLayouts
                 , onNavigate = NavigateTo
+                , onToggleTheme = ToggleTheme
+                , themeMode = model.themeMode
                 }
                 pageContent
             )

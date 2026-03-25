@@ -51,6 +51,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -172,27 +173,27 @@ withLabel l (JumpLinks opts) =
     JumpLinks { opts | label = Just l }
 
 
-renderSubLink : JumpLink msg -> Element msg
-renderSubLink (JumpLink opts) =
+renderSubLink : Theme -> JumpLink msg -> Element msg
+renderSubLink theme (JumpLink opts) =
     Element.el
         [ Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = Tokens.spacerXs, left = Tokens.spacerLg }
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 3 }
         , Border.color
             (if opts.isActive then
-                Tokens.colorPrimary
+                Theme.primary theme
 
              else
-                Tokens.colorBorderDefault
+                Theme.borderDefault theme
             )
         ]
         (Element.link
             [ Font.size Tokens.fontSizeSm
             , Font.color
                 (if opts.isActive then
-                    Tokens.colorPrimary
+                    Theme.primary theme
 
                  else
-                    Tokens.colorTextSubtle
+                    Theme.textSubtle theme
                 )
             ]
             { url = opts.href
@@ -201,8 +202,8 @@ renderSubLink (JumpLink opts) =
         )
 
 
-renderLink : Layout -> JumpLink msg -> Element msg
-renderLink layout (JumpLink opts) =
+renderLink : Theme -> Layout -> JumpLink msg -> Element msg
+renderLink theme layout (JumpLink opts) =
     let
         linkEl =
             Element.el
@@ -219,7 +220,7 @@ renderLink layout (JumpLink opts) =
                     )
                 , Border.color
                     (if opts.isActive then
-                        Tokens.colorPrimary
+                        Theme.primary theme
 
                      else
                         Element.rgba 0 0 0 0
@@ -229,10 +230,10 @@ renderLink layout (JumpLink opts) =
                     [ Font.size Tokens.fontSizeMd
                     , Font.color
                         (if opts.isActive then
-                            Tokens.colorPrimary
+                            Theme.primary theme
 
                          else
-                            Tokens.colorText
+                            Theme.text theme
                         )
                     , if opts.isActive then
                         Font.bold
@@ -248,7 +249,7 @@ renderLink layout (JumpLink opts) =
     case layout of
         Vertical ->
             Element.column [ Element.width Element.fill ]
-                (linkEl :: List.map renderSubLink opts.subsections)
+                (linkEl :: List.map (renderSubLink theme) opts.subsections)
 
 
 {-| Render the JumpLinks as an `Element msg`
@@ -258,8 +259,8 @@ navigation to work, the target sections must have matching `id` attributes
 set via `Element.htmlAttribute (Html.Attributes.id "section-name")`.
 
 -}
-toMarkup : JumpLinks msg -> Element msg
-toMarkup (JumpLinks opts) =
+toMarkup : Theme -> JumpLinks msg -> Element msg
+toMarkup theme (JumpLinks opts) =
     let
         container =
             case opts.layout of
@@ -267,8 +268,8 @@ toMarkup (JumpLinks opts) =
                     Element.column
                         [ Element.spacing 0
                         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-                        , Border.color Tokens.colorBorderDefault
-                        , Bg.color Tokens.colorBackgroundDefault
+                        , Border.color (Theme.borderDefault theme)
+                        , Bg.color (Theme.backgroundDefault theme)
                         ]
     in
     Element.column
@@ -278,12 +279,12 @@ toMarkup (JumpLinks opts) =
                 Element.el
                     [ Font.bold
                     , Font.size Tokens.fontSizeSm
-                    , Font.color Tokens.colorTextSubtle
+                    , Font.color (Theme.textSubtle theme)
                     , Element.paddingEach { bottom = Tokens.spacerXs, top = 0, left = Tokens.spacerMd, right = 0 }
                     ]
                     (Element.text (String.toUpper l))
 
             Nothing ->
                 Element.none
-        , container (List.map (renderLink opts.layout) opts.links)
+        , container (List.map (renderLink theme opts.layout) opts.links)
         ]

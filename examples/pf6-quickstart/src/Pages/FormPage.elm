@@ -6,23 +6,26 @@ import PF6.Card as Card
 import PF6.Checkbox as Checkbox
 import PF6.Form as Form
 import PF6.TextInput as TextInput
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
 view :
-    { formText : String
-    , onTextChange : String -> msg
-    , checkboxChecked : Bool
-    , onCheckboxToggle : Bool -> msg
-    }
+    Theme
+    ->
+        { formText : String
+        , onTextChange : String -> msg
+        , checkboxChecked : Bool
+        , onCheckboxToggle : Bool -> msg
+        }
     -> Element msg
-view config =
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Form" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Form" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Forms collect, validate, and submit user input." ]
-        , exampleSection "Basic form"
+        , exampleSection theme "Basic form"
             (Form.form
                 [ Form.formGroup
                     (TextInput.textInput
@@ -30,11 +33,11 @@ view config =
                         , onChange = config.onTextChange
                         }
                         |> TextInput.withPlaceholder "Enter your name"
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                     |> Form.withLabel "Full name"
                     |> Form.withRequired
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 , Form.formGroup
                     (TextInput.textInput
                         { value = ""
@@ -42,11 +45,11 @@ view config =
                         }
                         |> TextInput.withPlaceholder "you@example.com"
                         |> TextInput.withEmailType
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                     |> Form.withLabel "Email"
                     |> Form.withHelperText "We will never share your email."
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 , Form.formGroup
                     (Checkbox.checkbox
                         { id = "agree-checkbox"
@@ -54,13 +57,13 @@ view config =
                         }
                         |> Checkbox.withChecked config.checkboxChecked
                         |> Checkbox.withLabel "I agree to the terms and conditions"
-                        |> Checkbox.toMarkup
+                        |> Checkbox.toMarkup theme
                     )
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 ]
-                |> Form.toMarkup
+                |> Form.toMarkup theme
             )
-        , exampleSection "Horizontal form"
+        , exampleSection theme "Horizontal form"
             (Form.form
                 [ Form.formGroup
                     (TextInput.textInput
@@ -68,19 +71,19 @@ view config =
                         , onChange = config.onTextChange
                         }
                         |> TextInput.withPlaceholder "Username"
-                        |> TextInput.toMarkup
+                        |> TextInput.toMarkup theme
                     )
                     |> Form.withLabel "Username"
-                    |> Form.groupToMarkup
+                    |> Form.groupToMarkup theme
                 ]
                 |> Form.withHorizontal
-                |> Form.toMarkup
+                |> Form.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

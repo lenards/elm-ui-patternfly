@@ -44,6 +44,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -129,8 +130,8 @@ mastheadEl mEl =
 
 {-| Render the Page as an `Element msg`
 -}
-toMarkup : Page msg -> Element msg
-toMarkup (Page opts) =
+toMarkup : Theme -> Page msg -> Element msg
+toMarkup theme (Page opts) =
     let
         sidebarEl =
             case opts.sidebar of
@@ -141,9 +142,9 @@ toMarkup (Page opts) =
                     Element.el
                         [ Element.width (Element.px opts.sidebarWidth)
                         , Element.height Element.fill
-                        , Bg.color Tokens.colorBackgroundDefault
+                        , Bg.color (Theme.backgroundDefault theme)
                         , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         el
 
@@ -157,7 +158,7 @@ toMarkup (Page opts) =
                         [ Element.width Element.fill
                         , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
                         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         el
 
@@ -170,9 +171,9 @@ toMarkup (Page opts) =
                     Element.el
                         [ Element.width (Element.px 300)
                         , Element.height Element.fill
-                        , Bg.color Tokens.colorBackgroundDefault
+                        , Bg.color (Theme.backgroundDefault theme)
                         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         ]
                         el
 
@@ -188,7 +189,7 @@ toMarkup (Page opts) =
                     , Element.height Element.fill
                     , Element.htmlAttribute (Html.Attributes.style "min-height" "0")
                     , Element.padding Tokens.spacerMd
-                    , Bg.color Tokens.colorBackgroundSecondary
+                    , Bg.color (Theme.backgroundSecondary theme)
                     , Element.scrollbarY
                     ]
                     opts.mainContent

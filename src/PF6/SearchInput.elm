@@ -50,6 +50,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -125,12 +126,12 @@ withHints hints (SearchInput opts) =
 
 {-| Render the SearchInput as an `Element msg`
 -}
-toMarkup : SearchInput msg -> Element msg
-toMarkup (SearchInput opts) =
+toMarkup : Theme -> SearchInput msg -> Element msg
+toMarkup theme (SearchInput opts) =
     let
         searchIcon =
             Element.el
-                [ Font.color Tokens.colorTextSubtle
+                [ Font.color (Theme.textSubtle theme)
                 , Element.paddingXY Tokens.spacerSm 0
                 ]
                 (Element.text "🔍")
@@ -143,7 +144,7 @@ toMarkup (SearchInput opts) =
                 case opts.onClear of
                     Just msg ->
                         Input.button
-                            [ Font.color Tokens.colorTextSubtle
+                            [ Font.color (Theme.textSubtle theme)
                             , Element.paddingXY Tokens.spacerSm 0
                             ]
                             { onPress = Just msg
@@ -157,12 +158,12 @@ toMarkup (SearchInput opts) =
             case opts.onSubmit of
                 Just msg ->
                     Input.button
-                        [ Bg.color Tokens.colorBackgroundSecondary
+                        [ Bg.color (Theme.backgroundSecondary theme)
                         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-                        , Border.color Tokens.colorBorderDefault
+                        , Border.color (Theme.borderDefault theme)
                         , Element.paddingXY Tokens.spacerSm Tokens.spacerXs
                         , Font.size Tokens.fontSizeSm
-                        , Font.color Tokens.colorText
+                        , Font.color (Theme.text theme)
                         ]
                         { onPress = Just msg
                         , label = Element.text "Search"
@@ -177,14 +178,14 @@ toMarkup (SearchInput opts) =
                 , Border.width 0
                 , Element.padding Tokens.spacerXs
                 , Font.size Tokens.fontSizeMd
-                , Bg.color Tokens.colorBackgroundDefault
+                , Bg.color (Theme.backgroundDefault theme)
                 ]
                 { onChange = opts.onChange
                 , text = opts.value
                 , placeholder =
                     Just
                         (Input.placeholder
-                            [ Font.color Tokens.colorTextSubtle ]
+                            [ Font.color (Theme.textSubtle theme) ]
                             (Element.text opts.placeholder)
                         )
                 , label = Input.labelHidden opts.ariaLabel
@@ -197,10 +198,10 @@ toMarkup (SearchInput opts) =
             else
                 Element.column
                     [ Element.width Element.fill
-                    , Bg.color Tokens.colorBackgroundDefault
+                    , Bg.color (Theme.backgroundDefault theme)
                     , Border.solid
                     , Border.width 1
-                    , Border.color Tokens.colorBorderDefault
+                    , Border.color (Theme.borderDefault theme)
                     , Border.rounded Tokens.radiusMd
                     ]
                     (List.map
@@ -209,8 +210,8 @@ toMarkup (SearchInput opts) =
                                 [ Element.width Element.fill
                                 , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
                                 , Font.size Tokens.fontSizeMd
-                                , Font.color Tokens.colorText
-                                , Element.mouseOver [ Bg.color Tokens.colorBackgroundSecondary ]
+                                , Font.color (Theme.text theme)
+                                , Element.mouseOver [ Bg.color (Theme.backgroundSecondary theme) ]
                                 ]
                                 { onPress = Just (opts.onChange hint)
                                 , label = Element.text hint
@@ -226,8 +227,8 @@ toMarkup (SearchInput opts) =
             , Border.rounded Tokens.radiusMd
             , Border.solid
             , Border.width 1
-            , Border.color Tokens.colorBorderDefault
-            , Bg.color Tokens.colorBackgroundDefault
+            , Border.color (Theme.borderDefault theme)
+            , Bg.color (Theme.backgroundDefault theme)
             ]
             [ searchIcon
             , inputEl

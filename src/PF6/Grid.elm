@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/layouts/grid>
 
 import Element exposing (Element)
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -92,8 +93,8 @@ withGutter (Grid opts) =
 
 {-| Render the Grid as an Element msg
 -}
-toMarkup : Grid msg -> Element msg
-toMarkup (Grid opts) =
+toMarkup : Theme -> Grid msg -> Element msg
+toMarkup _ (Grid opts) =
     let
         spacingAttr =
             if opts.hasGutter then

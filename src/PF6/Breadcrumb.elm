@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/components/breadcrumb>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -80,29 +81,29 @@ dropdownItem config =
     DropdownItem config
 
 
-separatorEl : Element msg
-separatorEl =
+separatorEl : Theme -> Element msg
+separatorEl theme =
     Element.el
-        [ Font.color Tokens.colorTextSubtle
+        [ Font.color (Theme.textSubtle theme)
         , Element.paddingXY Tokens.spacerXs 0
         ]
         (Element.text "/")
 
 
-renderItem : BreadcrumbItem msg -> Element msg
-renderItem bcItem =
+renderItem : Theme -> BreadcrumbItem msg -> Element msg
+renderItem theme bcItem =
     case bcItem of
         LinkItem { label } ->
             Element.el
                 [ Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorPrimary
+                , Font.color (Theme.primary theme)
                 ]
                 (Element.text label)
 
         CurrentItem label ->
             Element.el
                 [ Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , Font.bold
                 ]
                 (Element.text label)
@@ -110,20 +111,20 @@ renderItem bcItem =
         DropdownItem { label } ->
             Element.el
                 [ Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorPrimary
+                , Font.color (Theme.primary theme)
                 ]
                 (Element.text (label ++ " ▾"))
 
 
 {-| Render the Breadcrumb as an `Element msg`
 -}
-toMarkup : Breadcrumb msg -> Element msg
-toMarkup (Breadcrumb items) =
+toMarkup : Theme -> Breadcrumb msg -> Element msg
+toMarkup theme (Breadcrumb items) =
     let
         withSeparators =
             items
-                |> List.map renderItem
-                |> List.intersperse separatorEl
+                |> List.map (renderItem theme)
+                |> List.intersperse (separatorEl theme)
     in
     Element.row
         [ Element.spacing 0

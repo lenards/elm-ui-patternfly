@@ -38,6 +38,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -93,8 +94,8 @@ withFooter el (Hint opts) =
 
 {-| Render the Hint as an `Element msg`
 -}
-toMarkup : Hint msg -> Element msg
-toMarkup (Hint opts) =
+toMarkup : Theme -> Hint msg -> Element msg
+toMarkup theme (Hint opts) =
     let
         titleEl =
             opts.title
@@ -103,7 +104,7 @@ toMarkup (Hint opts) =
                         Element.el
                             [ Font.bold
                             , Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             ]
                             (Element.text t)
                     )
@@ -112,7 +113,7 @@ toMarkup (Hint opts) =
         bodyEl =
             Element.paragraph
                 [ Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 [ Element.text opts.body ]
 
@@ -134,7 +135,7 @@ toMarkup (Hint opts) =
                             [ Element.width Element.fill
                             , Element.paddingEach { top = Tokens.spacerSm, right = 0, bottom = 0, left = 0 }
                             , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                            , Border.color Tokens.colorBorderSubtle
+                            , Border.color (Theme.borderSubtle theme)
                             ]
                             el
                     )
@@ -142,7 +143,7 @@ toMarkup (Hint opts) =
     in
     Element.column
         [ Element.width Element.fill
-        , Bg.color Tokens.colorBackgroundSecondary
+        , Bg.color (Theme.backgroundSecondary theme)
         , Border.rounded Tokens.radiusMd
         , Element.padding Tokens.spacerMd
         , Element.spacing Tokens.spacerXs

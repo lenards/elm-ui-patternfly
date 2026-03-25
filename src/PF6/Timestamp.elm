@@ -36,6 +36,7 @@ See: <https://www.patternfly.org/components/timestamp>
 import Element exposing (Element)
 import Element.Font as Font
 import Html.Attributes
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -91,15 +92,15 @@ withCustomIcon icon (Timestamp opts) =
 
 {-| Render the Timestamp as an `Element msg`
 -}
-toMarkup : Timestamp msg -> Element msg
-toMarkup (Timestamp opts) =
+toMarkup : Theme -> Timestamp msg -> Element msg
+toMarkup theme (Timestamp opts) =
     let
         iconEl =
             case opts.customIcon of
                 Just icon ->
                     Element.el
                         [ Font.size Tokens.fontSizeSm
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         ]
                         icon
 
@@ -107,7 +108,7 @@ toMarkup (Timestamp opts) =
                     if opts.showIcon then
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             (Element.text "\u{1F552}")
 
@@ -117,7 +118,7 @@ toMarkup (Timestamp opts) =
         textEl =
             Element.el
                 [ Font.size Tokens.fontSizeSm
-                , Font.color Tokens.colorTextSubtle
+                , Font.color (Theme.textSubtle theme)
                 ]
                 (Element.text opts.text)
 

@@ -34,6 +34,7 @@ See: <https://www.patternfly.org/layouts/gallery>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -86,8 +87,8 @@ withMaxWidthPx w (Gallery opts) =
 
 {-| Render the Gallery as an Element msg
 -}
-toMarkup : Gallery msg -> Element msg
-toMarkup (Gallery opts) =
+toMarkup : Theme -> Gallery msg -> Element msg
+toMarkup _ (Gallery opts) =
     let
         spacingAttr =
             if opts.hasGutter then

@@ -60,30 +60,30 @@ view model =
         , section theme
             "Button"
             [ row
-                [ Button.primary { label = "Primary", onPress = Nothing } |> Button.toMarkup
-                , Button.secondary { label = "Secondary", onPress = Nothing } |> Button.toMarkup
-                , Button.tertiary { label = "Tertiary", onPress = Nothing } |> Button.toMarkup
-                , Button.danger { label = "Danger", onPress = Nothing } |> Button.toMarkup
-                , Button.warning { label = "Warning", onPress = Nothing } |> Button.toMarkup
-                , Button.link { label = "Link", onPress = Nothing } |> Button.toMarkup
-                , Button.plain { label = "Plain", onPress = Nothing } |> Button.toMarkup
+                [ Button.primary { label = "Primary", onPress = Nothing } |> Button.toMarkup theme
+                , Button.secondary { label = "Secondary", onPress = Nothing } |> Button.toMarkup theme
+                , Button.tertiary { label = "Tertiary", onPress = Nothing } |> Button.toMarkup theme
+                , Button.danger { label = "Danger", onPress = Nothing } |> Button.toMarkup theme
+                , Button.warning { label = "Warning", onPress = Nothing } |> Button.toMarkup theme
+                , Button.link { label = "Link", onPress = Nothing } |> Button.toMarkup theme
+                , Button.plain { label = "Plain", onPress = Nothing } |> Button.toMarkup theme
                 ]
             , row
-                [ Button.primary { label = "Large", onPress = Nothing } |> Button.withLargeSize |> Button.toMarkup
-                , Button.primary { label = "Default", onPress = Nothing } |> Button.toMarkup
-                , Button.primary { label = "Small", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup
+                [ Button.primary { label = "Large", onPress = Nothing } |> Button.withLargeSize |> Button.toMarkup theme
+                , Button.primary { label = "Default", onPress = Nothing } |> Button.toMarkup theme
+                , Button.primary { label = "Small", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup theme
                 ]
             , row
                 [ Button.primary { label = "With icon", onPress = Nothing }
                     |> Button.withIcon (Element.text "★")
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 , Button.secondary { label = "Icon right", onPress = Nothing }
                     |> Button.withIcon (Element.text "→")
                     |> Button.withIconRight
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 , Button.primary { label = "Disabled", onPress = Nothing }
                     |> Button.withDisabled
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 ]
             ]
 
@@ -91,11 +91,11 @@ view model =
         , section theme
             "Badge"
             [ row
-                [ Badge.badge 7 |> Badge.toMarkup
-                , Badge.unreadBadge 3 |> Badge.toMarkup
-                , Badge.badge 0 |> Badge.toMarkup
-                , Badge.badge 1000 |> Badge.toMarkup
-                , Badge.badge 1000 |> Badge.withOverflowAt 99 |> Badge.toMarkup
+                [ Badge.badge 7 |> Badge.toMarkup theme
+                , Badge.unreadBadge 3 |> Badge.toMarkup theme
+                , Badge.badge 0 |> Badge.toMarkup theme
+                , Badge.badge 1000 |> Badge.toMarkup theme
+                , Badge.badge 1000 |> Badge.withOverflowAt 99 |> Badge.toMarkup theme
                 ]
             ]
 
@@ -103,20 +103,20 @@ view model =
         , section theme
             "Label"
             [ row
-                [ Label.label "Default" |> Label.toMarkup
-                , Label.label "Blue" |> Label.withBlueColor |> Label.toMarkup
-                , Label.label "Green" |> Label.withGreenColor |> Label.toMarkup
-                , Label.label "Orange" |> Label.withOrangeColor |> Label.toMarkup
-                , Label.label "Red" |> Label.withRedColor |> Label.toMarkup
-                , Label.label "Purple" |> Label.withPurpleColor |> Label.toMarkup
-                , Label.label "Cyan" |> Label.withCyanColor |> Label.toMarkup
-                , Label.label "Gold" |> Label.withGoldColor |> Label.toMarkup
+                [ Label.label "Default" |> Label.toMarkup theme
+                , Label.label "Blue" |> Label.withBlueColor |> Label.toMarkup theme
+                , Label.label "Green" |> Label.withGreenColor |> Label.toMarkup theme
+                , Label.label "Orange" |> Label.withOrangeColor |> Label.toMarkup theme
+                , Label.label "Red" |> Label.withRedColor |> Label.toMarkup theme
+                , Label.label "Purple" |> Label.withPurpleColor |> Label.toMarkup theme
+                , Label.label "Cyan" |> Label.withCyanColor |> Label.toMarkup theme
+                , Label.label "Gold" |> Label.withGoldColor |> Label.toMarkup theme
                 ]
             , row
-                [ Label.label "Outline" |> Label.withOutline |> Label.withBlueColor |> Label.toMarkup
-                , Label.label "Compact" |> Label.withCompact |> Label.withGreenColor |> Label.toMarkup
-                , Label.label "Closable" |> Label.withBlueColor |> Label.withCloseMsg NoOp |> Label.toMarkup
-                , Label.label "With icon" |> Label.withBlueColor |> Label.withIcon (Element.text "★") |> Label.toMarkup
+                [ Label.label "Outline" |> Label.withOutline |> Label.withBlueColor |> Label.toMarkup theme
+                , Label.label "Compact" |> Label.withCompact |> Label.withGreenColor |> Label.toMarkup theme
+                , Label.label "Closable" |> Label.withBlueColor |> Label.withCloseMsg NoOp |> Label.toMarkup theme
+                , Label.label "With icon" |> Label.withBlueColor |> Label.withIcon (Element.text "★") |> Label.toMarkup theme
                 ]
             ]
 
@@ -126,16 +126,16 @@ view model =
             [ row
                 [ Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withSmallSize
-                    |> Avatar.toMarkup
+                    |> Avatar.toMarkup theme
                 , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
-                    |> Avatar.toMarkup
+                    |> Avatar.toMarkup theme
                 , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withLargeSize
-                    |> Avatar.toMarkup
+                    |> Avatar.toMarkup theme
                 , Avatar.avatar { src = "avatar.svg", alt = "User avatar" }
                     |> Avatar.withLargeSize
                     |> Avatar.withBorder
-                    |> Avatar.toMarkup
+                    |> Avatar.toMarkup theme
                 ]
             ]
 
@@ -143,17 +143,17 @@ view model =
         , section theme
             "Icon"
             [ row
-                [ Icon.icon (Element.text "★") |> Icon.toMarkup
-                , Icon.icon (Element.text "✓") |> Icon.withSuccessStatus |> Icon.toMarkup
-                , Icon.icon (Element.text "✕") |> Icon.withDangerStatus |> Icon.toMarkup
-                , Icon.icon (Element.text "⚠") |> Icon.withWarningStatus |> Icon.toMarkup
-                , Icon.icon (Element.text "ℹ") |> Icon.withInfoStatus |> Icon.toMarkup
+                [ Icon.icon (Element.text "★") |> Icon.toMarkup theme
+                , Icon.icon (Element.text "✓") |> Icon.withSuccessStatus |> Icon.toMarkup theme
+                , Icon.icon (Element.text "✕") |> Icon.withDangerStatus |> Icon.toMarkup theme
+                , Icon.icon (Element.text "⚠") |> Icon.withWarningStatus |> Icon.toMarkup theme
+                , Icon.icon (Element.text "ℹ") |> Icon.withInfoStatus |> Icon.toMarkup theme
                 ]
             , row
-                [ Icon.icon (Element.text "◉") |> Icon.withSmallSize |> Icon.toMarkup
-                , Icon.icon (Element.text "◉") |> Icon.withMediumSize |> Icon.toMarkup
-                , Icon.icon (Element.text "◉") |> Icon.withLargeSize |> Icon.toMarkup
-                , Icon.icon (Element.text "◉") |> Icon.withXLargeSize |> Icon.toMarkup
+                [ Icon.icon (Element.text "◉") |> Icon.withSmallSize |> Icon.toMarkup theme
+                , Icon.icon (Element.text "◉") |> Icon.withMediumSize |> Icon.toMarkup theme
+                , Icon.icon (Element.text "◉") |> Icon.withLargeSize |> Icon.toMarkup theme
+                , Icon.icon (Element.text "◉") |> Icon.withXLargeSize |> Icon.toMarkup theme
                 ]
             ]
 
@@ -161,12 +161,12 @@ view model =
         , section theme
             "Title"
             [ Element.column [ Element.spacing Tokens.spacerSm ]
-                [ Title.title "Heading level 1" |> Title.withH1 |> Title.toMarkup
-                , Title.title "Heading level 2" |> Title.withH2 |> Title.toMarkup
-                , Title.title "Heading level 3" |> Title.withH3 |> Title.toMarkup
-                , Title.title "Heading level 4" |> Title.withH4 |> Title.toMarkup
-                , Title.title "Heading level 5" |> Title.withH5 |> Title.toMarkup
-                , Title.title "Heading level 6" |> Title.withH6 |> Title.toMarkup
+                [ Title.title "Heading level 1" |> Title.withH1 |> Title.toMarkup theme
+                , Title.title "Heading level 2" |> Title.withH2 |> Title.toMarkup theme
+                , Title.title "Heading level 3" |> Title.withH3 |> Title.toMarkup theme
+                , Title.title "Heading level 4" |> Title.withH4 |> Title.toMarkup theme
+                , Title.title "Heading level 5" |> Title.withH5 |> Title.toMarkup theme
+                , Title.title "Heading level 6" |> Title.withH6 |> Title.toMarkup theme
                 ]
             ]
 
@@ -175,9 +175,9 @@ view model =
             "Divider"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Element.text "Above divider"
-                , Divider.divider |> Divider.toMarkup
+                , Divider.divider |> Divider.toMarkup theme
                 , Element.text "Below divider"
-                , Divider.divider |> Divider.withInsetMd |> Divider.toMarkup
+                , Divider.divider |> Divider.withInsetMd |> Divider.toMarkup theme
                 , Element.text "With medium inset"
                 ]
             ]
@@ -188,11 +188,11 @@ view model =
             [ row
                 [ Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand--logo.svg", alt = "PatternFly" }
                     |> Brand.withHeight 36
-                    |> Brand.toMarkup
+                    |> Brand.toMarkup theme
                 , Brand.brand { src = "https://www.patternfly.org/images/pf-c-brand--logo.svg", alt = "PatternFly large" }
                     |> Brand.withHeight 48
                     |> Brand.withWidth 200
-                    |> Brand.toMarkup
+                    |> Brand.toMarkup theme
                 ]
             ]
 
@@ -202,15 +202,15 @@ view model =
             [ row
                 [ NotificationBadge.notificationBadge { count = 5, onClick = NotificationToggled }
                     |> NotificationBadge.withExpanded model.notificationExpanded
-                    |> NotificationBadge.toMarkup
+                    |> NotificationBadge.toMarkup theme
                 , NotificationBadge.notificationBadge { count = 0, onClick = NoOp }
                     |> NotificationBadge.withRead
-                    |> NotificationBadge.toMarkup
+                    |> NotificationBadge.toMarkup theme
                 , NotificationBadge.notificationBadge { count = 12, onClick = NoOp }
                     |> NotificationBadge.withAttentionVariant
-                    |> NotificationBadge.toMarkup
+                    |> NotificationBadge.toMarkup theme
                 , NotificationBadge.notificationBadge { count = 150, onClick = NoOp }
-                    |> NotificationBadge.toMarkup
+                    |> NotificationBadge.toMarkup theme
                 ]
             ]
 
@@ -219,14 +219,14 @@ view model =
             "Timestamp"
             [ row
                 [ Timestamp.timestamp "Jan 1, 2024, 12:00 PM"
-                    |> Timestamp.toMarkup
+                    |> Timestamp.toMarkup theme
                 , Timestamp.timestamp "Mar 15, 2024"
                     |> Timestamp.withIcon
-                    |> Timestamp.toMarkup
+                    |> Timestamp.toMarkup theme
                 , Timestamp.timestamp "2024-03-15T14:30:00Z"
                     |> Timestamp.withTooltip "March 15, 2024 at 2:30 PM UTC"
                     |> Timestamp.withCustomIcon (Element.text "\u{1F4C5}")
-                    |> Timestamp.toMarkup
+                    |> Timestamp.toMarkup theme
                 ]
             ]
 
@@ -236,14 +236,14 @@ view model =
             [ Element.column [ Element.spacing Tokens.spacerSm ]
                 [ Truncate.truncate "This is a very long text string that should be truncated at the end"
                     |> Truncate.withMaxChars 30
-                    |> Truncate.toMarkup
+                    |> Truncate.toMarkup theme
                 , Truncate.truncate "This is a long text that gets truncated in the middle to show both ends"
                     |> Truncate.withMaxChars 30
                     |> Truncate.withMiddleTruncation
-                    |> Truncate.toMarkup
+                    |> Truncate.toMarkup theme
                 , Truncate.truncate "Short text"
                     |> Truncate.withMaxChars 30
-                    |> Truncate.toMarkup
+                    |> Truncate.toMarkup theme
                 ]
             ]
         ]

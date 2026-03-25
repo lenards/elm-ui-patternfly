@@ -35,12 +35,13 @@ See: <https://www.patternfly.org/components/brand>
 
 import Element exposing (Element)
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 
 
 {-| Opaque Brand type
 -}
 type Brand msg
-    = Brand (Options)
+    = Brand Options
 
 
 type alias Options =
@@ -91,8 +92,8 @@ withResponsive (Brand opts) =
 
 {-| Render the Brand as an `Element msg`
 -}
-toMarkup : Brand msg -> Element msg
-toMarkup (Brand opts) =
+toMarkup : Theme -> Brand msg -> Element msg
+toMarkup _ (Brand opts) =
     let
         widthAttr =
             case ( opts.width, opts.responsive ) of

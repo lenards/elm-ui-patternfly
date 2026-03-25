@@ -41,6 +41,7 @@ See: <https://www.patternfly.org/components/empty-state>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -168,8 +169,8 @@ titleFontSize level size =
 
 {-| Render the EmptyState as an `Element msg`
 -}
-toMarkup : EmptyState msg -> Element msg
-toMarkup (EmptyState opts) =
+toMarkup : Theme -> EmptyState msg -> Element msg
+toMarkup theme (EmptyState opts) =
     let
         maxWidth =
             case opts.size of
@@ -196,7 +197,7 @@ toMarkup (EmptyState opts) =
                         Element.el
                             [ Element.centerX
                             , Font.size Tokens.fontSize4xl
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             ]
                             el
                     )
@@ -210,7 +211,7 @@ toMarkup (EmptyState opts) =
                             [ Element.centerX
                             , Font.bold
                             , Font.size (titleFontSize opts.titleLevel opts.size)
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             ]
                             (Element.text t)
                     )
@@ -223,7 +224,7 @@ toMarkup (EmptyState opts) =
                         Element.paragraph
                             [ Element.centerX
                             , Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.width Element.fill
                             ]
                             [ Element.text b ]

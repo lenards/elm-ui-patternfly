@@ -41,6 +41,7 @@ See: <https://www.patternfly.org/components/forms/form>
 
 import Element exposing (Element)
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -144,17 +145,17 @@ withValidation v (FormGroup opts) =
     FormGroup { opts | validation = v }
 
 
-validationColor : Validation -> Element.Color
-validationColor v =
+validationColor : Theme -> Validation -> Element.Color
+validationColor theme v =
     case v of
         NoValidation ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
 
 {-| Render a FormGroup as an `Element msg`
 -}
-groupToMarkup : FormGroup msg -> Element msg
-groupToMarkup (FormGroup opts) =
+groupToMarkup : Theme -> FormGroup msg -> Element msg
+groupToMarkup theme (FormGroup opts) =
     let
         labelEl =
             case opts.label of
@@ -169,12 +170,12 @@ groupToMarkup (FormGroup opts) =
                         [ Element.el
                             [ Font.size Tokens.fontSizeMd
                             , Font.bold
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             ]
                             (Element.text l)
                         , if opts.isRequired then
                             Element.el
-                                [ Font.color Tokens.colorDanger
+                                [ Font.color (Theme.danger theme)
                                 , Font.size Tokens.fontSizeSm
                                 ]
                                 (Element.text "*")
@@ -191,7 +192,7 @@ groupToMarkup (FormGroup opts) =
                 Just t ->
                     Element.el
                         [ Font.size Tokens.fontSizeSm
-                        , Font.color (validationColor opts.validation)
+                        , Font.color (validationColor theme opts.validation)
                         , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                         ]
                         (Element.text t)
@@ -208,8 +209,8 @@ groupToMarkup (FormGroup opts) =
 
 {-| Render the Form as an `Element msg`
 -}
-toMarkup : Form msg -> Element msg
-toMarkup (Form opts) =
+toMarkup : Theme -> Form msg -> Element msg
+toMarkup _ (Form opts) =
     let
         maxWidth =
             if opts.limitWidth then

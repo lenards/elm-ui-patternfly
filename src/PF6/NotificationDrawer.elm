@@ -60,6 +60,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -241,23 +242,23 @@ withCustomHeader el (NotificationDrawer opts) =
     NotificationDrawer { opts | customHeader = Just el }
 
 
-variantColor : Variant -> Element.Color
-variantColor variant =
+variantColor : Theme -> Variant -> Element.Color
+variantColor theme variant =
     case variant of
         Default ->
-            Tokens.colorText
+            Theme.text theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Info ->
-            Tokens.colorInfo
+            Theme.info theme
 
 
 variantIcon : Variant -> String
@@ -279,25 +280,25 @@ variantIcon variant =
             "ℹ"
 
 
-renderItem : NotificationItem msg -> Element msg
-renderItem (NotificationItem opts) =
+renderItem : Theme -> NotificationItem msg -> Element msg
+renderItem theme (NotificationItem opts) =
     Element.row
         [ Element.width Element.fill
         , Element.padding Tokens.spacerMd
         , Element.spacing Tokens.spacerSm
         , Bg.color
             (if opts.isRead then
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
              else
                 Element.rgb255 240 247 255
             )
         , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         [ -- Variant icon
           Element.el
-            [ Font.color (variantColor opts.variant)
+            [ Font.color (variantColor theme opts.variant)
             , Font.size Tokens.fontSizeMd
             , Element.alignTop
             ]
@@ -312,7 +313,7 @@ renderItem (NotificationItem opts) =
               Element.row [ Element.width Element.fill, Element.spacing Tokens.spacerSm ]
                 [ Element.el
                     [ Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     , if opts.isRead then
                         Font.regular
 
@@ -324,7 +325,7 @@ renderItem (NotificationItem opts) =
                 , case opts.onClear of
                     Just clearMsg ->
                         Input.button
-                            [ Font.color Tokens.colorTextSubtle
+                            [ Font.color (Theme.textSubtle theme)
                             , Font.size Tokens.fontSizeSm
                             ]
                             { onPress = Just clearMsg
@@ -340,7 +341,7 @@ renderItem (NotificationItem opts) =
                 Just ts ->
                     Element.el
                         [ Font.size Tokens.fontSizeSm
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         ]
                         (Element.text ts)
 
@@ -358,8 +359,8 @@ renderItem (NotificationItem opts) =
         ]
 
 
-drawerHeader : Options msg -> Element msg
-drawerHeader opts =
+drawerHeader : Theme -> Options msg -> Element msg
+drawerHeader theme opts =
     case opts.customHeader of
         Just el ->
             el
@@ -369,13 +370,13 @@ drawerHeader opts =
                 [ Element.width Element.fill
                 , Element.paddingXY Tokens.spacerMd Tokens.spacerSm
                 , Border.widthEach { top = 0, right = 0, bottom = 1, left = 0 }
-                , Border.color Tokens.colorBorderDefault
-                , Bg.color Tokens.colorBackgroundSecondary
+                , Border.color (Theme.borderDefault theme)
+                , Bg.color (Theme.backgroundSecondary theme)
                 ]
                 [ Element.el
                     [ Font.bold
                     , Font.size Tokens.fontSizeLg
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     , Element.width Element.fill
                     ]
                     (Element.text opts.heading)
@@ -384,7 +385,7 @@ drawerHeader opts =
                         Just markMsg ->
                             Input.button
                                 [ Font.size Tokens.fontSizeSm
-                                , Font.color Tokens.colorPrimary
+                                , Font.color (Theme.primary theme)
                                 ]
                                 { onPress = Just markMsg
                                 , label = Element.text "Mark all read"
@@ -396,7 +397,7 @@ drawerHeader opts =
                         Just closeMsg ->
                             Input.button
                                 [ Font.size Tokens.fontSizeMd
-                                , Font.color Tokens.colorTextSubtle
+                                , Font.color (Theme.textSubtle theme)
                                 ]
                                 { onPress = Just closeMsg
                                 , label = Element.text "×"
@@ -415,8 +416,8 @@ panel is rendered on the right side. Use `Element.inFront` or a layout
 column to position it alongside your main content.
 
 -}
-toMarkup : NotificationDrawer msg -> Element msg
-toMarkup (NotificationDrawer opts) =
+toMarkup : Theme -> NotificationDrawer msg -> Element msg
+toMarkup theme (NotificationDrawer opts) =
     if not opts.isOpen then
         Element.none
 
@@ -424,9 +425,9 @@ toMarkup (NotificationDrawer opts) =
         Element.column
             [ Element.width (Element.px 400)
             , Element.height Element.fill
-            , Bg.color Tokens.colorBackgroundDefault
+            , Bg.color (Theme.backgroundDefault theme)
             , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-            , Border.color Tokens.colorBorderDefault
+            , Border.color (Theme.borderDefault theme)
             , Border.shadow
                 { offset = ( -4, 0 )
                 , size = 0
@@ -434,7 +435,7 @@ toMarkup (NotificationDrawer opts) =
                 , color = Element.rgba 0 0 0 0.1
                 }
             ]
-            [ drawerHeader opts
+            [ drawerHeader theme opts
             , Element.column
                 [ Element.width Element.fill
                 , Element.height Element.fill
@@ -445,13 +446,13 @@ toMarkup (NotificationDrawer opts) =
                         [ Element.centerX
                         , Element.centerY
                         , Element.padding Tokens.spacerXl
-                        , Font.color Tokens.colorTextSubtle
+                        , Font.color (Theme.textSubtle theme)
                         , Font.size Tokens.fontSizeMd
                         ]
                         (Element.text "No notifications")
                     ]
 
                  else
-                    List.map renderItem opts.items
+                    List.map (renderItem theme) opts.items
                 )
             ]

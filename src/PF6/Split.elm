@@ -35,6 +35,7 @@ See: <https://www.patternfly.org/layouts/split>
 -}
 
 import Element exposing (Element)
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -100,8 +101,8 @@ withGutter (Split opts) =
 
 {-| Render the Split as an Element msg
 -}
-toMarkup : Split msg -> Element msg
-toMarkup (Split opts) =
+toMarkup : Theme -> Split msg -> Element msg
+toMarkup _ (Split opts) =
     let
         spacingAttr =
             if opts.hasGutter then

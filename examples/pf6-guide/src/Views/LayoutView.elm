@@ -89,7 +89,7 @@ view model =
                 [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                     [ Element.text "SkipToContent provides an accessibility skip-navigation link that is visually hidden until focused via keyboard. Place it at the very top of the page layout." ]
                 , SkipToContent.skipToContent { href = "#main-content", label = "Skip to main content" }
-                    |> SkipToContent.toMarkup
+                    |> SkipToContent.toMarkup theme
                 , Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ]
                     (Element.text "(Tab to this section to reveal the skip link)")
                 ]
@@ -111,11 +111,11 @@ view model =
                         [ Element.text "I am centered!" ]
                         |> Card.withTitle "Centered Card"
                         |> Card.withCompact
-                        |> Card.toMarkup
+                        |> Card.toMarkup theme
                     )
                     |> Bullseye.withPadding Tokens.spacerMd
                     |> Bullseye.withMinHeight 200
-                    |> Bullseye.toMarkup
+                    |> Bullseye.toMarkup theme
                 )
             ]
 
@@ -137,7 +137,7 @@ view model =
                     , Stack.stackItem (demoBoxFill "Footer" Tokens.colorPrimary)
                     ]
                     |> Stack.withGutter
-                    |> Stack.toMarkup
+                    |> Stack.toMarkup theme
                 )
             ]
 
@@ -154,13 +154,13 @@ view model =
                     |> Split.withFill
                 , Split.splitItem
                     (Element.row [ Element.spacing Tokens.spacerSm ]
-                        [ Button.secondary { label = "Cancel", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup
-                        , Button.primary { label = "Save", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup
+                        [ Button.secondary { label = "Cancel", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup theme
+                        , Button.primary { label = "Save", onPress = Nothing } |> Button.withSmallSize |> Button.toMarkup theme
                         ]
                     )
                 ]
                 |> Split.withGutter
-                |> Split.toMarkup
+                |> Split.toMarkup theme
             ]
 
         -- LEVEL
@@ -175,7 +175,7 @@ view model =
                 , demoBox "Disk: 89%" Tokens.colorDanger
                 ]
                 |> Level.withGutter
-                |> Level.toMarkup
+                |> Level.toMarkup theme
             ]
 
         -- GALLERY
@@ -190,14 +190,14 @@ view model =
                             [ Element.text ("Card content " ++ String.fromInt n) ]
                             |> Card.withTitle ("Card " ++ String.fromInt n)
                             |> Card.withCompact
-                            |> Card.toMarkup
+                            |> Card.toMarkup theme
                     )
                     (List.range 1 6)
                 )
                 |> Gallery.withGutter
                 |> Gallery.withMinWidthPx 180
                 |> Gallery.withMaxWidthPx 300
-                |> Gallery.toMarkup
+                |> Gallery.toMarkup theme
             ]
 
         -- GRID
@@ -216,7 +216,7 @@ view model =
                 , Grid.gridItem (demoBoxFill "Span 4" Tokens.colorDanger) |> Grid.withSpan 4
                 ]
                 |> Grid.withGutter
-                |> Grid.toMarkup
+                |> Grid.toMarkup theme
             ]
 
         -- FLEX
@@ -233,7 +233,7 @@ view model =
                     ]
                     |> Flex.withJustifySpaceBetween
                     |> Flex.withGapMd
-                    |> Flex.toMarkup
+                    |> Flex.toMarkup theme
                 , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color (Theme.text theme) ] (Element.text "Column with center alignment:")
                 , Flex.flex
                     [ Flex.flexItem (demoBox "Top" Tokens.colorPrimary)
@@ -243,7 +243,7 @@ view model =
                     |> Flex.withColumn
                     |> Flex.withAlignCenter
                     |> Flex.withGapSm
-                    |> Flex.toMarkup
+                    |> Flex.toMarkup theme
                 , Element.el [ Font.size Tokens.fontSizeSm, Font.bold, Font.color (Theme.text theme) ] (Element.text "Row with grow item:")
                 , Flex.flex
                     [ Flex.flexItem (demoBox "Fixed" Tokens.colorPrimary)
@@ -251,7 +251,7 @@ view model =
                     , Flex.flexItem (demoBox "Fixed" Tokens.colorPrimary)
                     ]
                     |> Flex.withGapMd
-                    |> Flex.toMarkup
+                    |> Flex.toMarkup theme
                 ]
             ]
 
@@ -264,32 +264,32 @@ view model =
                         [ Element.text "A basic card with title and body content. Cards are used to group related information." ]
                     ]
                     |> Card.withTitle "Basic card"
-                    |> Card.toMarkup
+                    |> Card.toMarkup theme
                 , Card.card
                     [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "This card has a footer with action buttons." ]
                     , Element.el [ Element.paddingEach { top = Tokens.spacerSm, right = 0, bottom = 0, left = 0 } ]
                         (Button.primary { label = "View details", onPress = Nothing }
                             |> Button.withSmallSize
-                            |> Button.toMarkup
+                            |> Button.toMarkup theme
                         )
                     ]
                     |> Card.withTitle "Card with actions"
-                    |> Card.toMarkup
+                    |> Card.toMarkup theme
                 , Card.card
                     [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "A flat card variant without the default box shadow." ]
                     ]
                     |> Card.withTitle "Flat card"
                     |> Card.withFlat
-                    |> Card.toMarkup
+                    |> Card.toMarkup theme
                 , Card.card
                     [ Element.paragraph [ Font.size Tokens.fontSizeMd, Font.color (Theme.textSubtle theme) ]
                         [ Element.text "A compact card with reduced padding." ]
                     ]
                     |> Card.withTitle "Compact card"
                     |> Card.withCompact
-                    |> Card.toMarkup
+                    |> Card.toMarkup theme
                 ]
             ]
 
@@ -299,15 +299,15 @@ view model =
             [ Element.wrappedRow [ Element.spacing Tokens.spacerMd, Element.width Element.fill ]
                 [ Panel.panel (Element.text "Basic panel content")
                     |> Panel.withBordered
-                    |> Panel.toMarkup
+                    |> Panel.toMarkup theme
                 , Panel.panel (Element.text "Panel with header and footer")
                     |> Panel.withBordered
                     |> Panel.withHeader (Element.el [ Font.bold ] (Element.text "Panel Header"))
                     |> Panel.withFooter (Element.el [ Font.size Tokens.fontSizeSm, Font.color (Theme.textSubtle theme) ] (Element.text "Panel Footer"))
-                    |> Panel.toMarkup
+                    |> Panel.toMarkup theme
                 , Panel.panel (Element.text "Raised panel with shadow")
                     |> Panel.withRaised
-                    |> Panel.toMarkup
+                    |> Panel.toMarkup theme
                 ]
             ]
 
@@ -336,7 +336,7 @@ view model =
                 }
                 |> Sidebar.withGutter
                 |> Sidebar.withPanelWidth 180
-                |> Sidebar.toMarkup
+                |> Sidebar.toMarkup theme
             ]
 
         -- MASTHEAD
@@ -353,7 +353,7 @@ view model =
                     )
                 |> Masthead.withToolbar
                     (Element.el [ Font.color Tokens.colorTextOnDark ] (Element.text "\u{2699}"))
-                |> Masthead.toMarkup
+                |> Masthead.toMarkup theme
             ]
 
         -- BACK TO TOP
@@ -363,7 +363,7 @@ view model =
                 [ Element.text "The BackToTop button is rendered as a fixed-position element in the bottom-right corner. A demo button is shown below (non-fixed for visibility):" ]
             , Button.primary { label = "\u{2191} Back to top", onPress = Just ScrollToTop }
                 |> Button.withSmallSize
-                |> Button.toMarkup
+                |> Button.toMarkup theme
             ]
 
         -- DRAWER
@@ -371,7 +371,7 @@ view model =
             "Drawer"
             [ Element.column [ Element.spacing Tokens.spacerSm, Element.width Element.fill ]
                 [ Button.secondary { label = "Toggle drawer", onPress = Just (DrawerToggled (not model.drawerOpen)) }
-                    |> Button.toMarkup
+                    |> Button.toMarkup theme
                 , Drawer.drawer
                     (Element.paragraph
                         [ Font.size Tokens.fontSizeMd
@@ -389,7 +389,7 @@ view model =
                             [ Element.text "This is the drawer panel content. It slides in from the right side of the page." ]
                         )
                     |> Drawer.withExpanded model.drawerOpen
-                    |> Drawer.toMarkup
+                    |> Drawer.toMarkup theme
                 ]
             ]
         ]

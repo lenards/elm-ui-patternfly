@@ -4,46 +4,49 @@ import Element exposing (Element)
 import Element.Font as Font
 import PF6.Card as Card
 import PF6.TextArea as TextArea
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Title as Title
 import PF6.Tokens as Tokens
 
 
 view :
-    { textAreaValue : String
-    , onTextAreaChange : String -> msg
-    }
+    Theme
+    ->
+        { textAreaValue : String
+        , onTextAreaChange : String -> msg
+        }
     -> Element msg
-view config =
+view theme config =
     Element.column [ Element.width Element.fill, Element.spacing 24 ]
-        [ Title.title "Text Area" |> Title.withH1 |> Title.toMarkup
-        , Element.paragraph [ Font.size 14, Font.color Tokens.colorText ]
+        [ Title.title "Text Area" |> Title.withH1 |> Title.toMarkup theme
+        , Element.paragraph [ Font.size 14, Font.color (Theme.text theme) ]
             [ Element.text "Text areas allow users to enter multi-line text." ]
-        , exampleSection "Basic text area"
+        , exampleSection theme "Basic text area"
             (TextArea.textArea { value = config.textAreaValue, onChange = config.onTextAreaChange }
                 |> TextArea.withLabel "Description"
                 |> TextArea.withPlaceholder "Enter a description..."
                 |> TextArea.withRows 4
-                |> TextArea.toMarkup
+                |> TextArea.toMarkup theme
             )
-        , exampleSection "Required with helper text"
+        , exampleSection theme "Required with helper text"
             (TextArea.textArea { value = config.textAreaValue, onChange = config.onTextAreaChange }
                 |> TextArea.withLabel "Comments"
                 |> TextArea.withRequired
                 |> TextArea.withHelperText "Please provide your feedback"
                 |> TextArea.withRows 3
-                |> TextArea.toMarkup
+                |> TextArea.toMarkup theme
             )
-        , exampleSection "Disabled"
+        , exampleSection theme "Disabled"
             (TextArea.textArea { value = "Read-only content", onChange = config.onTextAreaChange }
                 |> TextArea.withLabel "Notes"
                 |> TextArea.withDisabled
-                |> TextArea.toMarkup
+                |> TextArea.toMarkup theme
             )
         ]
 
 
-exampleSection : String -> Element msg -> Element msg
-exampleSection title content =
+exampleSection : Theme -> String -> Element msg -> Element msg
+exampleSection theme title content =
     Card.card [ content ]
         |> Card.withTitle title
-        |> Card.toMarkup
+        |> Card.toMarkup theme

@@ -37,6 +37,7 @@ import Element exposing (Element)
 import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -123,8 +124,8 @@ borderRadiusFor pos =
             [ Border.rounded r ]
 
 
-renderItem : Position -> InputGroupItem msg -> Element msg
-renderItem pos item =
+renderItem : Theme -> Position -> InputGroupItem msg -> Element msg
+renderItem theme pos item =
     case item of
         ItemElement el ->
             Element.el
@@ -137,12 +138,12 @@ renderItem pos item =
         ItemText text ->
             Element.el
                 ([ Element.paddingXY Tokens.spacerSm Tokens.spacerSm
-                 , Bg.color Tokens.colorBackgroundSecondary
+                 , Bg.color (Theme.backgroundSecondary theme)
                  , Font.size Tokens.fontSizeMd
-                 , Font.color Tokens.colorText
+                 , Font.color (Theme.text theme)
                  , Border.solid
                  , Border.width 1
-                 , Border.color Tokens.colorBorderDefault
+                 , Border.color (Theme.borderDefault theme)
                  , Element.centerY
                  ]
                     ++ borderRadiusFor pos
@@ -152,8 +153,8 @@ renderItem pos item =
 
 {-| Render the InputGroup as an `Element msg`
 -}
-toMarkup : InputGroup msg -> Element msg
-toMarkup (InputGroup items) =
+toMarkup : Theme -> InputGroup msg -> Element msg
+toMarkup theme (InputGroup items) =
     let
         total =
             List.length items
@@ -162,7 +163,7 @@ toMarkup (InputGroup items) =
         [ Element.width Element.fill ]
         (List.indexedMap
             (\i item ->
-                renderItem (positionOf i total) item
+                renderItem theme (positionOf i total) item
             )
             items
         )

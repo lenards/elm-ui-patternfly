@@ -44,6 +44,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -167,8 +168,8 @@ withOnFinish msg (Wizard opts) =
     Wizard { opts | onFinish = Just msg }
 
 
-stepStatusIcon : Int -> Int -> StepOptions msg -> Element msg
-stepStatusIcon index activeStep stepOpts =
+stepStatusIcon : Theme -> Int -> Int -> StepOptions msg -> Element msg
+stepStatusIcon theme index activeStep stepOpts =
     let
         iconContent =
             case stepOpts.icon of
@@ -184,13 +185,13 @@ stepStatusIcon index activeStep stepOpts =
 
         color =
             if index < activeStep then
-                Tokens.colorSuccess
+                Theme.success theme
 
             else if index == activeStep then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
     in
     Element.el
         [ Font.color color
@@ -201,14 +202,14 @@ stepStatusIcon index activeStep stepOpts =
         , Border.rounded 14
         , Border.width 2
         , Border.color color
-        , Bg.color Tokens.colorBackgroundDefault
+        , Bg.color (Theme.backgroundDefault theme)
         , Element.centerX
         ]
         (Element.el [ Element.centerX, Element.centerY ] iconContent)
 
 
-sidebarStep : Int -> Int -> Maybe (Int -> msg) -> WizardStep msg -> Element msg
-sidebarStep index activeStep onStepChange (WizardStep stepOpts) =
+sidebarStep : Theme -> Int -> Int -> Maybe (Int -> msg) -> WizardStep msg -> Element msg
+sidebarStep theme index activeStep onStepChange (WizardStep stepOpts) =
     let
         isCurrent =
             index == activeStep
@@ -218,20 +219,20 @@ sidebarStep index activeStep onStepChange (WizardStep stepOpts) =
 
         textColor =
             if stepOpts.isDisabled then
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
             else if isCurrent then
-                Tokens.colorPrimary
+                Theme.primary theme
 
             else if isComplete then
-                Tokens.colorText
+                Theme.text theme
 
             else
-                Tokens.colorTextSubtle
+                Theme.textSubtle theme
 
         bgAttrs =
             if isCurrent then
-                [ Bg.color Tokens.colorBackgroundSecondary ]
+                [ Bg.color (Theme.backgroundSecondary theme) ]
 
             else
                 []
@@ -245,7 +246,7 @@ sidebarStep index activeStep onStepChange (WizardStep stepOpts) =
 
         content =
             Element.row [ Element.spacing Tokens.spacerSm, Element.centerY ]
-                [ stepStatusIcon index activeStep stepOpts
+                [ stepStatusIcon theme index activeStep stepOpts
                 , Element.el
                     [ Font.size Tokens.fontSizeMd
                     , Font.color textColor
@@ -271,8 +272,8 @@ sidebarStep index activeStep onStepChange (WizardStep stepOpts) =
 
 {-| Render the Wizard as an `Element msg`
 -}
-toMarkup : Wizard msg -> Element msg
-toMarkup (Wizard opts) =
+toMarkup : Theme -> Wizard msg -> Element msg
+toMarkup theme (Wizard opts) =
     let
         totalSteps =
             List.length opts.steps
@@ -287,13 +288,13 @@ toMarkup (Wizard opts) =
             Element.column
                 [ Element.width (Element.px 250)
                 , Element.height Element.fill
-                , Bg.color Tokens.colorBackgroundDefault
+                , Bg.color (Theme.backgroundDefault theme)
                 , Border.widthEach { top = 0, right = 1, bottom = 0, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Element.paddingXY 0 Tokens.spacerMd
                 ]
                 (List.indexedMap
-                    (\i s -> sidebarStep i opts.activeStep opts.onStepChange s)
+                    (\i s -> sidebarStep theme i opts.activeStep opts.onStepChange s)
                     opts.steps
                 )
 
@@ -322,12 +323,12 @@ toMarkup (Wizard opts) =
                 Input.button
                     [ Element.paddingXY 16 Tokens.spacerSm
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
-                    , Bg.color Tokens.colorBackgroundDefault
+                    , Font.color (Theme.text theme)
+                    , Bg.color (Theme.backgroundDefault theme)
                     , Border.rounded Tokens.radiusMd
                     , Border.solid
                     , Border.width 1
-                    , Border.color Tokens.colorBorderDefault
+                    , Border.color (Theme.borderDefault theme)
                     ]
                     { onPress = opts.onBack
                     , label = Element.text "Back"
@@ -338,8 +339,8 @@ toMarkup (Wizard opts) =
                 Input.button
                     [ Element.paddingXY 16 Tokens.spacerSm
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorTextOnDark
-                    , Bg.color Tokens.colorPrimary
+                    , Font.color (Theme.textOnDark theme)
+                    , Bg.color (Theme.primary theme)
                     , Border.rounded Tokens.radiusMd
                     , Border.width 0
                     ]
@@ -351,8 +352,8 @@ toMarkup (Wizard opts) =
                 Input.button
                     [ Element.paddingXY 16 Tokens.spacerSm
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorTextOnDark
-                    , Bg.color Tokens.colorPrimary
+                    , Font.color (Theme.textOnDark theme)
+                    , Bg.color (Theme.primary theme)
                     , Border.rounded Tokens.radiusMd
                     , Border.width 0
                     ]
@@ -366,8 +367,8 @@ toMarkup (Wizard opts) =
                     Input.button
                         [ Element.paddingXY 16 Tokens.spacerSm
                         , Font.size Tokens.fontSizeMd
-                        , Font.color Tokens.colorPrimary
-                        , Bg.color Tokens.colorBackgroundDefault
+                        , Font.color (Theme.primary theme)
+                        , Bg.color (Theme.backgroundDefault theme)
                         , Border.rounded Tokens.radiusMd
                         , Border.width 0
                         ]
@@ -383,7 +384,7 @@ toMarkup (Wizard opts) =
                 [ Element.width Element.fill
                 , Element.paddingXY Tokens.spacerXl Tokens.spacerMd
                 , Border.widthEach { top = 1, right = 0, bottom = 0, left = 0 }
-                , Border.color Tokens.colorBorderDefault
+                , Border.color (Theme.borderDefault theme)
                 , Element.spacing Tokens.spacerSm
                 ]
                 [ backBtn
@@ -397,7 +398,7 @@ toMarkup (Wizard opts) =
         , Border.rounded Tokens.radiusLg
         , Border.solid
         , Border.width 1
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         , Element.clip
         ]
         [ Element.row

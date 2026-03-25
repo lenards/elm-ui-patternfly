@@ -50,6 +50,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -78,41 +79,41 @@ type alias ColorSet =
     }
 
 
-colorSetFor : Variant -> ColorSet
-colorSetFor variant =
+colorSetFor : Theme -> Variant -> ColorSet
+colorSetFor theme variant =
     case variant of
         Default ->
-            { bg = Tokens.colorBackgroundSecondary
-            , border = Tokens.colorBorderDefault
-            , icon = Tokens.colorText
+            { bg = Theme.backgroundSecondary theme
+            , border = Theme.borderDefault theme
+            , icon = Theme.text theme
             , iconLabel = "ℹ"
             }
 
         Success ->
-            { bg = Tokens.colorBackgroundSuccess
-            , border = Tokens.colorSuccess
-            , icon = Tokens.colorSuccess
+            { bg = Theme.backgroundSuccess theme
+            , border = Theme.success theme
+            , icon = Theme.success theme
             , iconLabel = "✓"
             }
 
         Danger ->
-            { bg = Tokens.colorBackgroundDanger
-            , border = Tokens.colorDanger
-            , icon = Tokens.colorDanger
+            { bg = Theme.backgroundDanger theme
+            , border = Theme.danger theme
+            , icon = Theme.danger theme
             , iconLabel = "✕"
             }
 
         Warning ->
-            { bg = Tokens.colorBackgroundWarning
-            , border = Tokens.colorWarning
+            { bg = Theme.backgroundWarning theme
+            , border = Theme.warning theme
             , icon = Element.rgb255 112 84 0
             , iconLabel = "⚠"
             }
 
         Info ->
-            { bg = Tokens.colorBackgroundInfo
-            , border = Tokens.colorInfo
-            , icon = Tokens.colorInfo
+            { bg = Theme.backgroundInfo theme
+            , border = Theme.info theme
+            , icon = Theme.info theme
             , iconLabel = "ℹ"
             }
 
@@ -222,15 +223,15 @@ withActions el (Alert opts) =
 
 {-| Render the Alert as an `Element msg`
 -}
-toMarkup : Alert msg -> Element msg
-toMarkup (Alert opts) =
+toMarkup : Theme -> Alert msg -> Element msg
+toMarkup theme (Alert opts) =
     let
         colors =
-            colorSetFor opts.variant
+            colorSetFor theme opts.variant
 
         bg =
             if opts.isPlain then
-                Tokens.colorBackgroundDefault
+                Theme.backgroundDefault theme
 
             else
                 colors.bg
@@ -252,7 +253,7 @@ toMarkup (Alert opts) =
                 Element.el
                     [ Font.bold
                     , Font.size Tokens.fontSizeMd
-                    , Font.color Tokens.colorText
+                    , Font.color (Theme.text theme)
                     ]
                     (Element.text opts.title)
 
@@ -262,7 +263,7 @@ toMarkup (Alert opts) =
                     (\b ->
                         Element.paragraph
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             ]
                             [ Element.text b ]
                     )
@@ -273,7 +274,7 @@ toMarkup (Alert opts) =
                 |> Maybe.map
                     (\msg ->
                         Input.button
-                            [ Font.color Tokens.colorTextSubtle
+                            [ Font.color (Theme.textSubtle theme)
                             , Element.alignTop
                             , Element.alignRight
                             ]

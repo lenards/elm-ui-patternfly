@@ -42,6 +42,7 @@ See: <https://www.patternfly.org/components/expandable-section>
 import Element exposing (Element)
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -117,8 +118,8 @@ withWidth w (ExpandableSection opts) =
     ExpandableSection { opts | width = w }
 
 
-toggleBtn : Options msg -> Element msg
-toggleBtn opts =
+toggleBtn : Theme -> Options msg -> Element msg
+toggleBtn theme opts =
     let
         label =
             if opts.isExpanded then
@@ -136,7 +137,7 @@ toggleBtn opts =
     in
     Input.button
         [ Font.size Tokens.fontSizeMd
-        , Font.color Tokens.colorPrimary
+        , Font.color (Theme.primary theme)
         ]
         { onPress = Just (opts.onToggle (not opts.isExpanded))
         , label = Element.text (arrow ++ label)
@@ -145,14 +146,14 @@ toggleBtn opts =
 
 {-| Render the ExpandableSection as an `Element msg`
 -}
-toMarkup : ExpandableSection msg -> Element msg
-toMarkup (ExpandableSection opts) =
+toMarkup : Theme -> ExpandableSection msg -> Element msg
+toMarkup theme (ExpandableSection opts) =
     Element.column
         [ Element.width opts.width
         , Element.spacing Tokens.spacerSm
         ]
         (if opts.isDetached then
-            [ toggleBtn opts
+            [ toggleBtn theme opts
             , if opts.isExpanded then
                 opts.body
 
@@ -166,6 +167,6 @@ toMarkup (ExpandableSection opts) =
 
               else
                 Element.none
-            , toggleBtn opts
+            , toggleBtn theme opts
             ]
         )

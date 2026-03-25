@@ -47,7 +47,7 @@ See: <https://www.patternfly.org/components/icon>
 
 import Element exposing (Element)
 import Element.Font as Font
-import PF6.Tokens as Tokens
+import PF6.Theme as Theme exposing (Theme)
 
 
 {-| Opaque Icon type
@@ -174,23 +174,23 @@ withAriaHidden (Icon opts) =
     Icon { opts | ariaHidden = True }
 
 
-statusColor : Status -> Element.Color
-statusColor status =
+statusColor : Theme -> Status -> Element.Color
+statusColor theme status =
     case status of
         Default ->
-            Tokens.colorText
+            Theme.text theme
 
         Success ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         Danger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         Warning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
         Info ->
-            Tokens.colorInfo
+            Theme.info theme
 
 
 sizePx : Size -> Int
@@ -211,14 +211,14 @@ sizePx size =
 
 {-| Render the Icon as an `Element msg`
 -}
-toMarkup : Icon msg -> Element msg
-toMarkup (Icon opts) =
+toMarkup : Theme -> Icon msg -> Element msg
+toMarkup theme (Icon opts) =
     let
         px =
             sizePx opts.size
     in
     Element.el
-        [ Font.color (statusColor opts.status)
+        [ Font.color (statusColor theme opts.status)
         , Font.size px
         , Element.width (Element.px px)
         , Element.height (Element.px px)

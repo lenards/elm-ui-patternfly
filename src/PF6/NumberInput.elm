@@ -50,6 +50,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -195,38 +196,38 @@ clampedValue opts v =
     withMax_
 
 
-borderColor : ValidationStatus -> Element.Color
-borderColor v =
+borderColor : Theme -> ValidationStatus -> Element.Color
+borderColor theme v =
     case v of
         NoValidation ->
-            Tokens.colorBorderDefault
+            Theme.borderDefault theme
 
         ValidationSuccess ->
-            Tokens.colorSuccess
+            Theme.success theme
 
         ValidationDanger ->
-            Tokens.colorDanger
+            Theme.danger theme
 
         ValidationWarning ->
-            Tokens.colorWarning
+            Theme.warning theme
 
 
-stepperBtn : String -> Maybe msg -> Element msg
-stepperBtn label onPress =
+stepperBtn : Theme -> String -> Maybe msg -> Element msg
+stepperBtn theme label onPress =
     Input.button
         [ Element.paddingXY Tokens.spacerSm Tokens.spacerXs
-        , Bg.color Tokens.colorBackgroundSecondary
+        , Bg.color (Theme.backgroundSecondary theme)
         , Font.size Tokens.fontSizeMd
         , Font.color
             (case onPress of
                 Nothing ->
-                    Tokens.colorTextSubtle
+                    Theme.textSubtle theme
 
                 Just _ ->
-                    Tokens.colorText
+                    Theme.text theme
             )
         , Border.widthEach { top = 0, right = 0, bottom = 0, left = 1 }
-        , Border.color Tokens.colorBorderDefault
+        , Border.color (Theme.borderDefault theme)
         ]
         { onPress = onPress
         , label = Element.text label
@@ -235,11 +236,11 @@ stepperBtn label onPress =
 
 {-| Render the NumberInput as an `Element msg`
 -}
-toMarkup : NumberInput msg -> Element msg
-toMarkup (NumberInput opts) =
+toMarkup : Theme -> NumberInput msg -> Element msg
+toMarkup theme (NumberInput opts) =
     let
         bc =
-            borderColor opts.validation
+            borderColor theme opts.validation
 
         displayValue =
             if opts.step == toFloat (round opts.step) then
@@ -255,7 +256,7 @@ toMarkup (NumberInput opts) =
                         Element.el
                             [ Font.size Tokens.fontSizeMd
                             , Font.bold
-                            , Font.color Tokens.colorText
+                            , Font.color (Theme.text theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = Tokens.spacerXs, left = 0 }
                             ]
                             (Element.text l)
@@ -263,7 +264,7 @@ toMarkup (NumberInput opts) =
                 |> Maybe.withDefault Element.none
 
         decrementBtn =
-            stepperBtn "−"
+            stepperBtn theme "−"
                 (if canDecrement opts then
                     Just (opts.onChange (clampedValue opts (opts.value - opts.step)))
 
@@ -272,7 +273,7 @@ toMarkup (NumberInput opts) =
                 )
 
         incrementBtn =
-            stepperBtn "+"
+            stepperBtn theme "+"
                 (if canIncrement opts then
                     Just (opts.onChange (clampedValue opts (opts.value + opts.step)))
 
@@ -284,7 +285,7 @@ toMarkup (NumberInput opts) =
             Element.el
                 [ Element.paddingXY Tokens.spacerSm Tokens.spacerXs
                 , Font.size Tokens.fontSizeMd
-                , Font.color Tokens.colorText
+                , Font.color (Theme.text theme)
                 , Element.width (Element.minimum 60 Element.shrink)
                 , Element.centerX
                 ]
@@ -296,7 +297,7 @@ toMarkup (NumberInput opts) =
                     (\u ->
                         Element.el
                             [ Font.size Tokens.fontSizeMd
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = 0, right = 0, bottom = 0, left = Tokens.spacerXs }
                             ]
                             (Element.text u)
@@ -309,7 +310,7 @@ toMarkup (NumberInput opts) =
                     (\t ->
                         Element.el
                             [ Font.size Tokens.fontSizeSm
-                            , Font.color Tokens.colorTextSubtle
+                            , Font.color (Theme.textSubtle theme)
                             , Element.paddingEach { top = Tokens.spacerXs, right = 0, bottom = 0, left = 0 }
                             ]
                             (Element.text t)
@@ -326,10 +327,10 @@ toMarkup (NumberInput opts) =
                     , Border.color bc
                     , Bg.color
                         (if opts.isDisabled then
-                            Tokens.colorBackgroundSecondary
+                            Theme.backgroundSecondary theme
 
                          else
-                            Tokens.colorBackgroundDefault
+                            Theme.backgroundDefault theme
                         )
                     ]
                     [ decrementBtn, valueEl, incrementBtn ]

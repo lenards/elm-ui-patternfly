@@ -39,6 +39,7 @@ import Element.Background as Bg
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
+import PF6.Theme as Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -98,33 +99,33 @@ withExpanded isExpanded (NotificationBadge opts) =
     NotificationBadge { opts | expanded = isExpanded }
 
 
-badgeColor : Variant -> Element.Color
-badgeColor variant =
+badgeColor : Theme -> Variant -> Element.Color
+badgeColor theme variant =
     case variant of
         Unread ->
-            Tokens.colorPrimary
+            Theme.primary theme
 
         Read ->
-            Tokens.colorTextSubtle
+            Theme.textSubtle theme
 
         Attention ->
-            Tokens.colorDanger
+            Theme.danger theme
 
 
 {-| Render the NotificationBadge as an `Element msg`
 -}
-toMarkup : NotificationBadge msg -> Element msg
-toMarkup (NotificationBadge opts) =
+toMarkup : Theme -> NotificationBadge msg -> Element msg
+toMarkup theme (NotificationBadge opts) =
     let
         bellIcon =
             Element.el
                 [ Font.size Tokens.fontSizeXl
                 , Font.color
                     (if opts.expanded then
-                        Tokens.colorPrimary
+                        Theme.primary theme
 
                      else
-                        Tokens.colorText
+                        Theme.text theme
                     )
                 ]
                 (Element.text "\u{1F514}")
@@ -132,8 +133,8 @@ toMarkup (NotificationBadge opts) =
         countBadge =
             if opts.count > 0 then
                 Element.el
-                    [ Bg.color (badgeColor opts.variant)
-                    , Font.color Tokens.colorTextOnDark
+                    [ Bg.color (badgeColor theme opts.variant)
+                    , Font.color (Theme.textOnDark theme)
                     , Font.size Tokens.fontSizeSm
                     , Font.bold
                     , Border.rounded Tokens.radiusPill
@@ -159,7 +160,7 @@ toMarkup (NotificationBadge opts) =
         , Border.width 0
         , Bg.color
             (if opts.expanded then
-                Tokens.colorBackgroundSecondary
+                Theme.backgroundSecondary theme
 
              else
                 Element.rgba 0 0 0 0

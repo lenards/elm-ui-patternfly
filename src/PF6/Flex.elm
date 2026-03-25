@@ -66,6 +66,7 @@ See: <https://www.patternfly.org/layouts/flex>
 
 import Element exposing (Element)
 import Html.Attributes
+import PF6.Theme exposing (Theme)
 import PF6.Tokens as Tokens
 
 
@@ -297,8 +298,8 @@ withFlex1 (FlexItem opts) =
 
 {-| Render the Flex layout as an Element msg
 -}
-toMarkup : Flex msg -> Element msg
-toMarkup (Flex opts) =
+toMarkup : Theme -> Flex msg -> Element msg
+toMarkup _ (Flex opts) =
     let
         isReversed =
             case opts.direction of
