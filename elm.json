@@ -97,7 +97,8 @@
             "PF6.Split",
             "PF6.Level",
             "PF6.Gallery",
-            "PF6.Grid"
+            "PF6.Grid",
+            "PF6.Flex"
         ]
     },
     "elm-version": "0.19.1 <= v < 0.20.0",
