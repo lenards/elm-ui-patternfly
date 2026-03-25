@@ -135,8 +135,6 @@ withCircle (Skeleton opts) =
     Skeleton { opts | shape = Circle }
 
 
-{-| Render the Skeleton as an `Element msg`
--}
 colorToCss : Element.Color -> String
 colorToCss color =
     let
@@ -158,6 +156,8 @@ colorToCss color =
     "rgba(" ++ r ++ "," ++ g ++ "," ++ b ++ "," ++ a ++ ")"
 
 
+{-| Render the Skeleton as an `Element msg`
+-}
 toMarkup : Theme -> Skeleton -> Element msg
 toMarkup theme (Skeleton opts) =
     let

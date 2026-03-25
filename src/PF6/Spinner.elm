@@ -127,12 +127,6 @@ sizePx size =
             60
 
 
-{-| Render the Spinner as an `Element msg`
-
-Uses CSS animation via inline HTML for the spinning effect.
-The spinner is a circle with a colored arc rotating via CSS.
-
--}
 colorToCss : Element.Color -> String
 colorToCss color =
     let
@@ -154,6 +148,12 @@ colorToCss color =
     "rgba(" ++ r ++ "," ++ g ++ "," ++ b ++ "," ++ a ++ ")"
 
 
+{-| Render the Spinner as an `Element msg`
+
+Uses CSS animation via inline HTML for the spinning effect.
+The spinner is a circle with a colored arc rotating via CSS.
+
+-}
 toMarkup : Theme -> Spinner -> Element msg
 toMarkup theme (Spinner opts) =
     let
