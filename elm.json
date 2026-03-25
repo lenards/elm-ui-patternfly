@@ -3,7 +3,7 @@
     "name": "lenards/elm-ui-patternfly",
     "summary": "An elm-ui implementation of components from the PatternFly design system",
     "license": "BSD-3-Clause",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "exposed-modules": [
         "PF6.Tokens",
         "PF6.Theme",
