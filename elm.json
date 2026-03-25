@@ -26,6 +26,7 @@
         ],
         "PF6": [
             "PF6.Tokens",
+            "PF6.Theme",
             "PF6.Accordion",
             "PF6.ActionList",
             "PF6.Alert",
